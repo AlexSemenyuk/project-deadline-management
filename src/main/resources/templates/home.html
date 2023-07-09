@@ -8,13 +8,23 @@
 <body>
 <div class="container">
     <div class="row">
-        <div class="col-xl-2"></div>
-        <div class="col-xl-6 text-center my-5">
-            <h1 class="text-center my-5">Project Deadline Management</h1>
-            <a class="btn btn-primary " th:href="@{/divisions}">Divisions</a>
-            <a class="btn btn-primary " th:href="@{/equipments}">Equipments</a>
+        <div class="col-xl-2">
+            <div class="my-5"></div>
+            <div>
+                <a class="btn btn-primary my-2" th:href="@{/divisions}">Divisions</a>
+            </div>
+            <div>
+                <a class="btn btn-primary my-2" th:href="@{/equipments}">Equipments</a>
+            </div>
+            <div>
+                <a class="btn btn-primary my-2" th:href="@{/projects}">Projects</a>
+            </div>
+
         </div>
-        <div class="col-xl-4 my-5">
+        <div class="col-xl-8 text-center my-5">
+            <h1 class="text-center my-5">Project Deadline Management</h1>
+        </div>
+        <div class="col-xl-2 my-5">
             <p>Welcome: <span th:text="${#authentication.name}"></span></p>
             <a class="btn btn-secondary" th:href="@{/login}">Login</a>
             <form method="post" th:action="@{/logout}">
