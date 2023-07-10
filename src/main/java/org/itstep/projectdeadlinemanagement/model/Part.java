@@ -26,7 +26,10 @@ public class Part {
     @ManyToMany(mappedBy = "parts")
     private List<Assembly> assemblies = new ArrayList<>();
 
-    public Part (Integer number, String name) {
+    @OneToMany(mappedBy = "part")
+    private List<Term> terms = new ArrayList<>();
+
+    public Part(Integer number, String name) {
         this.number = number;
         this.name = name;
     }

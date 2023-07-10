@@ -27,7 +27,7 @@
                 <label class="form-label d-block me-1">
                     Parts
                     <select  class="form-select d-block"  aria-label="Default select example" name="partsIds" multiple size="15">
-                        <option th:each="p: ${parts}" th:value="${p.id}" th:text="${p.number + ' ' + p.name}">
+                        <option th:each="p: ${parts}" th:value="${p.id}" th:text="${p.number + ' : ' + p.name}">
                         </option>
                     </select>
                 </label>
@@ -57,9 +57,9 @@
                         <details>
                             <summary class="sum-item">List</summary>
                             <p th:each="p: ${assembly.parts}">
-                                <span th:text="${p.number}"></span>
-                                <span>   </span>
-                                <span th:text="${p.name}"></span>
+                                <span th:text="${p.number + ' : ' + p.name}"></span>
+<!--                                <span>   </span>-->
+<!--                                <span th:text="${p.name}"></span>-->
                             </p>
                         </details>
                     </td>

@@ -5,6 +5,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.itstep.projectdeadlinemanagement.command.EquipmentCommand;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Data
 @Entity
 @Table(name = "equipments")
@@ -22,6 +25,9 @@ public class Equipment {
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Division division;
+
+    @OneToMany(mappedBy = "equipment")
+    private List<Term> terms = new ArrayList<>();
 
     public Equipment(Integer number, String name) {
         this.number = number;
