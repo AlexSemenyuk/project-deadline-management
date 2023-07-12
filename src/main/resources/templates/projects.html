@@ -20,8 +20,14 @@
                 <label class="form-label d-block me-1" >
                     Number (unique) <input class="form-control" type="number" name="number">
                 </label>
-                <label class="form-label d-block me-1" >
-                    Name (unique) <input class="form-control" type="text" name="name">
+                <label class="form-label d-block me-1">
+                    Customers
+                    <select class="form-select"  aria-label="Default select example" name="projectListsIds" multiple size="10">
+                        <option th:each="list: ${project_lists}"
+                                th:value="${list.id}"
+                                th:text="${list.assembly.number + ' : ' + list.assembly.name + ' - ' + list.amount}">
+                        </option>
+                    </select>
                 </label>
                 <br/>
                 <label class="form-label d-block me-1">
@@ -50,7 +56,7 @@
                 <tr>
                     <th th:scope="col">Id</th>
                     <th th:scope="col">Number</th>
-                    <th th:scope="col">Name</th>
+                    <th th:scope="col">Project Lists (Number:Name - Amount)</th>
                     <th th:scope="col">Customer</th>
                     <th th:scope="col">Start project</th>
                     <th th:scope="col">Start project</th>
@@ -61,7 +67,14 @@
                 <tr th:each="project: ${projects}">
                     <td th:scope="row" th:text="${project.id}"></td>
                     <td th:text="${project.number}"></td>
-                    <td th:text="${project.name}"></td>
+                    <td>
+                        <details>
+                            <summary class="sum-item">Project Lists</summary>
+                            <p th:each="p: ${project.projectLists}">
+                                <span th:text="${p.assembly.number + ' : ' + p.assembly.name + ' - ' + p.amount}"></span>
+                            </p>
+                        </details>
+                    </td>
                     <td th:text="${project.customer.name}"></td>
                     <td th:text="${project.start}"></td>
                     <td th:text="${project.deadline}"></td>

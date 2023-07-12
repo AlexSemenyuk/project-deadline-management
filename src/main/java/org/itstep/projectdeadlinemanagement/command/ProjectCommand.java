@@ -4,10 +4,11 @@ import jakarta.persistence.Column;
 
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 
 public record ProjectCommand(
         Integer number,
-        String name,
+        List<Integer> projectListsIds,
         Integer customerId,
         LocalDateTime start,
         LocalDateTime deadline

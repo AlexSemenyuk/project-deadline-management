@@ -4,8 +4,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.itstep.projectdeadlinemanagement.command.ProjectCommand;
 import org.itstep.projectdeadlinemanagement.model.Customer;
+import org.itstep.projectdeadlinemanagement.model.Part;
 import org.itstep.projectdeadlinemanagement.model.Project;
+import org.itstep.projectdeadlinemanagement.model.ProjectList;
 import org.itstep.projectdeadlinemanagement.repository.CustomerRepository;
+import org.itstep.projectdeadlinemanagement.repository.ProjectListRepository;
 import org.itstep.projectdeadlinemanagement.repository.ProjectRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,11 +26,13 @@ import java.util.Optional;
 public class ProjectController {
     private final ProjectRepository projectRepository;
     private final CustomerRepository customerRepository;
+    private final ProjectListRepository projectListRepository;
     @GetMapping
     public String home(Model model) {
         List<Project> projects = projectRepository.findAll();
         model.addAttribute("projects", projects);
         model.addAttribute("customers", customerRepository.findAll());
+        model.addAttribute("project_lists", projectListRepository.findAll());
         return "projects";
     }
 
@@ -37,6 +42,8 @@ public class ProjectController {
         Optional<Customer> optionalCustomer = customerRepository.findById(command.customerId());
         optionalCustomer.ifPresent(customer -> {
             Project project = Project.fromCommand(command);
+            List<ProjectList> projectLists = projectListRepository.findAllById(command.projectListsIds());
+            projectLists.forEach(project::addProjectList);
             project.setCustomer(customer);
             projectRepository.save(project);
         });

@@ -5,6 +5,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.itstep.projectdeadlinemanagement.command.ProjectListCommand;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Data
 @Entity
 @Table(name = "orders")
@@ -19,6 +22,9 @@ public class ProjectList {
 
     @Column(nullable = false)
     Integer amount;
+
+    @ManyToMany(mappedBy = "projectLists")
+    private List<Project> projects = new ArrayList<>();
 
     public ProjectList(Integer amount) {
         this.amount = amount;
