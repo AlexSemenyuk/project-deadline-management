@@ -36,7 +36,7 @@ public class EquipmentController {
         List<Equipment> equipments = equipmentRepository.findAll();
         model.addAttribute("equipments", equipments);
         List<Division> divisions = divisionRepository.findAll()
-                .stream().filter(d -> d.getDivisionType().getName().equals("11"))
+                .stream().filter(d -> d.getDivisionType().getName().equals("Production"))
                 .collect(Collectors.toList());
         model.addAttribute("divisions", divisions);
         return "equipments";

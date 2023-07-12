@@ -21,7 +21,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Controller
-@RequestMapping("/assemblies/parts")
+@RequestMapping("/parts")
 @RequiredArgsConstructor
 @Slf4j
 public class PartController {
@@ -57,14 +57,14 @@ public class PartController {
         } catch (Exception ex) {
             model.addFlashAttribute("error", "Error creating part because of non unique part name");
         }
-        return "redirect:/assemblies/parts";
+        return "redirect:/parts";
     }
 
     @GetMapping(("delete/{id}"))
     String delete(@PathVariable Integer id) {
         Optional<Part> optionalPart = partRepository.findById(id);
         optionalPart.ifPresent(part -> partRepository.deleteById(id));
-        return "redirect:/assemblies/parts";
+        return "redirect:/parts";
     }
 
 //    @GetMapping(("edit/{id}"))

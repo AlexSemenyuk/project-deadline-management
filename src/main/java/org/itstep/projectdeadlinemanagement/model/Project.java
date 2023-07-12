@@ -32,7 +32,6 @@ public class Project {
     @Column(nullable = false)
     private LocalDateTime deadline;
 
-
     public Project(Integer number, String name, LocalDateTime start, LocalDateTime deadline) {
         this.number = number;
         this.name = name;

@@ -27,7 +27,7 @@ public class Part {
     private List<Assembly> assemblies = new ArrayList<>();
 
     @OneToMany(mappedBy = "part")
-    private List<Term> terms = new ArrayList<>();
+    private List<PartTerm> partTerms = new ArrayList<>();
 
     public Part(Integer number, String name) {
         this.number = number;

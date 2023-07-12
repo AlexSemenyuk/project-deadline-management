@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.itstep.projectdeadlinemanagement.command.AssemblyCommand;
 import org.itstep.projectdeadlinemanagement.model.Assembly;
 import org.itstep.projectdeadlinemanagement.model.Part;
-import org.itstep.projectdeadlinemanagement.repository.AssemblyReposutory;
+import org.itstep.projectdeadlinemanagement.repository.AssemblyRepository;
 import org.itstep.projectdeadlinemanagement.repository.PartRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,11 +22,11 @@ import java.util.Optional;
 @Slf4j
 public class AssemblyController {
     private final PartRepository partRepository;
-    private final AssemblyReposutory assemblyReposutory;
+    private final AssemblyRepository assemblyRepository;
 
     @GetMapping
     public String findAll(Model model) {
-        model.addAttribute("assemblies", assemblyReposutory.findAll());
+        model.addAttribute("assemblies", assemblyRepository.findAll());
         model.addAttribute("parts", partRepository.findAll());
         return "assemblies";
     }
@@ -38,15 +38,15 @@ public class AssemblyController {
             Assembly assembly = Assembly.fromCommand(command);
             List<Part> parts = partRepository.findAllById(command.partsIds());
             parts.forEach(assembly::addPart);
-            assemblyReposutory.save(assembly);
+            assemblyRepository.save(assembly);
         }
         return "redirect:/assemblies";
     }
 
     @GetMapping("delete/{id}")
     public String delete(@PathVariable Integer id) {
-        Optional<Assembly> optionalAssembly = assemblyReposutory.findById(id);
-        optionalAssembly.ifPresent(assembly -> assemblyReposutory.deleteById(id));
+        Optional<Assembly> optionalAssembly = assemblyRepository.findById(id);
+        optionalAssembly.ifPresent(assembly -> assemblyRepository.deleteById(id));
         return "redirect:/assemblies";
     }
 }

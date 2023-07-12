@@ -1,14 +1,11 @@
 package org.itstep.projectdeadlinemanagement.command;
 
-import java.util.List;
-
-public record TermCommand(
-        Integer partId,
+public record AssemblyTermCommand (
+        Integer assemblyId,
         Integer number,
         Integer equipmentId,
-//        String name,
         Integer operationTime
-) {
+){
 }
 
 

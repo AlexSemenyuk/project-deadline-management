@@ -20,14 +20,17 @@ public class Equipment {
     @Column(nullable = false, unique = true)
     private Integer number;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String name;
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Division division;
 
     @OneToMany(mappedBy = "equipment")
-    private List<Term> terms = new ArrayList<>();
+    private List<PartTerm> partTerms = new ArrayList<>();
+
+    @OneToMany(mappedBy = "equipment")
+    private List<AssemblyTerm> assemblyTerms = new ArrayList<>();
 
     public Equipment(Integer number, String name) {
         this.number = number;

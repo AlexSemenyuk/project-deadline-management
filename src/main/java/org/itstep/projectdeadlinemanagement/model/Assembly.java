@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.itstep.projectdeadlinemanagement.command.AssemblyCommand;
-import org.itstep.projectdeadlinemanagement.command.DivisionCommand;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,8 +24,13 @@ public class Assembly {
     private String name;
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-//    private Set<Author> authors = new HashSet<>();
     private List<Part> parts = new ArrayList<>();
+
+    @OneToMany(mappedBy = "assembly")
+    private List<AssemblyTerm> assemblyTerms = new ArrayList<>();
+
+    @OneToMany(mappedBy = "assembly")
+    private List<ProjectList> orders = new ArrayList<>();
 
     public Assembly(Integer number, String name) {
         this.number = number;

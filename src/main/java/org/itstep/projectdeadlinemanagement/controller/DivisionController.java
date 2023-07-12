@@ -45,6 +45,17 @@ public class DivisionController {
         return "redirect:/divisions";
     }
 
+
+
+//    DivisionCommand designOrArchiveDivisionCommand = new DivisionCommand(1, "Design / Archive", 1);
+//    Optional<DivisionType> optionalDivisionType = divisionTypeRepository.findById(designOrArchiveDivisionCommand.divisionTypeId());
+//        optionalDivisionType.ifPresent(divisionType -> {
+//        Division designOrArchiveDivision = Division.fromCommand(designOrArchiveDivisionCommand);
+//        designOrArchiveDivision.setDivisionType(divisionType);
+//        divisionRepository.save(designOrArchiveDivision);
+//    });
+
+
     @GetMapping("delete/{id}")
     public String delete(@PathVariable Integer id) {
         Optional<Division> optionalDivision = divisionRepository.findById(id);
