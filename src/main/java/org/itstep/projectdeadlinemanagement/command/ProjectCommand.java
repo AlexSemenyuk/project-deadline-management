@@ -11,7 +11,8 @@ public record ProjectCommand(
         List<Integer> projectListsIds,
         Integer customerId,
         LocalDateTime start,
-        LocalDateTime deadline
+        LocalDateTime deadline,
+        Integer projectConditionId
 ) {
 }
 

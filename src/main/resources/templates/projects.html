@@ -20,15 +20,16 @@
                 <label class="form-label d-block me-1" >
                     Number (unique) <input class="form-control" type="number" name="number">
                 </label>
-                <label class="form-label d-block me-1">
-                    Customers
-                    <select class="form-select"  aria-label="Default select example" name="projectListsIds" multiple size="10">
-                        <option th:each="list: ${project_lists}"
-                                th:value="${list.id}"
-                                th:text="${list.assembly.number + ' : ' + list.assembly.name + ' - ' + list.amount}">
-                        </option>
-                    </select>
-                </label>
+<!--                <label class="form-label d-block me-1">-->
+<!--                    Project Lists-->
+<!--                    <select class="form-select"  aria-label="Default select example" name="projectListsIds" multiple size="10">-->
+<!--                        <option th:each="list: ${project_lists}"-->
+<!--                                th:value="${list.id}"-->
+<!--                                th:text="${list.part.number + ' : ' + list.part.name + ' - ' + list.amount}">-->
+<!--&lt;!&ndash;                                th:text="${list.assembly.number + ' : ' + list.assembly.name + ' - ' + list.amount}">&ndash;&gt;-->
+<!--                        </option>-->
+<!--                    </select>-->
+<!--                </label>-->
                 <br/>
                 <label class="form-label d-block me-1">
                     Customers
@@ -44,10 +45,17 @@
                     Deadline project<input class="form-control" type="datetime-local" name="deadline">
                 </label>
                 <br/>
+                <label class="form-label d-block me-1">
+                    Conditions
+                    <select class="form-select"  aria-label="Default select example" name="projectConditionId">
+                        <option th:each="condition: ${projectConditions}" th:value="${condition.id}" th:text="${condition.name}">
+                        </option>
+                    </select>
+                </label>
+                <br/>
                 <input th:name="${_csrf.parameterName}" type="hidden" th:value="${_csrf.token}">
                 <input class="btn btn-primary my-5 " type="submit">
             </form>
-
             <!--            <div style="color: green" th:text="${message}"></div>-->
             <!--            <div style="color: red" th:text="${error}"></div>-->
             <h3>Your projects</h3>
@@ -56,10 +64,11 @@
                 <tr>
                     <th th:scope="col">Id</th>
                     <th th:scope="col">Number</th>
-                    <th th:scope="col">Project Lists (Number:Name - Amount)</th>
+                    <th th:scope="col">Project Lists</th>
                     <th th:scope="col">Customer</th>
                     <th th:scope="col">Start project</th>
                     <th th:scope="col">Start project</th>
+                    <th th:scope="col">Conditions</th>
                     <th th:scope="col">Action</th>
                 </tr>
                 </thead>
@@ -71,14 +80,18 @@
                         <details>
                             <summary class="sum-item">Project Lists</summary>
                             <p th:each="p: ${project.projectLists}">
-                                <span th:text="${p.assembly.number + ' : ' + p.assembly.name + ' - ' + p.amount}"></span>
+<!--                                <span th:text="${p.assembly.number + ' : ' + p.assembly.name + ' - ' + p.amount}"></span>-->
+                                <span th:text="${p.part.number + ' : ' + p.part.name + ' - ' + p.amount}"></span>
                             </p>
                         </details>
                     </td>
                     <td th:text="${project.customer.name}"></td>
                     <td th:text="${project.start}"></td>
                     <td th:text="${project.deadline}"></td>
+                    <td th:text="${project.projectCondition.name}"></td>
                     <td>
+                        <a th:text="addLists" th:href="@{/projects/project_lists/{id}(id=${project.id})}" />
+                        |
                         <a th:text="Edit" th:href="@{/projects/edit/{id}(id=${project.id})}" />
                         |
                         <a th:text="Delete" th:href="@{/projects/delete/{id}(id=${project.id})}" />
@@ -86,6 +99,7 @@
                 </tr>
                 </tbody>
             </table>
+            <p>Project Lists - Number:Name - Amount</p>
         </div>
         <div class="col-xl-2 my-5">
             <p>Welcome: <span th:text="${#authentication.name}"></span></p>
@@ -93,8 +107,11 @@
                 <a class="btn btn-primary my-5 " th:href="@{/projects/customers}">Go to Customers</a>
             </div>
             <div>
-                <a class="btn btn-primary my-5 " th:href="@{/projects/project_lists}">Go to Project Lists</a>
+                <a class="btn btn-primary my-5 " th:href="@{/projects/project_conditions}">Go to Conditions</a>
             </div>
+<!--            <div>-->
+<!--                <a class="btn btn-primary my-5 " th:href="@{/projects/project_lists}">Go to Project Lists</a>-->
+<!--            </div>-->
         </div>
     </div>
 </div>

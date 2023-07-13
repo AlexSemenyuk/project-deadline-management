@@ -34,6 +34,9 @@ public class Project {
     @Column(nullable = false)
     private LocalDateTime deadline;
 
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private ProjectCondition projectCondition;
+
     public Project(Integer number, LocalDateTime start, LocalDateTime deadline) {
         this.number = number;
         this.start = start;
@@ -43,6 +46,11 @@ public class Project {
     public void setCustomer(Customer customer) {
         customer.getProjects().add(this);
         this.customer = customer;
+    }
+
+    public void setProjectCondition(ProjectCondition projectCondition) {
+        projectCondition.getProjects().add(this);
+        this.projectCondition = projectCondition;
     }
 
     public void addProjectList(ProjectList projectList) {

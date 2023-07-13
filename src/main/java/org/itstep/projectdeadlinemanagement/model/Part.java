@@ -29,6 +29,9 @@ public class Part {
     @OneToMany(mappedBy = "part")
     private List<PartTerm> partTerms = new ArrayList<>();
 
+    @OneToMany(mappedBy = "part")
+    private List<ProjectList> projectLists = new ArrayList<>();
+
     public Part(Integer number, String name) {
         this.number = number;
         this.name = name;

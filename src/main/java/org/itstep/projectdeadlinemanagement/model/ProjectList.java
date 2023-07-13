@@ -17,8 +17,10 @@ public class ProjectList {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+//    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+//    private Assembly assembly;
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    private Assembly assembly;
+    private Part part;
 
     @Column(nullable = false)
     Integer amount;
@@ -30,10 +32,14 @@ public class ProjectList {
         this.amount = amount;
     }
 
-    public void setAssembly (Assembly assembly) {
-        assembly.getOrders().add(this);
-        this.assembly = assembly;
+    public void setPart (Part part) {
+        part.getProjectLists().add(this);
+        this.part = part;
     }
+//    public void setAssembly (Assembly assembly) {
+//        assembly.getProjectLists().add(this);
+//        this.assembly = assembly;
+//    }
 
     public static ProjectList fromCommand(ProjectListCommand command) {
         return new ProjectList(command.amount());

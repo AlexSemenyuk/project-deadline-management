@@ -29,8 +29,8 @@ public class Assembly {
     @OneToMany(mappedBy = "assembly")
     private List<AssemblyTerm> assemblyTerms = new ArrayList<>();
 
-    @OneToMany(mappedBy = "assembly")
-    private List<ProjectList> orders = new ArrayList<>();
+//    @OneToMany(mappedBy = "assembly")
+//    private List<ProjectList> projectLists = new ArrayList<>();
 
     public Assembly(Integer number, String name) {
         this.number = number;

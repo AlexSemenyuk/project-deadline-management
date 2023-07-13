@@ -20,12 +20,21 @@
             <h1>Project Lists</h1>
             <h3>Create new Project List</h3>
             <form method="post">
+<!--                <label class="form-label d-block me-1">-->
+<!--                    Assembly-->
+<!--                    <select class="form-select"  aria-label="Default select example" name="assemblyId">-->
+<!--                        <option th:each="assembly: ${assemblies}"-->
+<!--                                th:value="${assembly.id}"-->
+<!--                                th:text="${assembly.number + ' : ' + assembly.name}">-->
+<!--                        </option>-->
+<!--                    </select>-->
+<!--                </label>-->
                 <label class="form-label d-block me-1">
-                    Assembly
-                    <select class="form-select"  aria-label="Default select example" name="assemblyId">
-                        <option th:each="assembly: ${assemblies}"
-                                th:value="${assembly.id}"
-                                th:text="${assembly.number + ' : ' + assembly.name}">
+                    Part
+                    <select class="form-select"  aria-label="Default select example" name="partId">
+                        <option th:each="part: ${parts}"
+                                th:value="${part.id}"
+                                th:text="${part.number + ' : ' + part.name}">
                         </option>
                     </select>
                 </label>
@@ -45,7 +54,8 @@
                 <thead>
                 <tr>
                     <th th:scope="col">Id</th>
-                    <th th:scope="col">Assembly(Number:Name)</th>
+<!--                    <th th:scope="col">Assembly(Number:Name)</th>-->
+                    <th th:scope="col">Part(Number:Name)</th>
                     <th th:scope="col">Amount</th>
                     <th th:scope="col">Action</th>
                 </tr>
@@ -53,12 +63,16 @@
                 <tbody>
                 <tr th:each="list: ${project_lists}">
                     <td th:scope="row" th:text="${list.id}"></td>
-                    <td th:text="${list.assembly.number + ' : ' + list.assembly.name}"></td>
+<!--                    <td th:text="${list.assembly.number + ' : ' + list.assembly.name}"></td>-->
+                    <td th:text="${list.part.number + ' : ' + list.part.name}"></td>
                     <td th:text="${list.amount}"></td>
                     <td>
                         <a th:text="Edit" th:href="@{/projects/project_lists/edit/{id}(id=${list.id})}" />
                         |
                         <a th:text="Delete" th:href="@{/projects/project_lists/delete/{id}(id=${list.id})}" />
+<!--                        <a th:text="Edit" th:href="@{/projects/project_lists/edit/{id}(id=${list.id})}" />-->
+<!--                        |-->
+<!--                        <a th:text="Delete" th:href="@{/projects/project_lists/delete/{id}(id=${list.id})}" />-->
                     </td>
                 </tr>
                 </tbody>
@@ -66,7 +80,7 @@
         </div>
         <div class="col-xl-2 my-5">
             <p>Welcome: <span th:text="${#authentication.name}"></span></p>
-
+            <p>Project: <span th:text="${project.number}"></span></p>
         </div>
     </div>
 </div>
