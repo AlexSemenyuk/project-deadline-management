@@ -3,7 +3,6 @@ package org.itstep.projectdeadlinemanagement.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.itstep.projectdeadlinemanagement.command.AssemblyTermCommand;
-import org.itstep.projectdeadlinemanagement.command.PartTermCommand;
 import org.itstep.projectdeadlinemanagement.model.*;
 import org.itstep.projectdeadlinemanagement.repository.AssemblyTermRepository;
 import org.itstep.projectdeadlinemanagement.repository.AssemblyRepository;

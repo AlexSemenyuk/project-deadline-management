@@ -5,17 +5,17 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.itstep.projectdeadlinemanagement.command.PartTermCommand;
+import org.itstep.projectdeadlinemanagement.command.TermPartCommand;
 
 
 
 @Entity
 @Data
-@Table(name = "part_terms")
+@Table(name = "term_parts")
 @NoArgsConstructor
 @ToString(exclude = {"part", "equipment"})
 @EqualsAndHashCode(exclude = {"part", "equipment"})
-public class PartTerm {
+public class TermPart {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -33,7 +33,7 @@ public class PartTerm {
     private Equipment equipment;
 
 
-    public PartTerm(Integer number, Integer operationTime) {
+    public TermPart(Integer number, Integer operationTime) {
         this.number = number;
         this.operationTime = operationTime;
     }
@@ -48,8 +48,8 @@ public class PartTerm {
         this.equipment = equipment;
     }
 
-    public static PartTerm fromCommand(PartTermCommand command) {
-        return new PartTerm(command.number(), command.operationTime());
+    public static TermPart fromCommand(TermPartCommand command) {
+        return new TermPart(command.number(), command.operationTime());
     }
 }
 

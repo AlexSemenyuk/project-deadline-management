@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Controller
@@ -38,10 +39,11 @@ public class ProjectListController {
         Optional<Project> optionalProject = projectRepository.findById(id);
         optionalProject.ifPresent(project -> {
             model.addAttribute("project", project);
+            model.addAttribute("project_lists", project.getProjectLists());
         });
         List<Part> parts = partRepository.findAll();
         model.addAttribute("parts", parts);
-        model.addAttribute("project_lists", projectListRepository.findAll());
+//        model.addAttribute("project_lists", projectListRepository.findAll());
         return "project_lists";
     }
 
@@ -70,18 +72,20 @@ public class ProjectListController {
         return "redirect:/projects/project_lists/{id}";
     }
 
-    @GetMapping("delete/{id}")
-    public String delete(@PathVariable Integer id) {
-        Optional<ProjectList> optionalProjectLists = projectListRepository.findById(id);
-        optionalProjectLists.ifPresent(projectList -> projectListRepository.deleteById(id));
-        return "redirect:/projects/project_lists";
+    @GetMapping("/{id}/delete/{listId}")
+    public String delete(@PathVariable Integer id, @PathVariable Integer listId) {
+        Optional<Project> optionalProject = projectRepository.findById(id);
+        optionalProject.ifPresent(project -> {
+            for (ProjectList item: project.getProjectLists()){
+                if (Objects.equals(item.getId(), listId)){
+                    project.getProjectLists().remove(item);
+                    break;
+                }
+            }
+            projectRepository.save(project);
+        });
+        return "redirect:/projects/project_lists/{id}";
     }
 
-//    @GetMapping("add/{id}")
-//    public String addLists(@PathVariable Integer id) {
-//        Optional<ProjectList> optionalProjectLists = projectListRepository.findById(id);
-//        optionalProjectLists.ifPresent(projectList -> projectListRepository.deleteById(id));
-//        return "redirect:/projects/project_lists";
-//    }
 }
 

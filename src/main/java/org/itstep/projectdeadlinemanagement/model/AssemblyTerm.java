@@ -6,7 +6,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.itstep.projectdeadlinemanagement.command.AssemblyTermCommand;
-import org.itstep.projectdeadlinemanagement.command.PartTermCommand;
+
 @Entity
 @Data
 @Table(name = "assembly_terms")

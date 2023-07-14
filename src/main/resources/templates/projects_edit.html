@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css">
+    <title>Project edit</title>
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-xl-2">
+            <div>
+                <a class="btn btn-primary my-5 " th:href="@{/}">Back to main page</a>
+            </div>
+            <p>Welcome: <span th:text="${#authentication.name}"></span></p>
+            <div>
+                <a class="btn btn-primary my-5 " th:href="@{/projects}">Back to projects page</a>
+            </div>
+        </div>
+        <div class="col-xl-10 text-center my-5">
+            <h1>Project edit</h1>
+            <h3>Your project</h3>
+            <table  class="table">
+                <thead>
+                <tr>
+                    <th th:scope="col">Id</th>
+                    <th th:scope="col">Number</th>
+                    <th th:scope="col">Project Lists</th>
+                    <th th:scope="col">Customer</th>
+                    <th th:scope="col">Start project</th>
+                    <th th:scope="col">Start project</th>
+                    <th th:scope="col">Conditions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td th:scope="row" th:text="${project.id}"></td>
+                    <td th:text="${project.number}"></td>
+                    <td>
+                        <details>
+                            <summary class="sum-item">Project Lists</summary>
+                            <p th:each="p: ${project.projectLists}">
+                                <span th:text="${p.part.number + ' : ' + p.part.name + ' - ' + p.amount}"></span>
+                            </p>
+                        </details>
+                    </td>
+                    <td th:text="${project.customer.name}"></td>
+                    <td th:text="${project.start}"></td>
+                    <td th:text="${project.deadline}"></td>
+                    <td th:text="${project.projectCondition.name}"></td>
+                </tr>
+                </tbody>
+            </table>
+            <p>Project Lists - Part(Number:Name) - Amount</p>
+            <h3>Edit</h3>
+            <form method="post">
+                <label class="form-label d-block me-1" >
+                    Number (unique) <input class="form-control" type="number" name="number" th:value="${project.number}">
+                </label>
+<!--                <label class="form-label d-block me-1">-->
+<!--                    Project Lists-->
+<!--                    <select class="form-select"  aria-label="Default select example" name="projectListsIds" multiple size="10">-->
+<!--                        <option th:each="list: ${project.projectLists}"-->
+<!--                            th:value="${list.id}"-->
+<!--                            th:text="${list.part.number + ' : ' + list.part.name + ' - ' + list.amount}">-->
+<!--                        </option>-->
+<!--                    </select>-->
+<!--                </label>-->
+                <br/>
+                <label class="form-label d-block me-1">
+                    Customers
+                    <select class="form-select"  aria-label="Default select example" name="customerId">
+                        <option th:each="customer: ${customers}" th:value="${customer.id}" th:text="${customer.name}">
+                        </option>
+                    </select>
+                </label>
+                <label class="form-label d-block me-1" >
+                    Start project<input class="form-control" type="datetime-local" name="start" th:value="${project.start}">
+                </label>
+                <label class="form-label d-block me-1" >
+                    Deadline project<input class="form-control" type="datetime-local" name="deadline" th:value="${project.deadline}">
+                </label>
+                <br/>
+                <label class="form-label d-block me-1">
+                    Conditions
+                    <select class="form-select"  aria-label="Default select example" name="projectConditionId">
+                         <option th:each="condition: ${projectConditions}" th:value="${condition.id}" th:text="${condition.name}">
+                         </option>
+                    </select>
+                </label>
+                <br/>
+                <input th:name="${_csrf.parameterName}" type="hidden" th:value="${_csrf.token}">
+                <input class="btn btn-primary my-5 " type="submit">
+            </form>
+            <!--            <div style="color: green" th:text="${message}"></div>-->
+            <!--            <div style="color: red" th:text="${error}"></div>-->
+
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
+        crossorigin="anonymous"></script>
+
+</body>
+</html>

@@ -69,10 +69,7 @@
                     <td>
                         <a th:text="Edit" th:href="@{/projects/project_lists/edit/{id}(id=${list.id})}" />
                         |
-                        <a th:text="Delete" th:href="@{/projects/project_lists/delete/{id}(id=${list.id})}" />
-<!--                        <a th:text="Edit" th:href="@{/projects/project_lists/edit/{id}(id=${list.id})}" />-->
-<!--                        |-->
-<!--                        <a th:text="Delete" th:href="@{/projects/project_lists/delete/{id}(id=${list.id})}" />-->
+                        <a th:text="Delete" th:href="@{/projects/project_lists/{id}/delete/{listId}(id=${project.id}, listId=${list.id})}" />
                     </td>
                 </tr>
                 </tbody>

@@ -1,6 +1,6 @@
 package org.itstep.projectdeadlinemanagement.command;
 
-public record PartTermCommand(
+public record TermPartCommand(
         Integer partId,
         Integer number,
         Integer equipmentId,

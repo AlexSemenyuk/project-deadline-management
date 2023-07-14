@@ -5,14 +5,8 @@ import lombok.RequiredArgsConstructor;
 import org.itstep.projectdeadlinemanagement.command.AssemblyCommand;
 import org.itstep.projectdeadlinemanagement.command.DivisionCommand;
 import org.itstep.projectdeadlinemanagement.controller.DivisionController;
-import org.itstep.projectdeadlinemanagement.model.Assembly;
-import org.itstep.projectdeadlinemanagement.model.Division;
-import org.itstep.projectdeadlinemanagement.model.DivisionType;
-import org.itstep.projectdeadlinemanagement.model.Part;
-import org.itstep.projectdeadlinemanagement.repository.AssemblyRepository;
-import org.itstep.projectdeadlinemanagement.repository.DivisionRepository;
-import org.itstep.projectdeadlinemanagement.repository.DivisionTypeRepository;
-import org.itstep.projectdeadlinemanagement.repository.PartRepository;
+import org.itstep.projectdeadlinemanagement.model.*;
+import org.itstep.projectdeadlinemanagement.repository.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -27,10 +21,12 @@ public class InitDatabase implements CommandLineRunner {
     private final DivisionRepository divisionRepository;
     private final PartRepository partRepository;
     private final AssemblyRepository assemblyRepository;
+    private final ProjectConditionRepository projectConditionRepository;
+    private final CustomerRepository customerRepository;
 
     @Override
     public void run(String... args) throws Exception {
-        // 1. Деление дивизионов на подготовка (формирование проекта) / производство (изготовление проекта)
+        // 1. Тип дивизиона (подготовка / производство)
         DivisionType preparation = new DivisionType("Preparation");
         DivisionType production = new DivisionType("Production");
         divisionTypeRepository.save(preparation);
@@ -41,7 +37,6 @@ public class InitDatabase implements CommandLineRunner {
 //        preparation.setId(1);
 //        division.setDivisionType(preparation);
 //        divisionRepository.save(division);
-
 
         DivisionCommand command = new DivisionCommand(1, "Design / Archive", 1);
         Optional<DivisionType> optionalDivisionType = divisionTypeRepository.findById(command.divisionTypeId());
@@ -58,7 +53,7 @@ public class InitDatabase implements CommandLineRunner {
 //        Division shopThreeDivision = new Division(5, "Mechanical Shop №2");
 
 
-        // 3. Деление дивизионов на подготовка (формирование проекта) / производство (изготовление проекта)
+        // 3. Создание деталей
         Part frame = new Part(1, "Корпус");
         Part cover1 = new Part(2, "Крышка");
         Part cover2 = new Part(3, "Крышка");
@@ -77,26 +72,25 @@ public class InitDatabase implements CommandLineRunner {
         partRepository.save(bolt1);
         partRepository.save(bolt2);
 
-        List<Integer> partList = new ArrayList<>();
-        partList.add(1);
-        partList.add(2);
-        partList.add(3);
-        partList.add(4);
-        partList.add(5);
-        partList.add(6);
-        partList.add(7);
-        partList.add(8);
+        // 4. Создание состояний проекта (Design, Technology, Production, Archive)
+        ProjectCondition projectCondition1 = new ProjectCondition("Design");
+        ProjectCondition projectCondition2 = new ProjectCondition("Technology");
+        ProjectCondition projectCondition3 = new ProjectCondition("Production");
+        ProjectCondition projectCondition4 = new ProjectCondition("Archive");
+
+        projectConditionRepository.save(projectCondition1);
+        projectConditionRepository.save(projectCondition2);
+        projectConditionRepository.save(projectCondition3);
+        projectConditionRepository.save(projectCondition4);
+
+        // 4. Создание Зыказчиков / Customer
+        Customer customer1 = new Customer("Запорожсталь", "Запорожье");
+        Customer customer2 = new Customer("Арселор Миттаол Кривой Рог", "Кривой Рог");
+
+        customerRepository.save(customer1);
+        customerRepository.save(customer2);
 
 
-//        AssemblyCommand assemblyCommand = new AssemblyCommand(1, "Футорка", partList);
-//        List<Part> optionalParts = partRepository.findAllById(assemblyCommand.partsIds());
-//
-////        if (optionalParts != null){
-//        Assembly assembly = Assembly.fromCommand(assemblyCommand);
-//        List<Part> parts = partRepository.findAllById(assemblyCommand.partsIds());
-//        parts.forEach(assembly::addPart);
-////        }
-//        assemblyReposutory.save(assembly);
     }
 }
 

@@ -12,8 +12,15 @@
             <div>
                 <a class="btn btn-primary my-5 " th:href="@{/}">Back to main page</a>
             </div>
+            <p>Welcome: <span th:text="${#authentication.name}"></span></p>
+            <div>
+                <a class="btn btn-primary my-1 " th:href="@{/projects/customers}">Go to Customers</a>
+            </div>
+            <div>
+                <a class="btn btn-primary my-1 " th:href="@{/projects/project_conditions}">Go to Conditions</a>
+            </div>
         </div>
-        <div class="col-xl-8 text-center my-5">
+        <div class="col-xl-10 text-center my-5">
             <h1>Projects</h1>
             <h3>Create new project</h3>
             <form method="post">
@@ -45,13 +52,14 @@
                     Deadline project<input class="form-control" type="datetime-local" name="deadline">
                 </label>
                 <br/>
-                <label class="form-label d-block me-1">
-                    Conditions
-                    <select class="form-select"  aria-label="Default select example" name="projectConditionId">
-                        <option th:each="condition: ${projectConditions}" th:value="${condition.id}" th:text="${condition.name}">
-                        </option>
-                    </select>
-                </label>
+                <p>Condition - Design (default)</p>
+<!--                <label class="form-label d-block me-1">-->
+<!--                    Conditions-->
+<!--                    <select class="form-select"  aria-label="Default select example" name="projectConditionId">-->
+<!--                        <option th:each="condition: ${projectConditions}" th:value="${condition.id}" th:text="${condition.name}">-->
+<!--                        </option>-->
+<!--                    </select>-->
+<!--                </label>-->
                 <br/>
                 <input th:name="${_csrf.parameterName}" type="hidden" th:value="${_csrf.token}">
                 <input class="btn btn-primary my-5 " type="submit">
@@ -99,19 +107,7 @@
                 </tr>
                 </tbody>
             </table>
-            <p>Project Lists - Number:Name - Amount</p>
-        </div>
-        <div class="col-xl-2 my-5">
-            <p>Welcome: <span th:text="${#authentication.name}"></span></p>
-            <div>
-                <a class="btn btn-primary my-5 " th:href="@{/projects/customers}">Go to Customers</a>
-            </div>
-            <div>
-                <a class="btn btn-primary my-5 " th:href="@{/projects/project_conditions}">Go to Conditions</a>
-            </div>
-<!--            <div>-->
-<!--                <a class="btn btn-primary my-5 " th:href="@{/projects/project_lists}">Go to Project Lists</a>-->
-<!--            </div>-->
+            <p>Project Lists - Part(Number:Name) - Amount</p>
         </div>
     </div>
 </div>

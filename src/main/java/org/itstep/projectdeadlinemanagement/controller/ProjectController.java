@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,8 +46,10 @@ public class ProjectController {
     public String create(ProjectCommand command) {
         log.info("ProjectCommand {}", command);
         Optional<Customer> optionalCustomer = customerRepository.findById(command.customerId());
-        Optional<ProjectCondition> optionalProjectCondition = projectConditionRepository.findById(command.projectConditionId());
-        if (optionalCustomer.isPresent() && optionalProjectCondition.isPresent()) {
+//        Optional<ProjectCondition> optionalProjectCondition = projectConditionRepository.findById(command.projectConditionId());
+        Optional<ProjectCondition> optionalProjectCondition = projectConditionRepository.findById(1);
+        if (optionalCustomer.isPresent() && optionalProjectCondition.isPresent()
+        ) {
             Customer customer = optionalCustomer.get();
             ProjectCondition projectCondition = optionalProjectCondition.get();
             Project project = Project.fromCommand(command);
@@ -54,16 +57,6 @@ public class ProjectController {
             project.setProjectCondition(projectCondition);
             projectRepository.save(project);
         }
-
-
-//        optionalCustomer.ifPresent(customer -> {
-//            Project project = Project.fromCommand(command);
-////            List<ProjectList> projectLists = projectListRepository.findAllById(command.projectListsIds());
-//////            projectLists.forEach(project::addProjectList);
-//            project.setCustomer(customer);
-//            project.setCustomer(customer);
-//            projectRepository.save(project);
-//        });
         return "redirect:/projects";
     }
 
@@ -74,7 +67,41 @@ public class ProjectController {
         return "redirect:/projects";
     }
 
-
+    @GetMapping(("/edit/{id}"))
+    String datails(@PathVariable Integer id, Model model) {
+        Optional<Project> optionalProject = projectRepository.findById(id);
+        if (optionalProject.isPresent()){
+            Project project = optionalProject.get();
+            model.addAttribute("project", project);
+            model.addAttribute("customers", customerRepository.findAll());
+            model.addAttribute("projectConditions", projectConditionRepository.findAll());
+        }
+        return "projects_edit";
+    }
+    @PostMapping(("edit/{id}"))
+    String update(@PathVariable Integer id, ProjectCommand command) {
+        log.info("ProjectCommand {}", command);
+        Optional<Project> optionalProject = projectRepository.findById(id);
+        Optional<Customer> optionalCustomer = customerRepository.findById(command.customerId());
+        Optional<ProjectCondition> optionalProjectCondition = projectConditionRepository.findById(command.projectConditionId());
+//        List<ProjectList> projectLists = projectListRepository.findAllById(command.projectListsIds());
+        if (optionalProject.isPresent() &&
+                optionalProjectCondition.isPresent() &&
+                optionalCustomer.isPresent()){
+            Project project = optionalProject.get();
+            project.setNumber(command.number());
+            ProjectCondition projectCondition = optionalProjectCondition.get();
+            Customer customer = optionalCustomer.get();
+            project.setCustomer(customer);
+            project.setProjectCondition(projectCondition);
+            project.setStart(command.start());
+            project.setDeadline(command.deadline());
+//            project.setProjectLists(new ArrayList<>());
+//            projectLists.forEach(project::addProjectList);
+            projectRepository.save(project);
+        }
+        return "redirect:/projects/edit/{id}";
+    }
 }
 
 
