@@ -12,8 +12,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Objects;
+import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 @Controller
 @RequestMapping("terms/term_parts")
@@ -28,12 +29,19 @@ public class TermPartController {
     @GetMapping("/{id}")
     public String findAll(@PathVariable Integer id, Model model) {
         Optional<Project> optionalProject = projectRepository.findById(id);
+        List<TermPart> termPartLists = new CopyOnWriteArrayList<>();
         optionalProject.ifPresent(project -> {
             model.addAttribute("projectTerm", project);
             model.addAttribute("projectLists", project.getProjectLists());
+
+            project.getProjectLists().forEach(projectList -> {
+                termPartLists.addAll(projectList.getPart().getTermParts());
+
+            });
+            model.addAttribute("term_parts", termPartLists);
         });
         model.addAttribute("equipments", equipmentRepository.findAll());
-        model.addAttribute("term_parts", termPartRepository.findAll());  //  Не годится - Вытянуть из проекта
+//        model.addAttribute("term_parts", termPartRepository.findAll());   //  Не годится - Вытянуть из проекта
         return "term_parts";
     }
 
@@ -42,7 +50,7 @@ public class TermPartController {
         log.info("TermCommand {}", command);
         Optional<Part> optionalPart = partRepository.findById(command.partId());
         Optional<Equipment> optionalEquipment = equipmentRepository.findById(command.equipmentId());
-        if (optionalPart.isPresent() && optionalEquipment.isPresent()){
+        if (optionalPart.isPresent() && optionalEquipment.isPresent()) {
             Part part = optionalPart.get();
             Equipment equipment = optionalEquipment.get();
             TermPart termPart = TermPart.fromCommand(command);

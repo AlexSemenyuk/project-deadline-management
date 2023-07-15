@@ -39,7 +39,7 @@ public class TermPart {
     }
 
     public void setPart (Part part) {
-        part.getPartTerms().add(this);
+        part.getTermParts().add(this);
         this.part = part;
     }
 
