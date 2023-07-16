@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,21 +39,27 @@ public class Task {
     @Column(nullable = false)
     private Integer lotNumber;
 
+    @Column(nullable = false)
+    private LocalDateTime start;
+
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private TaskCondition taskCondition;
 
-    //    @ManyToMany(mappedBy = "tasks")
-//    private List<Project> projects = new ArrayList<>();
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Project project;
 
-    public Task(Integer projectNumber, Integer partNumber, String partName, Integer termNumber, Integer operationTime, Integer lotNumber) {
+    @OneToOne(mappedBy = "task")
+    private ProductionPlan productionPlan;
+
+    public Task(Integer projectNumber, Integer partNumber, String partName, Integer termNumber,
+                Integer operationTime, Integer lotNumber, LocalDateTime start) {
         this.projectNumber = projectNumber;
         this.partNumber = partNumber;
         this.partName = partName;
         this.termNumber = termNumber;
         this.operationTime = operationTime;
         this.lotNumber = lotNumber;
+        this.start = start;
     }
 
     public void setEquipment(Equipment equipment) {
@@ -70,8 +77,8 @@ public class Task {
     }
 
     public static Task formTask(Integer projectNumber, Integer partNumber, String partName,
-                                Integer termNumber, Integer operationTime, Integer lotNumber) {
-        return new Task(projectNumber, partNumber, partName, termNumber, operationTime, lotNumber);
+                                Integer termNumber, Integer operationTime, Integer lotNumber, LocalDateTime start) {
+        return new Task(projectNumber, partNumber, partName, termNumber, operationTime, lotNumber, start);
     }
 
 }

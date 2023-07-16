@@ -8,6 +8,7 @@ import org.itstep.projectdeadlinemanagement.repository.TaskConditionRepository;
 import org.itstep.projectdeadlinemanagement.repository.TaskRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -20,7 +21,7 @@ public class TaskService {
     private final TaskConditionRepository taskConditionRepository;
     private final EquipmentRepository equipmentRepository;
 
-    public void formTasks(Integer id) {
+    public List<Task> formTasks(Integer id) {
         List<Task> tasks = new CopyOnWriteArrayList<>();
         Optional<Project> optionalProject = projectRepository.findById(id);
         int[] projectNumber = new int[1];
@@ -28,6 +29,9 @@ public class TaskService {
 
         int[] lotNumber = new int[1];
         lotNumber[0] = 0;
+
+        LocalDateTime[] start = new LocalDateTime[1];
+        start[0] = null;
 
         int[] amount = new int[1];
         amount[0] = 0;
@@ -39,6 +43,7 @@ public class TaskService {
         part[0] = null;
         optionalProject.ifPresent(project -> {
             projectNumber[0] = project.getNumber();
+            start[0] = project.getStart();
             project.getProjectLists().forEach(projectList -> {
                 part[0] = projectList.getPart();
                 amount[0] = projectList.getAmount();
@@ -50,7 +55,8 @@ public class TaskService {
                                 part[0].getName(),
                                 termPart.getNumber(),
                                 termPart.getOperationTime(),
-                                lotNumber[0]);
+                                lotNumber[0],
+                                start[0]);
                         Optional<Equipment> optionalEquipment = equipmentRepository.findById(termPart.getEquipment().getId());
                         optionalEquipment.ifPresent(task[0]::setEquipment);
                         Optional<TaskCondition> optionalTaskCondition = taskConditionRepository.findById(1);
@@ -62,6 +68,7 @@ public class TaskService {
             });
         });
         taskRepository.saveAll(tasks);
+        return tasks;
     }
 
 

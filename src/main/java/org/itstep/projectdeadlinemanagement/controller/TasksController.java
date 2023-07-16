@@ -7,6 +7,7 @@ import org.itstep.projectdeadlinemanagement.repository.EquipmentRepository;
 import org.itstep.projectdeadlinemanagement.repository.ProjectRepository;
 import org.itstep.projectdeadlinemanagement.repository.TaskConditionRepository;
 import org.itstep.projectdeadlinemanagement.repository.TaskRepository;
+import org.itstep.projectdeadlinemanagement.service.ProductionPlanService;
 import org.itstep.projectdeadlinemanagement.service.TaskService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,6 +27,7 @@ public class TasksController {
     private final ProjectRepository projectRepository;
     private final TaskRepository taskRepository;
     private final TaskService taskService;
+    private final ProductionPlanService productionPlanService;
     private final TaskConditionRepository taskConditionRepository;
     private final EquipmentRepository equipmentRepository;
     @GetMapping
@@ -43,13 +45,8 @@ public class TasksController {
 
     @PostMapping
     public String create(Integer id, Model model) {
-        taskService.formTasks(id);
-//        Task task = Task.formTask(1001, 1, "крышка", 1, 2, 1);
-//        Optional<TaskCondition> optionalTaskCondition = taskConditionRepository.findById(1);
-//        optionalTaskCondition.ifPresent(task::setTaskCondition);
-//        Optional<Equipment> optionalEquipment = equipmentRepository.findById(1);
-//        optionalEquipment.ifPresent(task::setEquipment);
-//        taskRepository.save(task);
+        List<Task> tasks = taskService.formTasks(id);
+        productionPlanService.formProductionPlans(tasks);
         return "redirect:/tasks/project_tasks/" + id;
     }
 

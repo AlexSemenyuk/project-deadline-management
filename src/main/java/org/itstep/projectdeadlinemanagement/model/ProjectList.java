@@ -36,6 +36,7 @@ public class ProjectList {
         part.getProjectLists().add(this);
         this.part = part;
     }
+
 //    public void setAssembly (Assembly assembly) {
 //        assembly.getProjectLists().add(this);
 //        this.assembly = assembly;

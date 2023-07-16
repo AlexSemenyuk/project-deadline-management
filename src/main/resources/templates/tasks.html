@@ -34,50 +34,6 @@
                 <input th:name="${_csrf.parameterName}" type="hidden" th:value="${_csrf.token}">
                 <input class="btn btn-primary my-5 " type="submit">
             </form>
-            <!--            <div style="color: green" th:text="${message}"></div>-->
-            <!--            <div style="color: red" th:text="${error}"></div>-->
-            <h3>Your project tasks</h3>
-            <table  class="table">
-                <thead>
-                <tr>
-                    <th th:scope="col">Id</th>
-                    <th th:scope="col">Number</th>
-                    <th th:scope="col">Project Lists</th>
-                    <th th:scope="col">Customer</th>
-                    <th th:scope="col">Start project</th>
-                    <th th:scope="col">Start project</th>
-                    <th th:scope="col">Conditions</th>
-                    <th th:scope="col">Action</th>
-                </tr>
-                </thead>
-                <tbody>
-<!--                <tr th:each="project: ${projects}">-->
-<!--                    <td th:scope="row" th:text="${project.id}"></td>-->
-<!--                    <td th:text="${project.number}"></td>-->
-<!--                    <td>-->
-<!--                        <details>-->
-<!--                            <summary class="sum-item">Project Lists</summary>-->
-<!--                            <p th:each="p: ${project.projectLists}">-->
-<!--                                &lt;!&ndash;                                <span th:text="${p.assembly.number + ' : ' + p.assembly.name + ' - ' + p.amount}"></span>&ndash;&gt;-->
-<!--                                <span th:text="${p.part.number + ' : ' + p.part.name + ' - ' + p.amount}"></span>-->
-<!--                            </p>-->
-<!--                        </details>-->
-<!--                    </td>-->
-<!--                    <td th:text="${project.customer.name}"></td>-->
-<!--                    <td th:text="${project.start}"></td>-->
-<!--                    <td th:text="${project.deadline}"></td>-->
-<!--                    <td th:text="${project.projectCondition.name}"></td>-->
-<!--                    <td>-->
-<!--                        <a th:text="addLists" th:href="@{/projects/project_lists/{id}(id=${project.id})}" />-->
-<!--                        |-->
-<!--                        <a th:text="Edit" th:href="@{/projects/edit/{id}(id=${project.id})}" />-->
-<!--                        |-->
-<!--                        <a th:text="Delete" th:href="@{/projects/delete/{id}(id=${project.id})}" />-->
-<!--                    </td>-->
-<!--                </tr>-->
-                </tbody>
-            </table>
-<!--            <p>Project Lists - Part(Number:Name) - Amount</p>-->
         </div>
     </div>
 </div>

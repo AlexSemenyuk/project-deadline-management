@@ -59,6 +59,7 @@
                     <th th:scope="col">Lot Number</th>
                     <th th:scope="col">Equipment</th>
                     <th th:scope="col">Operation Time</th>
+                    <th th:scope="col">Start</th>
                     <th th:scope="col">Condition</th>
                 </tr>
                 </thead>
@@ -71,6 +72,7 @@
                     <td th:text="${task.lotNumber}"></td>
                     <td th:text="${task.equipment.number + ' : ' + task.equipment.name}"></td>
                     <td th:text="${task.operationTime}"></td>
+                    <td th:text="${task.start}"></td>
                     <td th:text="${task.taskCondition.name}"></td>
                 </tr>
                 </tbody>
