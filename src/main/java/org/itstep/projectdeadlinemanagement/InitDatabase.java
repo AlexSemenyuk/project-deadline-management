@@ -23,6 +23,7 @@ public class InitDatabase implements CommandLineRunner {
     private final AssemblyRepository assemblyRepository;
     private final ProjectConditionRepository projectConditionRepository;
     private final CustomerRepository customerRepository;
+    private final TaskConditionRepository taskConditionRepository;
 
     @Override
     public void run(String... args) throws Exception {
@@ -83,13 +84,23 @@ public class InitDatabase implements CommandLineRunner {
         projectConditionRepository.save(projectCondition3);
         projectConditionRepository.save(projectCondition4);
 
-        // 4. Создание Зыказчиков / Customer
+        // 5. Создание Зыказчиков / Customer
         Customer customer1 = new Customer("Запорожсталь", "Запорожье");
         Customer customer2 = new Customer("Арселор Миттаол Кривой Рог", "Кривой Рог");
 
         customerRepository.save(customer1);
         customerRepository.save(customer2);
 
+        // 6. Создание состояний task (Production, Stop, Ок, Archive)
+        TaskCondition taskCondition1 = new TaskCondition("Production");
+        TaskCondition taskCondition2 = new TaskCondition("Stop");
+        TaskCondition taskCondition3 = new TaskCondition("Ок");
+        TaskCondition taskCondition4 = new TaskCondition("Archive");
+
+        taskConditionRepository.save(taskCondition1);
+        taskConditionRepository.save(taskCondition2);
+        taskConditionRepository.save(taskCondition3);
+        taskConditionRepository.save(taskCondition4);
 
     }
 }

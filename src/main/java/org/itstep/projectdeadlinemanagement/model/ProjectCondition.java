@@ -5,14 +5,13 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.itstep.projectdeadlinemanagement.command.CustomerCommand;
 import org.itstep.projectdeadlinemanagement.command.ProjectConditionCommand;
 
 import java.util.ArrayList;
 import java.util.List;
 @Entity
 @Data
-@Table(name = "conditions")
+@Table(name = "project_conditions")
 @NoArgsConstructor
 @ToString(exclude = "projects")
 @EqualsAndHashCode(exclude = "projects")

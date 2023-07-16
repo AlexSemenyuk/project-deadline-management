@@ -2,7 +2,9 @@ package org.itstep.projectdeadlinemanagement.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.itstep.projectdeadlinemanagement.command.EquipmentCommand;
 
 import java.util.ArrayList;
@@ -12,6 +14,8 @@ import java.util.List;
 @Entity
 @Table(name = "equipments")
 @NoArgsConstructor
+@ToString(exclude = {"partTerms", "assemblyTerms", "tasks"})
+@EqualsAndHashCode(exclude = {"partTerms", "assemblyTerms", "tasks"})
 public class Equipment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,6 +35,9 @@ public class Equipment {
 
     @OneToMany(mappedBy = "equipment")
     private List<AssemblyTerm> assemblyTerms = new ArrayList<>();
+
+    @OneToMany(mappedBy = "equipment")
+    private List<Task> tasks = new ArrayList<>();
 
     public Equipment(Integer number, String name) {
         this.number = number;

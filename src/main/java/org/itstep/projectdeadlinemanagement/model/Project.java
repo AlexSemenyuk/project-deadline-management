@@ -37,6 +37,11 @@ public class Project {
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private ProjectCondition projectCondition;
 
+    //    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+//    private List<Task> tasks = new ArrayList<>();
+    @OneToMany(mappedBy = "project")
+    private List<Task> tasks = new ArrayList<>();
+
     public Project(Integer number, LocalDateTime start, LocalDateTime deadline) {
         this.number = number;
         this.start = start;
@@ -57,6 +62,12 @@ public class Project {
         projectList.getProjects().add(this);
         projectLists.add(projectList);
     }
+
+    //    public void addTask(Task task) {
+//        task.getProjects().add(this);
+//        tasks.add(task);
+//    }
+
 
     public static Project fromCommand(ProjectCommand command) {
         return new Project(command.number(),

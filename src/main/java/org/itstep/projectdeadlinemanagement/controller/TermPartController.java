@@ -41,7 +41,6 @@ public class TermPartController {
             model.addAttribute("term_parts", termPartLists);
         });
         model.addAttribute("equipments", equipmentRepository.findAll());
-//        model.addAttribute("term_parts", termPartRepository.findAll());   //  Не годится - Вытянуть из проекта
         return "term_parts";
     }
 
