@@ -24,6 +24,9 @@ public class ProductionPlan {
     @Column(nullable = false)
     private LocalDateTime currentStart;
 
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private Equipment equipment;
+
     public ProductionPlan(Integer number) {
         this.number = number;
     }
@@ -31,6 +34,11 @@ public class ProductionPlan {
     public void setTask(Task task) {
         task.setProductionPlan(this);
         this.task = task;
+    }
+
+    public void setEquipment (Equipment equipment) {
+        equipment.getProductionPlans().add(this);
+        this.equipment = equipment;
     }
 
 }

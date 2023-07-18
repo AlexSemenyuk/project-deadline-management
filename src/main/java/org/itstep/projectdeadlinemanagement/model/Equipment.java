@@ -39,10 +39,15 @@ public class Equipment {
     @OneToMany(mappedBy = "equipment")
     private List<Task> tasks = new ArrayList<>();
 
+    @OneToMany(mappedBy = "equipment")
+    private List<ProductionPlan> productionPlans = new ArrayList<>();
+
     public Equipment(Integer number, String name) {
         this.number = number;
         this.name = name;
     }
+
+
 
     public void setDivision (Division division) {
         division.getEquipments().add(this);

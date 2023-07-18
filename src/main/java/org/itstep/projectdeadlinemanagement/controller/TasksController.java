@@ -44,9 +44,13 @@ public class TasksController {
     }
 
     @PostMapping
-    public String create(Integer id, Model model) {
-        List<Task> tasks = taskService.formTasks(id);
-        productionPlanService.formProductionPlans(tasks);
+    public String create(Integer id, String form, Model model) {
+        if (form != null){
+            if ( form.equals("ON")){
+                List<Task> tasks = taskService.formTasks(id);
+                productionPlanService.formProductionPlans(tasks);
+            }
+        }
         return "redirect:/tasks/project_tasks/" + id;
     }
 
@@ -59,7 +63,5 @@ public class TasksController {
         });
         return "project_tasks";
     }
-
-
 }
 

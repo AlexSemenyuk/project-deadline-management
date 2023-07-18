@@ -20,8 +20,8 @@
         <div class="col-xl-10 text-center my-5">
             <h1>Tasks</h1>
             <h3>Form tasks for project</h3>
-            <form method="post">
-                <label class="form-label d-block me-1">
+            <form method="post" class="row">
+                <label class="form-label d-inline-block me-1 col-xl-9 text-center ">
                     Projects
                     <select class="form-select"  aria-label="Default select example" name="id">
                         <option th:each="project: ${projects}"
@@ -30,6 +30,12 @@
                         </option>
                     </select>
                 </label>
+                <div class="form-check col-xl-2 text-start d-inline-block my-4" >
+                    <input class="form-check-input" type="checkbox" value="ON" id="formTasks" name="form" >
+                    <label class="form-check-label d-inline-block" for="formTasks">
+                        Form tasks
+                    </label>
+                </div>
                 <br/>
                 <input th:name="${_csrf.parameterName}" type="hidden" th:value="${_csrf.token}">
                 <input class="btn btn-primary my-5 " type="submit">
