@@ -72,7 +72,6 @@
 <!--    </div>-->
 
 </div>
-
         <div  id="totalPlan1" >
             <table class="table">
                 <thead>
@@ -85,34 +84,54 @@
                 </tr>
                 </thead>
                 <tbody>
-                   <tr th:each="equipment: ${equipmentList}">
-                       <td class="colEquipment" th:scope="col" th:text="${equipment.number + ':' + equipment.name}"></td>
-                       <th th:each="day: ${days}" th:scope="col" class="days">
+                   <tr th:each="e: ${equipmentList}">
+                       <td class="colEquipment"
+                           th:scope="col"
+                           th:text="${e.number + ' : ' + e.name}">
+
+                       </td>
+                       <th th:each="d: ${days}" th:scope="col" class="days">
                            <details>
                                 <summary class="sum-item">Lists</summary>
-                                <p th:each="d: ${days}">
-                                     <span>11111111111111111111</span>
+                                <p>
+                                     <span >11111111111111111111</span>
                                 </p>
                            </details>
                        </th>
-<!--                       <td>-->
-<!--                           <details>-->
-<!--                               <summary class="sum-item">Project Lists</summary>-->
-<!--                               <p th:each="p: ${project.projectLists}">-->
-<!--                                   &lt;!&ndash;                                <span th:text="${p.assembly.number + ' : ' + p.assembly.name + ' - ' + p.amount}"></span>&ndash;&gt;-->
-<!--                                   <span th:text="${p.part.number + ' : ' + p.part.name + ' - ' + p.amount}"></span>-->
-<!--                               </p>-->
-<!--                           </details>-->
-<!--                           <span class="itemPlan"-->
-<!--                                  th:each="plan: ${equipment.productionPlans}"-->
-<!--                                  th:text="${plan.number}"-->
-<!--                           ></span>-->
-<!--                           &lt;!&ndash;                               th:width="${(plan.task.operationTime * 8) + 'px'}"&ndash;&gt;-->
-<!--                       </td>-->
                    </tr>
                 </tbody>
             </table>
         </div>
+<!--    <div  id="totalPlan1" >-->
+<!--    <table class="table">-->
+<!--        <thead>-->
+<!--        <tr>-->
+<!--            <th class="colEquipment" th:scope="col"><span>Equipment</span></th>-->
+<!--            <th th:scope="col"-->
+<!--                class="days"-->
+<!--                th:each="day: ${days}" th:text="${day}">-->
+<!--            </th>-->
+<!--        </tr>-->
+<!--        </thead>-->
+<!--        <tbody>-->
+<!--        <tr th:each="e: ${equipmentList}">-->
+<!--            <td class="colEquipment"-->
+<!--                th:scope="col"-->
+<!--                th:text="${e.number + ' : ' + e.name}">-->
+
+<!--            </td>-->
+<!--            <th th:each="d: ${days}" th:scope="col" class="days">-->
+<!--                <details>-->
+<!--                    <summary class="sum-item">Lists</summary>-->
+<!--                    <p>-->
+<!--                        <span >11111111111111111111</span>-->
+<!--                    </p>-->
+<!--                </details>-->
+<!--            </th>-->
+<!--        </tr>-->
+<!--        </tbody>-->
+<!--    </table>-->
+<!--    </div>-->
        <div>
         <h3 class="text-center">Data</h3>
         <table class="table">

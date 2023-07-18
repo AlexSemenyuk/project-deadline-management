@@ -2,6 +2,7 @@ package org.itstep.projectdeadlinemanagement.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.itstep.projectdeadlinemanagement.command.ChartEquipmentCommand;
 import org.itstep.projectdeadlinemanagement.command.ChartPlanCommand;
 import org.itstep.projectdeadlinemanagement.model.Equipment;
 import org.itstep.projectdeadlinemanagement.model.ProductionPlan;
@@ -44,8 +45,10 @@ public class ProductionPlanController {
         }
         model.addAttribute("days", days);
 
-        List<ChartPlanCommand> chartPlanCommands = productionPlanService.formChartPlanCommand(productionPlans, days);
-        model.addAttribute("chartPlanCommands", chartPlanCommands);
+//        if (!productionPlans.isEmpty()){
+//            List<ChartEquipmentCommand> chartEquipmentCommands = productionPlanService.formChartPlanCommand(equipmentList, daysOfMonth);
+//        }
+//        model.addAttribute("chartEquipmentCommands", chartEquipmentCommands);
 
         return "production_plans";
     }
