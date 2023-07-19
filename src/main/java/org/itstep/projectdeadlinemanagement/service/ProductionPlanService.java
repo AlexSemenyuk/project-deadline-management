@@ -63,28 +63,28 @@ public class ProductionPlanService {
         return dayOfMonth;
     }
 
-    public List<ChartEquipmentCommand> formChartPlanCommand(List<Equipment> equipmentList, int daysAmount) {
+    public List<ChartEquipmentCommand> formChartPlanCommand(List<Equipment> equipmentList, int daysOfMonth) {
 
 
 //        LocalDateTime currentTimeTMP = LocalDateTime.now();
-        String [] equipment = new String[1];
-        String [] part = new String[1];
-        int [] day = new int[1];
-        List <ChartEquipmentCommand> chartEquipmentCommands = new CopyOnWriteArrayList<>();
+        String[] equipment = new String[1];
+        String[] part = new String[1];
+        int[] day = new int[1];
+        List<ChartEquipmentCommand> chartEquipmentCommands = new CopyOnWriteArrayList<>();
 
         for (Equipment e : equipmentList) {
-            ChartEquipmentCommand chartEquipmentCommand = new ChartEquipmentCommand(e.getNumber() + ":" + e.getName());
+            ChartEquipmentCommand chartEquipmentCommand = new ChartEquipmentCommand(e.getId(), e.getNumber() + ":" + e.getName());
 
-            for (int i = 0; i < daysAmount ; i++) {
-                ChartDaysCommand chartDaysCommand = new ChartDaysCommand(i);
+            for (int i = 0; i < daysOfMonth; i++) {
+                ChartDaysCommand chartDaysCommand = new ChartDaysCommand(i + 1);
                 chartEquipmentCommand.getChartDaysCommands().add(chartDaysCommand);
 
                 for (ProductionPlan plan : e.getProductionPlans()) {
                     day[0] = plan.getCurrentStart().getDayOfMonth();
-                    if ( day[0] == i + 1) {
+//                    System.out.println("day = " + day[0]);
+                    if (day[0] == i + 1) {
                         equipment[0] = e.getNumber() + ":" + e.getName();
                         part[0] = plan.getTask().getPartNumber() + ":" + plan.getTask().getPartName();
-
 
                         ChartPlanCommand chartPlanCommand = new ChartPlanCommand(
                                 plan.getId(),
@@ -100,16 +100,13 @@ public class ProductionPlanService {
                                 plan.getTask().getStart(),
                                 plan.getTask().getTaskCondition().getName()
                         );
-                        if (chartPlanCommand != null){
+                        if (chartPlanCommand != null) {
                             chartDaysCommand.getChartPlanCommandList().add(chartPlanCommand);
                         }
                     }
                 }
-                if (chartEquipmentCommand != null){
-                    chartEquipmentCommands.add(chartEquipmentCommand);
-                }
             }
-
+            chartEquipmentCommands.add(chartEquipmentCommand);
         }
         return chartEquipmentCommands;
     }

@@ -8,104 +8,70 @@
     <style>
         .table {
             font-size: 10px;
-            width: 1100px;
+            /*width: 1100px;*/
         }
         .days {
-            display: inline-block;
-            width: 30px;
+            /*display: inline-block;*/
+            /*width: 30px;*/
         }
         #totalPlan {
             margin-left: 20px;
         }
         .colEquipment {
-            display: inline-block;
-            width: 80px;
+            /*display: inline-block;*/
+            /*width: 100px;*/
         }
     </style>
 </head>
-<body>
+    <body>
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-2">
+                    <div>
+                        <a class="btn btn-primary my-2 " th:href="@{/}">Back to main page</a>
+                    </div>
+                    <div>
+                        <p>Welcome: <span th:text="${#authentication.name}"></span></p>
+                    </div>
+                </div>
 
-<div class="container">
-    <div class="row">
-        <div class="col-xl-2">
-            <div>
-                <a class="btn btn-primary my-2 " th:href="@{/}">Back to main page</a>
-            </div>
-            <div>
-                <p>Welcome: <span th:text="${#authentication.name}"></span></p>
             </div>
         </div>
-        <div class="col-xl-10 text-center my-5">
+        <div class="text-center">
             <h1>Production Plans</h1>
         </div>
-    </div>
-</div>
-
-<div class="text-center">
-    <h3>Chart</h3>
-</div>
-        <div  id="totalPlan" >
-            <table class="table">
-                <thead>
+        <div class="text-center">
+            <h3>Chart</h3>
+        </div>
+        <table class="table">
+            <thead>
                 <tr>
-                    <th class="colEquipment" th:scope="col"><span>Equipment</span></th>
-                    <th th:scope="col"
-                        class="days"
-                        th:each="day: ${days}" th:text="${day}">
-                    </th>
+                    <th class="colEquipment" th:scope="col">Equipment</th>
+                    <th class="days text-center" th:scope="col" th:each="day: ${days}" th:text="${day}" ></th>
                 </tr>
                 </thead>
                 <tbody>
-                   <tr th:each="e: ${equipmentList}">
-                       <td class="colEquipment"
-                           th:scope="col"
-                           th:text="${e.number + ' : ' + e.name}">
-
-                       </td>
-                       <th th:each="d: ${days}" th:scope="col" class="days">
-                           <details>
-                                <summary class="sum-item">Lists</summary>
-                                <p>
-                                     <span >11111111111111111111</span>
-                                </p>
-                           </details>
-                       </th>
-                   </tr>
-                </tbody>
-            </table>
+                <tr th:each="chartE: ${chartEquipmentCommands}">
+                <td class="colEquipment" th:scope="col"
+                    th:text="${chartE.equipment}">
+                </td>
+                <td th:each="day: ${chartE.chartDaysCommands}" th:scope="col" class="days text-center">
+                    <a th:text="Edit" th:href="@{/production_plans/{id}(id=${day.dayNumber + ':' + chartE.equipmentId})}" />
+<!--                    <details>-->
+<!--                        <summary class="sum-item">Lists</summary>-->
+<!--                            <p th:each="plan: ${day.chartPlanCommandList}"-->
+<!--                                th:text="${plan.projectNumber + ' : ' + plan.part + ' : '-->
+<!--                                    + plan.operationTime + ' : ' + plan.lotNumber + ' : ' + plan.condition}">-->
+<!--                            </p>-->
+<!--                    </details>-->
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <div class="text-center">
+            <h3>Plans per day</h3>
         </div>
-<!--    <div  id="totalPlan1" >-->
-<!--    <table class="table">-->
-<!--        <thead>-->
-<!--        <tr>-->
-<!--            <th class="colEquipment" th:scope="col"><span>Equipment</span></th>-->
-<!--            <th th:scope="col"-->
-<!--                class="days"-->
-<!--                th:each="day: ${days}" th:text="${day}">-->
-<!--            </th>-->
-<!--        </tr>-->
-<!--        </thead>-->
-<!--        <tbody>-->
-<!--        <tr th:each="e: ${equipmentList}">-->
-<!--            <td class="colEquipment"-->
-<!--                th:scope="col"-->
-<!--                th:text="${e.number + ' : ' + e.name}">-->
-
-<!--            </td>-->
-<!--            <th th:each="d: ${days}" th:scope="col" class="days">-->
-<!--                <details>-->
-<!--                    <summary class="sum-item">Lists</summary>-->
-<!--                    <p>-->
-<!--                        <span >11111111111111111111</span>-->
-<!--                    </p>-->
-<!--                </details>-->
-<!--            </th>-->
-<!--        </tr>-->
-<!--        </tbody>-->
-<!--    </table>-->
-<!--    </div>-->
-       <div>
-        <h3 class="text-center">Data</h3>
+        <div th:if="${chartPlanCommandListPerDay != null}">
         <table class="table">
             <thead>
             <tr>
@@ -117,7 +83,41 @@
                 <th th:scope="col">Operation Time</th>
                 <th th:scope="col">Lot Number</th>
                 <th th:scope="col">Current Start</th>
-<!--                <th th:scope="col">Task</th>-->
+                <th th:scope="col">Project Start</th>
+                <th th:scope="col">Condition</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="planCommand: ${chartPlanCommandListPerDay}">
+                <td th:scope="row" th:text="${planCommand.id}"></td>
+                <td th:text="${planCommand.projectNumber}"></td>
+                <td th:text="${planCommand.part}"></td>
+                <td th:text="${planCommand.equipment}"></td>
+                <td th:text="${planCommand.number}"></td>
+                <td th:text="${planCommand.operationTime}"></td>
+                <td th:text="${planCommand.lotNumber}"></td>
+                <td th:text="${planCommand.lotNumber}"></td>
+                <td th:text="${planCommand.currentStart}"></td>
+                <td th:text="${planCommand.projectStart}"></td>
+                <td th:text="${planCommand.condition}"></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div class="text-center">
+            <h3>All plans</h3>
+        </div>
+        <table class="table">
+            <thead>
+            <tr>
+                <th th:scope="col">Id</th>
+                <th th:scope="col">Project Number</th>
+                <th th:scope="col">Part</th>
+                <th th:scope="col">Equipment</th>
+                <th th:scope="col">Queue on Equipment</th>
+                <th th:scope="col">Operation Time</th>
+                <th th:scope="col">Lot Number</th>
+                <th th:scope="col">Current Start</th>
                 <th th:scope="col">Project Start</th>
                 <th th:scope="col">Condition</th>
             </tr>
@@ -126,26 +126,17 @@
             <tr th:each="p: ${productionPlans}">
                 <td th:scope="row" th:text="${p.id}"></td>
                 <td th:text="${p.task.projectNumber}"></td>
-                <td th:text="${p.task.partNumber + '/' + p.task.partName}"></td>
-                <td th:text="${p.equipment.number + ' : ' + p.equipment.name}"></td>
+                <td th:text="${p.task.partNumber + '-' + p.task.partName}"></td>
+                <td th:text="${p.equipment.number + ' - ' + p.equipment.name}"></td>
                 <td th:text="${p.number}"></td>
                 <td th:text="${p.task.operationTime}"></td>
                 <td th:text="${p.task.lotNumber}"></td>
                 <td th:text="${p.task.start}"></td>
                 <td th:text="${p.currentStart}"></td>
-<!--                <td>-->
-<!--                    <details>-->
-<!--                        <summary class="sum-item">Task</summary>-->
-<!--                        <p th:text="${'lotNumber : ' + p.task.lotNumber}"></p>-->
-<!--                        <p th:text="${'operationTime : ' + p.task.operationTime}"></p>-->
-<!--                        <p th:text="${'start : ' + p.task.start}"></p>-->
-<!--                    </details>-->
-<!--                </td>-->
                 <td th:text="${p.task.taskCondition.name}"></td>
             </tr>
             </tbody>
         </table>
-       </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"

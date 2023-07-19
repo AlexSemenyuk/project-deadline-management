@@ -108,7 +108,7 @@ public class InitDatabase implements CommandLineRunner {
                 LocalDateTime.parse("2023-07-18T00:00"), LocalDateTime.parse("2023-07-27T00:00"),
                 1));
         addProjectList(3, new ProjectListCommand(5, 3));
-        addProjectList(3, new ProjectListCommand(6, 3));
+        addProjectList(3, new ProjectListCommand(6, 5));
 
         addProject(new ProjectCommand(
                 1004, null, 4,
@@ -136,7 +136,7 @@ public class InitDatabase implements CommandLineRunner {
         addTermPart(new TermPartCommand(5, 3, 7, 5));
         addTermPart(new TermPartCommand(6, 1, 7, 2));
         addTermPart(new TermPartCommand(6, 2, 9, 4));
-        // Project 1003
+        // Project 1004
         addTermPart(new TermPartCommand(8, 1, 1, 2));
         addTermPart(new TermPartCommand(8, 2, 7, 4));
 
