@@ -74,6 +74,8 @@ public class ProjectController {
             Project project = optionalProject.get();
             model.addAttribute("project", project);
             model.addAttribute("customers", customerRepository.findAll());
+            model.addAttribute("idCustomer", project.getCustomer().getId());
+            model.addAttribute("idProjectCondition", project.getProjectCondition().getId());
             model.addAttribute("projectConditions", projectConditionRepository.findAll());
         }
         return "projects_edit";

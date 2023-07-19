@@ -57,20 +57,14 @@
                 <label class="form-label d-block me-1" >
                     Number (unique) <input class="form-control" type="number" name="number" th:value="${project.number}">
                 </label>
-<!--                <label class="form-label d-block me-1">-->
-<!--                    Project Lists-->
-<!--                    <select class="form-select"  aria-label="Default select example" name="projectListsIds" multiple size="10">-->
-<!--                        <option th:each="list: ${project.projectLists}"-->
-<!--                            th:value="${list.id}"-->
-<!--                            th:text="${list.part.number + ' : ' + list.part.name + ' - ' + list.amount}">-->
-<!--                        </option>-->
-<!--                    </select>-->
-<!--                </label>-->
                 <br/>
                 <label class="form-label d-block me-1">
                     Customers
                     <select class="form-select"  aria-label="Default select example" name="customerId">
-                        <option th:each="customer: ${customers}" th:value="${customer.id}" th:text="${customer.name}">
+                        <option th:each="customer: ${customers}"
+                                th:value="${customer.id}"
+                                th:text="${customer.name}"
+                                th:selected="${idCustomer == customer.id}">
                         </option>
                     </select>
                 </label>
@@ -84,7 +78,10 @@
                 <label class="form-label d-block me-1">
                     Conditions
                     <select class="form-select"  aria-label="Default select example" name="projectConditionId">
-                         <option th:each="condition: ${projectConditions}" th:value="${condition.id}" th:text="${condition.name}">
+                         <option th:each="condition: ${projectConditions}"
+                                 th:value="${condition.id}"
+                                 th:text="${condition.name}"
+                                 th:selected="${idProjectCondition == condition.id}">
                          </option>
                     </select>
                 </label>

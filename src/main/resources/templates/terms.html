@@ -24,7 +24,9 @@
                      <select class="form-select"  aria-label="Default select example" name="id">
                           <option th:each="project: ${projects}"
                                   th:value="${project.id}"
-                                  th:text="${project.number + ' : ' + project.start + ' ... ' + project.deadline + ' : ' + project.projectCondition.name}">
+                                  th:text="${project.number + ' : ' + project.customer.name + ' : '
+                                  + project.start + ' ... ' + project.deadline + ' : '
+                                  + project.projectCondition.name}">
                           </option>
                      </select>
                 </label>

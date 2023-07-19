@@ -39,6 +39,7 @@ public class ProductionPlanController {
         // Количество дней в месяце
         LocalDateTime date = LocalDateTime.now();
         int daysOfMonth = productionPlanService.getDaysOfMonth(date);
+
         int [] days = new int[daysOfMonth];
         for (int i = 0; i < days.length; i++) {
             days[i] = i + 1;

@@ -20,9 +20,6 @@ public class Division {
     private Integer id;
 
     @Column(nullable = false, unique = true)
-    private Integer number;
-
-    @Column(nullable = false, unique = true)
     private String name;
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
@@ -31,8 +28,7 @@ public class Division {
     @OneToMany(mappedBy = "division")
     private List<Equipment> equipments = new ArrayList<>();
 
-    public Division(Integer number, String name) {
-        this.number = number;
+    public Division(String name) {
         this.name = name;
     }
 
@@ -42,6 +38,6 @@ public class Division {
     }
 
     public static Division fromCommand(DivisionCommand command) {
-        return new Division (command.number(), command.name());
+        return new Division (command.name());
     }
 }

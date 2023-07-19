@@ -17,9 +17,9 @@
             <h1>Divisions</h1>
             <h3>Create new division</h3>
             <form method="post">
-                <label class="form-label d-block me-1" >
-                    Number (unique) <input class="form-control" type="number" name="number">
-                </label>
+<!--                <label class="form-label d-block me-1" >-->
+<!--                    Number (unique) <input class="form-control" type="number" name="number">-->
+<!--                </label>-->
                 <label class="form-label d-block me-1" >
                     Name (unique) <input class="form-control" type="text" name="name">
                 </label>
@@ -43,7 +43,7 @@
                 <thead>
                 <tr>
                     <th th:scope="col">Id</th>
-                    <th th:scope="col">Number</th>
+<!--                    <th th:scope="col">Number</th>-->
                     <th th:scope="col">Name</th>
                     <th th:scope="col">Type</th>
                     <th th:scope="col">Action</th>
@@ -52,7 +52,7 @@
                 <tbody>
                 <tr th:each="division: ${divisions}">
                     <td th:scope="row" th:text="${division.id}"></td>
-                    <td th:text="${division.number}"></td>
+<!--                    <td th:text="${division.number}"></td>-->
                     <td th:text="${division.name}"></td>
                     <td th:text="${division.divisionType.name}"></td>
                     <td>

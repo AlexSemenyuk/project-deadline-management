@@ -26,11 +26,10 @@ public class ProductionPlanService {
     public void formProductionPlans(List<Task> tasks) {
         int[] count = new int[1];
         count[0] = 0;
-
         tasks.forEach(task -> {
             // Номер в соответствии со списком ProductionPlans в Equipment
             count[0] = task.getEquipment().getProductionPlans().size();
-            System.out.println("count = " + count[0]);
+//            System.out.println("count = " + count[0]);
 
             ProductionPlan productionPlan = new ProductionPlan(count[0] + 1);
             productionPlan.setTask(task);
@@ -61,7 +60,6 @@ public class ProductionPlanService {
             dayInMonths[1] = 29;
         }
         dayOfMonth = dayInMonths[month - 1];
-        System.out.println("dayOfMonth = " + dayOfMonth);
         return dayOfMonth;
     }
 

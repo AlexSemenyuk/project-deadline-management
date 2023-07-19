@@ -49,9 +49,9 @@ public class DivisionTypeController {
                                 .collect(Collectors.joining(","))));
             }
         } catch (IllegalArgumentException | OptimisticEntityLockException ex) {
-            model.addFlashAttribute("error", "Error creating publisher because of illegal argument or optimistic entry lock");
+            model.addFlashAttribute("error", "Error creating division type because of illegal argument or optimistic entry lock");
         } catch (Exception ex) {
-            model.addFlashAttribute("error", "Error creating publisher because of non unique publisher name");
+            model.addFlashAttribute("error", "Error creating division type because of non unique division type name");
         }
         return "redirect:/divisions/types";
     }
