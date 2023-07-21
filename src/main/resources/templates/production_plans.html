@@ -38,7 +38,7 @@
             </div>
         </div>
         <div class="text-center">
-            <h1>Production Plans</h1>
+            <h1 th:text="'Production Plans (' + ${month} + ')'"></h1>
         </div>
         <div class="text-center">
             <h3>Chart</h3>
@@ -47,7 +47,7 @@
             <thead>
                 <tr>
                     <th class="colEquipment" th:scope="col">Equipment</th>
-                    <th class="days text-center" th:scope="col" th:each="day: ${days}" th:text="${day}" ></th>
+                    <th class="days text-center" th:scope="col" th:each="d: ${chartEquipmentCommands[0].chartDaysCommands}" th:text="${d.dayNumber}" ></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -56,20 +56,13 @@
                     th:text="${chartE.equipment}">
                 </td>
                 <td th:each="day: ${chartE.chartDaysCommands}" th:scope="col" class="days text-center">
-                    <a th:text="Edit" th:href="@{/production_plans/{id}(id=${day.dayNumber + ':' + chartE.equipmentId})}" />
-<!--                    <details>-->
-<!--                        <summary class="sum-item">Lists</summary>-->
-<!--                            <p th:each="plan: ${day.chartPlanCommandList}"-->
-<!--                                th:text="${plan.projectNumber + ' : ' + plan.part + ' : '-->
-<!--                                    + plan.operationTime + ' : ' + plan.lotNumber + ' : ' + plan.condition}">-->
-<!--                            </p>-->
-<!--                    </details>-->
+                    <a th:text="${day.planPerDay}" th:href="@{/production_plans/{id}(id=${day.dayNumber + ':' + chartE.equipmentId})}" />
                 </td>
             </tr>
             </tbody>
         </table>
         <div class="text-center">
-            <h3>Plans per day</h3>
+            <h3 th:text="'Plans per day (' + ${parameter} + ')'"></h3>
         </div>
         <div th:if="${chartPlanCommandListPerDay != null}">
         <table class="table">
@@ -105,7 +98,7 @@
         </table>
 
         <div class="text-center">
-            <h3>All plans</h3>
+            <h3>Plans per month / ????????????</h3>
         </div>
         <table class="table">
             <thead>

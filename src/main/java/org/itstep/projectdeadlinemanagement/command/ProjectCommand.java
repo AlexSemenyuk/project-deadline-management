@@ -1,9 +1,8 @@
 package org.itstep.projectdeadlinemanagement.command;
 
-import jakarta.persistence.Column;
 
 import java.time.LocalDateTime;
-import java.util.Date;
+
 import java.util.List;
 
 public record ProjectCommand(

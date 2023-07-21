@@ -17,7 +17,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("projects/project_conditions")
+@RequestMapping("projects/project_create/project_conditions")
 @Slf4j
 public class ProjectConditionController {
     private final ProjectConditionRepository projectConditionRepository;
@@ -52,14 +52,14 @@ public class ProjectConditionController {
         } catch (Exception ex) {
             model.addFlashAttribute("error", "Error creating Condition because of non unique publisher name");
         }
-        return "redirect:/projects/project_conditions";
+        return "redirect:/projects/project_create/project_conditions";
     }
 
     @GetMapping(("delete/{id}"))
     String delete(@PathVariable Integer id) {
         Optional<ProjectCondition> optionalProjectCondition = projectConditionRepository.findById(id);
         optionalProjectCondition.ifPresent(condition -> projectConditionRepository.deleteById(id));
-        return "redirect:/projects/project_conditions";
+        return "redirect:/projects/project_create/project_conditions";
     }
 
 }

@@ -13,7 +13,7 @@
                 <a class="btn btn-primary my-5 " th:href="@{/}">Back to main page</a>
             </div>
             <div>
-                <a class="btn btn-primary my-5 " th:href="@{/projects}">Back to projects page</a>
+                <a class="btn btn-primary my-5 " th:href="@{/projects/project_create}">Back to project create page</a>
             </div>
         </div>
         <div class="col-xl-8 text-center my-5">
@@ -42,9 +42,9 @@
                     <td th:scope="row" th:text="${condition.id}"></td>
                     <td th:text="${condition.name}"></td>
                     <td>
-                        <a th:text="Edit" th:href="@{/projects/project_conditions/edit/{id}(id=${condition.id})}" />
+                        <a th:text="Edit" th:href="@{/projects/project_create/project_conditions/edit/{id}(id=${condition.id})}" />
                         |
-                        <a th:text="Delete" th:href="@{/projects/project_conditions/delete/{id}(id=${condition.id})}" /></td>
+                        <a th:text="Delete" th:href="@{/projects/project_create/project_conditions/delete/{id}(id=${condition.id})}" /></td>
                 </tr>
                 </tbody>
             </table>

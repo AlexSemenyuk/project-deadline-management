@@ -25,7 +25,7 @@ import java.util.Optional;
 @Controller
 @RequiredArgsConstructor
 @Slf4j
-@RequestMapping("/projects/project_lists")
+@RequestMapping("/projects/project_details/project_lists")
 public class ProjectListController {
     //    private final AssemblyRepository assemblyRepository;
     private final ProjectRepository projectRepository;
@@ -69,7 +69,7 @@ public class ProjectListController {
             });
         });
 
-        return "redirect:/projects/project_lists/{id}";
+        return "redirect:/projects/project_details/project_lists/{id}";
     }
 
     @GetMapping("/{id}/delete/{listId}")
@@ -84,7 +84,7 @@ public class ProjectListController {
             }
             projectRepository.save(project);
         });
-        return "redirect:/projects/project_lists/{id}";
+        return "redirect:/projects/project_details/project_lists/{id}";
     }
 
 }

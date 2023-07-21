@@ -21,7 +21,7 @@ public class ProductionPlanService {
 
     private final ProductionPlanRepository productionPlanRepository;
     private final EquipmentRepository equipmentRepository;
-    private final int HOURS_PER_DAY = 8;
+    public final int HOURS_PER_DAY = 8;
 
     public void formProductionPlans(List<Task> tasks) {
         int[] count = new int[1];
@@ -65,8 +65,6 @@ public class ProductionPlanService {
 
     public List<ChartEquipmentCommand> formChartPlanCommand(List<Equipment> equipmentList, int daysOfMonth) {
 
-
-//        LocalDateTime currentTimeTMP = LocalDateTime.now();
         String[] equipment = new String[1];
         String[] part = new String[1];
         int[] day = new int[1];
@@ -77,14 +75,14 @@ public class ProductionPlanService {
 
             for (int i = 0; i < daysOfMonth; i++) {
                 ChartDaysCommand chartDaysCommand = new ChartDaysCommand(i + 1);
-                chartEquipmentCommand.getChartDaysCommands().add(chartDaysCommand);
+
 
                 for (ProductionPlan plan : e.getProductionPlans()) {
                     day[0] = plan.getCurrentStart().getDayOfMonth();
 //                    System.out.println("day = " + day[0]);
                     if (day[0] == i + 1) {
-                        equipment[0] = e.getNumber() + ":" + e.getName();
-                        part[0] = plan.getTask().getPartNumber() + ":" + plan.getTask().getPartName();
+                        equipment[0] = e.getNumber() + "-" + e.getName();
+                        part[0] = plan.getTask().getPartNumber() + "-" + plan.getTask().getPartName();
 
                         ChartPlanCommand chartPlanCommand = new ChartPlanCommand(
                                 plan.getId(),
@@ -105,11 +103,26 @@ public class ProductionPlanService {
                         }
                     }
                 }
+                int planPerDay = formPlanPerDay(chartDaysCommand);
+                chartDaysCommand.setPlanPerDay(planPerDay);
+                chartEquipmentCommand.getChartDaysCommands().add(chartDaysCommand);
             }
             chartEquipmentCommands.add(chartEquipmentCommand);
         }
         return chartEquipmentCommands;
     }
+
+    private int formPlanPerDay(ChartDaysCommand chartDaysCommand) {
+        int [] sum = new int [1];
+        sum[0] = 0;
+        if (chartDaysCommand.getChartPlanCommandList().size() > 0){
+            for (ChartPlanCommand plan: chartDaysCommand.getChartPlanCommandList()){
+                sum[0] += plan.getOperationTime();
+            }
+        }
+        return sum[0] * 100 / HOURS_PER_DAY;
+    }
+
 
 }
 

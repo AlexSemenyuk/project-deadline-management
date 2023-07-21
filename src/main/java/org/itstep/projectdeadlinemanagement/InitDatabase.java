@@ -43,11 +43,12 @@ public class InitDatabase implements CommandLineRunner {
         divisionTypeRepository.save(production);
 
         // 2. Создание дивизионов (конструкторский отдел, технологический отдел, мх-1 (механо-сборочный цех №1), мх-2, мх-3)
-        addDivision(new DivisionCommand("Design / Archive", 1));
+        addDivision(new DivisionCommand("Design", 1));
         addDivision(new DivisionCommand("Technology", 1));
         addDivision(new DivisionCommand("Мх-1", 2));
         addDivision(new DivisionCommand("Мх-2", 2));
         addDivision(new DivisionCommand("Мх-3", 2));
+
 
         // 3. Создание оборудования
         addEquipment(new EquipmentCommand(11, "Токарный", 3));
@@ -95,63 +96,64 @@ public class InitDatabase implements CommandLineRunner {
                 1));
         addProjectList(1, new ProjectListCommand(1, 2));
         addProjectList(1, new ProjectListCommand(3, 3));
-
-        addProject(new ProjectCommand(
-                1002, null, 2,
-                LocalDateTime.parse("2023-07-21T00:00"), LocalDateTime.parse("2023-07-28T00:00"),
-                1));
-        addProjectList(2, new ProjectListCommand(2, 3));
-        addProjectList(2, new ProjectListCommand(4, 1));
-
-        addProject(new ProjectCommand(
-                1003, null, 3,
-                LocalDateTime.parse("2023-07-18T00:00"), LocalDateTime.parse("2023-07-27T00:00"),
-                1));
-        addProjectList(3, new ProjectListCommand(5, 3));
-        addProjectList(3, new ProjectListCommand(6, 5));
-
-        addProject(new ProjectCommand(
-                1004, null, 4,
-                LocalDateTime.parse("2023-07-15T00:00"), LocalDateTime.parse("2023-07-26T00:00"),
-                1));
-        addProjectList(4, new ProjectListCommand(5, 1));
-        addProjectList(4, new ProjectListCommand(8, 2));
+//
+//        addProject(new ProjectCommand(
+//                1002, null, 2,
+//                LocalDateTime.parse("2023-07-21T00:00"), LocalDateTime.parse("2023-07-28T00:00"),
+//                1));
+//        addProjectList(2, new ProjectListCommand(2, 3));
+//        addProjectList(2, new ProjectListCommand(4, 1));
+//
+//        addProject(new ProjectCommand(
+//                1003, null, 3,
+//                LocalDateTime.parse("2023-07-18T00:00"), LocalDateTime.parse("2023-07-27T00:00"),
+//                1));
+//        addProjectList(3, new ProjectListCommand(5, 3));
+//        addProjectList(3, new ProjectListCommand(6, 5));
+//
+//        addProject(new ProjectCommand(
+//                1004, null, 4,
+//                LocalDateTime.parse("2023-07-15T00:00"), LocalDateTime.parse("2023-07-26T00:00"),
+//                1));
+//        addProjectList(4, new ProjectListCommand(5, 1));
+//        addProjectList(4, new ProjectListCommand(8, 2));
 
         // 9. Term for parts of project / Нормирование труда
-        // Project 1001
-        addTermPart(new TermPartCommand(1, 1, 1, 3));
-        addTermPart(new TermPartCommand(1, 2, 2, 2));
-        addTermPart(new TermPartCommand(1, 3, 3, 5));
-        addTermPart(new TermPartCommand(3, 1, 1, 2));
-        addTermPart(new TermPartCommand(3, 2, 3, 4));
-        // Project 1002
-        addTermPart(new TermPartCommand(2, 1, 4, 1));
-        addTermPart(new TermPartCommand(2, 2, 5, 3));
-        addTermPart(new TermPartCommand(2, 3, 6, 2));
-        addTermPart(new TermPartCommand(4, 1, 5, 2));
-        addTermPart(new TermPartCommand(4, 2, 6, 4));
-        // Project 1003
-        addTermPart(new TermPartCommand(5, 1, 3, 1));
-        addTermPart(new TermPartCommand(5, 2, 4, 3));
-        addTermPart(new TermPartCommand(5, 3, 7, 5));
-        addTermPart(new TermPartCommand(6, 1, 7, 2));
-        addTermPart(new TermPartCommand(6, 2, 9, 4));
-        // Project 1004
-        addTermPart(new TermPartCommand(8, 1, 1, 2));
-        addTermPart(new TermPartCommand(8, 2, 7, 4));
+//        // Project 1001
+//        addTermPart(new TermPartCommand(1, 1, 1, 3));
+//        addTermPart(new TermPartCommand(1, 2, 2, 2));
+//        addTermPart(new TermPartCommand(1, 3, 3, 5));
+//        addTermPart(new TermPartCommand(3, 1, 1, 2));
+//        addTermPart(new TermPartCommand(3, 2, 3, 4));
+//        // Project 1002
+//        addTermPart(new TermPartCommand(2, 1, 4, 1));
+//        addTermPart(new TermPartCommand(2, 2, 5, 3));
+//        addTermPart(new TermPartCommand(2, 3, 6, 2));
+//        addTermPart(new TermPartCommand(4, 1, 5, 2));
+//        addTermPart(new TermPartCommand(4, 2, 6, 4));
+//        // Project 1003
+//        addTermPart(new TermPartCommand(5, 1, 3, 1));
+//        addTermPart(new TermPartCommand(5, 2, 4, 3));
+//        addTermPart(new TermPartCommand(5, 3, 7, 5));
+//        addTermPart(new TermPartCommand(6, 1, 7, 2));
+//        addTermPart(new TermPartCommand(6, 2, 9, 4));
+//        // Project 1004
+//        addTermPart(new TermPartCommand(8, 1, 1, 2));
+//        addTermPart(new TermPartCommand(8, 2, 7, 4));
 
         // 10. Создание состояний task (Production, Stop, Ок, Archive)
         taskConditionRepository.save(new TaskCondition("Production"));
         taskConditionRepository.save(new TaskCondition("Ок"));
+        taskConditionRepository.save(new TaskCondition("Design"));
+        taskConditionRepository.save(new TaskCondition("Technology"));
         taskConditionRepository.save(new TaskCondition("Archive"));
-        taskConditionRepository.save(new TaskCondition("Stop"));
 
         // Формирование Tasks и ProductionPlans
 //        List<Task> tasks = taskService.formTasks(1);
-        productionPlanService.formProductionPlans(taskService.formTasks(1));
-        productionPlanService.formProductionPlans(taskService.formTasks(2));
-        productionPlanService.formProductionPlans(taskService.formTasks(3));
-        productionPlanService.formProductionPlans(taskService.formTasks(4));
+//        productionPlanService.formProductionPlans(taskService.formTasks(1));
+//        productionPlanService.formProductionPlans(taskService.formTasks(2));
+//        productionPlanService.formProductionPlans(taskService.formTasks(3));
+//        productionPlanService.formProductionPlans(taskService.formTasks(4));
     }
 
     private void addDivision(DivisionCommand command) {

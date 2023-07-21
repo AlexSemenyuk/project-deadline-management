@@ -5,6 +5,7 @@ import java.util.List;
 
 public class ChartDaysCommand {
     private int dayNumber;
+    private int planPerDay;
     List<ChartPlanCommand> chartPlanCommandList = new ArrayList<>();
 
     public ChartDaysCommand(int dayNumber) {
@@ -19,6 +20,14 @@ public class ChartDaysCommand {
         this.dayNumber = dayNumber;
     }
 
+    public int getPlanPerDay() {
+        return planPerDay;
+    }
+
+    public void setPlanPerDay(int planPerDay) {
+        this.planPerDay = planPerDay;
+    }
+
     public List<ChartPlanCommand> getChartPlanCommandList() {
         return chartPlanCommandList;
     }
@@ -31,6 +40,7 @@ public class ChartDaysCommand {
     public String toString() {
         return "ChartDaysCommand{" +
                 "dayNumber=" + dayNumber +
+                ", planPerDay=" + planPerDay +
                 ", chartPlanCommandList=" + chartPlanCommandList +
                 '}';
     }

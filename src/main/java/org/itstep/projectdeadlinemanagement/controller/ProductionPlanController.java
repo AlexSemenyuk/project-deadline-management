@@ -7,7 +7,6 @@ import org.itstep.projectdeadlinemanagement.command.ChartEquipmentCommand;
 import org.itstep.projectdeadlinemanagement.command.ChartPlanCommand;
 import org.itstep.projectdeadlinemanagement.model.Equipment;
 import org.itstep.projectdeadlinemanagement.model.ProductionPlan;
-import org.itstep.projectdeadlinemanagement.model.Project;
 import org.itstep.projectdeadlinemanagement.repository.*;
 import org.itstep.projectdeadlinemanagement.service.ProductionPlanService;
 import org.springframework.stereotype.Controller;
@@ -15,9 +14,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -40,21 +39,24 @@ public class ProductionPlanController {
         List<ProductionPlan> productionPlans = productionPlanRepository.findAll();
         model.addAttribute("productionPlans", productionPlans);
 
-        // Количество дней в месяце
+        // Количество дней в месяце и месяц
         int daysOfMonth = productionPlanService.getDaysOfMonth(DATE);
-
-        int [] days = new int[daysOfMonth];
-        for (int i = 0; i < days.length; i++) {
-            days[i] = i + 1;
-        }
-        model.addAttribute("days", days);
+        Month month = DATE.getMonth();
+        model.addAttribute("month", month);
 
         if (!productionPlans.isEmpty()){
+            // Данные в общую таблицу
             List<ChartEquipmentCommand> chartEquipmentCommands = productionPlanService.formChartPlanCommand(equipmentList, daysOfMonth);
             model.addAttribute("chartEquipmentCommands", chartEquipmentCommands);
+            // Данные за день
             List<ChartPlanCommand> chartPlanCommandListPerDay = new CopyOnWriteArrayList<>();
             model.addAttribute("chartPlanCommandListPerDay",
-                    chartEquipmentCommands.get(1).getChartDaysCommands().get(23).getChartPlanCommandList());
+                    chartEquipmentCommands.get(0).getChartDaysCommands().get(0).getChartPlanCommandList());
+
+            String parameter = chartEquipmentCommands.get(0).getEquipment() + ";" +
+                    month + " , " +
+                    chartEquipmentCommands.get(0).getChartDaysCommands().get(0).getDayNumber();
+            model.addAttribute("parameter", parameter);
         }
         return "production_plans";
     }
@@ -68,43 +70,52 @@ public class ProductionPlanController {
         List<ProductionPlan> productionPlans = productionPlanRepository.findAll();
         model.addAttribute("productionPlans", productionPlans);
 
-        // Количество дней в месяце
+        // Количество дней в месяце и месяц
         int daysOfMonth = productionPlanService.getDaysOfMonth(DATE);
-
-        int [] days = new int[daysOfMonth];
-        for (int i = 0; i < days.length; i++) {
-            days[i] = i + 1;
-        }
-        model.addAttribute("days", days);
+        Month month = DATE.getMonth();
+        model.addAttribute("month", month);
 
         if (!productionPlans.isEmpty()){
+            // Данные в общую таблицу
             List<ChartEquipmentCommand> chartEquipmentCommands = productionPlanService.formChartPlanCommand(equipmentList, daysOfMonth);
             model.addAttribute("chartEquipmentCommands", chartEquipmentCommands);
 
+            // Данные за день
             String [] tmpId = id.split(":");
             int dayNumber = Integer.parseInt(tmpId[0]);
             int equipmentId = Integer.parseInt(tmpId[1]);
-            System.out.println("tmpId = " + Arrays.toString(tmpId));
-            List<ChartPlanCommand> chartPlanCommandListPerDay = new CopyOnWriteArrayList<>();
 
+            List<ChartPlanCommand> chartPlanCommandListPerDay = new CopyOnWriteArrayList<>();
+            model.addAttribute("chartPlanCommandListPerDay",
+                    chartEquipmentCommands.get(equipmentId - 1).getChartDaysCommands().get(dayNumber - 1).getChartPlanCommandList());
+
+            String parameter = chartEquipmentCommands.get(equipmentId - 1).getEquipment() + "; " +
+                    month + " , " +
+                    chartEquipmentCommands.get(equipmentId - 1).getChartDaysCommands().get(dayNumber - 1).getDayNumber();
+            model.addAttribute("parameter", parameter);
+
+
+
+//            List<ChartPlanCommand> chartPlanCommandListPerDay = new CopyOnWriteArrayList<>();
+//
 //            label:
-            for (ChartEquipmentCommand e: chartEquipmentCommands) {
-                if (equipmentId == e.getEquipmentId()){
-                    for (ChartDaysCommand d: e.getChartDaysCommands()){
-                        if (dayNumber == d.getDayNumber()){
-                            d.getChartPlanCommandList().forEach(plan -> {
-                                chartPlanCommandListPerDay.add(plan);
-                            });
-                            chartPlanCommandListPerDay.forEach(System.out::println);
-                            model.addAttribute("chartPlanCommandListPerDay", chartPlanCommandListPerDay);
+//            for (ChartEquipmentCommand e: chartEquipmentCommands) {
+//                if (equipmentId == e.getEquipmentId()){
+//                    for (ChartDaysCommand d: e.getChartDaysCommands()){
+//                        if (dayNumber == d.getDayNumber()){
+//                            d.getChartPlanCommandList().forEach(plan -> {
+//                                chartPlanCommandListPerDay.add(plan);
+//                            });
+//                            chartPlanCommandListPerDay.forEach(System.out::println);
+//                            model.addAttribute("chartPlanCommandListPerDay", chartPlanCommandListPerDay);
 //                            break label;
-                        }
-                    }
-                }
-            }
+//                        }
+//                    }
+//                }
+//            }
+
         }
         return "production_plans";
-//        return "redirect:/production_plans";
     }
 
 }

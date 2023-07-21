@@ -13,7 +13,7 @@
                 <a class="btn btn-primary my-5 " th:href="@{/}">Back to main page</a>
             </div>
             <div>
-                <a class="btn btn-primary my-5 " th:href="@{/projects}">Back to projects page</a>
+                <a class="btn btn-primary my-5 " th:href="@{/projects/project_create}">Back to project create page</a>
             </div>
         </div>
         <div class="col-xl-8 text-center my-5">
@@ -47,9 +47,9 @@
                     <td th:text="${customer.name}"></td>
                     <td th:text="${customer.address}"></td>
                     <td>
-                        <a th:text="Edit" th:href="@{/projects/customers/edit/{id}(id=${customer.id})}" />
+                        <a th:text="Edit" th:href="@{/projects/project_create/customers/edit/{id}(id=${customer.id})}" />
                         |
-                        <a th:text="Delete" th:href="@{/projects/customers/delete/{id}(id=${customer.id})}" /></td>
+                        <a th:text="Delete" th:href="@{/projects/project_create/customers/delete/{id}(id=${customer.id})}" /></td>
                 </tr>
                 </tbody>
             </table>

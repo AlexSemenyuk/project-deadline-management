@@ -12,9 +12,16 @@
             <div>
                 <a class="btn btn-primary my-5 " th:href="@{/}">Back to main page</a>
             </div>
+            <div>
+                <p>Welcome: <span th:text="${#authentication.name}"></span></p>
+            </div>
+            <div>
+                <a class="btn btn-primary"  th:text="'Finish technology'"
+                   th:href="@{/technologies/term_parts/finish/{id}(id=${technologyProject.id})}" />
+            </div>
         </div>
-        <div class="col-xl-8 text-center my-5">
-            <h1>Part Terms</h1>
+        <div class="col-xl-10 text-center my-5">
+            <h1>Term Parts</h1>
             <h3>Your project for term</h3>
             <table  class="table">
                 <thead>
@@ -24,26 +31,26 @@
                     <th th:scope="col">Project Lists</th>
                     <th th:scope="col">Customer</th>
                     <th th:scope="col">Start project</th>
-                    <th th:scope="col">Start project</th>
+                    <th th:scope="col">Deadline project</th>
                     <th th:scope="col">Conditions</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr>
-                    <td th:scope="row" th:text="${projectTerm.id}"></td>
-                    <td th:text="${projectTerm.number}"></td>
+                    <td th:scope="row" th:text="${technologyProject.id}"></td>
+                    <td th:text="${technologyProject.number}"></td>
                     <td>
                         <details>
-                            <summary class="sum-item">Project Lists</summary>
-                            <p th:each="p: ${projectTerm.projectLists}">
+                            <summary class="sum-item">Lists</summary>
+                            <p th:each="p: ${technologyProject.projectLists}">
                                 <span th:text="${p.part.number + ' : ' + p.part.name + ' - ' + p.amount}"></span>
                             </p>
                         </details>
                     </td>
-                    <td th:text="${projectTerm.customer.name}"></td>
-                    <td th:text="${projectTerm.start}"></td>
-                    <td th:text="${projectTerm.deadline}"></td>
-                    <td th:text="${projectTerm.projectCondition.name}"></td>
+                    <td th:text="${technologyProject.customer.name}"></td>
+                    <td th:text="${technologyProject.start}"></td>
+                    <td th:text="${technologyProject.deadline}"></td>
+                    <td th:text="${technologyProject.projectCondition.name}"></td>
                 </tr>
                 </tbody>
             </table>
@@ -53,7 +60,7 @@
                 <label class="form-label d-block me-1">
                     Parts
                     <select class="form-select"  aria-label="Default select example" name="partId">
-                        <option th:each="list: ${projectLists}"
+                        <option th:each="list: ${technologyProject.projectLists}"
                                 th:value="${list.part.id}"
                                 th:text="${list.part.number + ' : ' + list.part.name + ' - ' + list.amount}">
                         </option>
@@ -99,15 +106,12 @@
                     <td th:text="${term.equipment.number + ' : ' + term.equipment.name}"></td>
                     <td th:text="${term.operationTime}"></td>
                     <td>
-                        <a th:text="Edit" th:href="@{/terms/term_parts/{id}/edit/{termId}(id=${projectTerm.id}, termId=${term.id})}" />
+                        <a th:text="Edit" th:href="@{/technologies/term_parts/{id}/edit/{termId}(id=${technologyProject.id}, termId=${term.id})}" />
                         |
-                        <a th:text="Delete" th:href="@{/terms/term_parts/{id}/delete/{termId}(id=${projectTerm.id}, termId=${term.id})}" /></td>
+                        <a th:text="Delete" th:href="@{/technologies/term_parts/{id}/delete/{termId}(id=${technologyProject.id}, termId=${term.id})}" /></td>
                 </tr>
                 </tbody>
             </table>
-        </div>
-        <div class="col-xl-2 my-5">
-            <p>Welcome: <span th:text="${#authentication.name}"></span></p>
         </div>
     </div>
 </div>

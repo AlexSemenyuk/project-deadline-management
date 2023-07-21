@@ -7,7 +7,6 @@ import org.itstep.projectdeadlinemanagement.repository.ProjectRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -19,8 +18,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 @Controller
 @RequiredArgsConstructor
 @Slf4j
-@RequestMapping("/terms")
-public class TermsController {
+@RequestMapping("/technologies")
+public class TechnologyController {
     private final ProjectRepository projectRepository;
 
     @GetMapping
@@ -33,19 +32,13 @@ public class TermsController {
             }
         }
         model.addAttribute("projects", projects);
-        return "terms";
+        return "technologies";
     }
 
     @PostMapping
     public String create(Integer id, Model model) {
         Optional<Project> optionalProject = projectRepository.findById(id);
-//        String[] redirect = new String[1];
-//        redirect[0] = "redirect:/terms";
-//        optionalProject.ifPresent(project -> {
-//            model.addAttribute("projectTerm", project);
-//            redirect[0] = "redirect:/terms/term_parts" + projectId;
-//        });
-        String redirect = "redirect:/terms/term_parts/" + id;
+        String redirect = "redirect:/technologies/term_parts/" + id;
         return redirect;
     }
 }

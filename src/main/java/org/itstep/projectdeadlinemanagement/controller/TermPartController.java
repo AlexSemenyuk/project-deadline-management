@@ -4,10 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.itstep.projectdeadlinemanagement.command.TermPartCommand;
 import org.itstep.projectdeadlinemanagement.model.*;
-import org.itstep.projectdeadlinemanagement.repository.EquipmentRepository;
-import org.itstep.projectdeadlinemanagement.repository.PartRepository;
-import org.itstep.projectdeadlinemanagement.repository.ProjectRepository;
-import org.itstep.projectdeadlinemanagement.repository.TermPartRepository;
+import org.itstep.projectdeadlinemanagement.repository.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -17,11 +14,12 @@ import java.util.Optional;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 @Controller
-@RequestMapping("terms/term_parts")
+@RequestMapping("technologies/term_parts")
 @RequiredArgsConstructor
 @Slf4j
 public class TermPartController {
     private final ProjectRepository projectRepository;
+    private final ProjectConditionRepository projectConditionRepository;
     private final PartRepository partRepository;
     private final EquipmentRepository equipmentRepository;
     private final TermPartRepository termPartRepository;
@@ -31,8 +29,8 @@ public class TermPartController {
         Optional<Project> optionalProject = projectRepository.findById(id);
         List<TermPart> termPartLists = new CopyOnWriteArrayList<>();
         optionalProject.ifPresent(project -> {
-            model.addAttribute("projectTerm", project);
-            model.addAttribute("projectLists", project.getProjectLists());
+            model.addAttribute("technologyProject", project);
+//            model.addAttribute("projectLists", project.getProjectLists());
 
             project.getProjectLists().forEach(projectList -> {
                 termPartLists.addAll(projectList.getPart().getTermParts());
@@ -57,39 +55,29 @@ public class TermPartController {
             termPart.setEquipment(equipment);
             termPartRepository.save(termPart);
         }
-        return "redirect:/terms/term_parts/{id}";
+        return "redirect:/technologies/term_parts/{id}";
     }
 
     @GetMapping(("{id}/delete/{termPartId}"))
     String delete(@PathVariable Integer id, @PathVariable Integer termPartId) {
-//        Optional<Project> optionalProject = projectRepository.findById(id);
-//        optionalProject.ifPresent(project -> {
-//            for (ProjectList item: project.getProjectLists()){
-//                if (Objects.equals(item.getId(), listId)){
-//                    project.getProjectLists().remove(item);
-//                    break;
-//                }
-//            }
-//        });
+
         Optional<TermPart> optionalTermPart = termPartRepository.findById(termPartId);
         optionalTermPart.ifPresent(term -> termPartRepository.deleteById(termPartId));
-        return "redirect:/terms/term_parts/{id}";
+        return "redirect:/technologies/term_parts/{id}";
     }
-//    @GetMapping("/{id}/delete/{listId}")
-//    public String delete(@PathVariable Integer id, @PathVariable Integer listId) {
-//        Optional<Project> optionalProject = projectRepository.findById(id);
-//        optionalProject.ifPresent(project -> {
-//            for (ProjectList item: project.getProjectLists()){
-//                if (Objects.equals(item.getId(), listId)){
-//                    project.getProjectLists().remove(item);
-//                    break;
-//                }
-//            }
-//            projectRepository.save(project);
-//        });
-//        return "redirect:/projects/project_lists/{id}";
-//    }
 
+    @GetMapping(("finish/{id}"))
+    String finish(@PathVariable Integer id) {
+        Optional<Project> optionalProject = projectRepository.findById(id);
+        optionalProject.ifPresent(project -> {
+            Optional<ProjectCondition> optionalProjectCondition = projectConditionRepository.findById(3);
+            optionalProjectCondition.ifPresent(condition -> {
+                project.setProjectCondition(condition);
+                projectRepository.save(project);
+            });
+        });
+        return "redirect:/";
+    }
 
 }
 

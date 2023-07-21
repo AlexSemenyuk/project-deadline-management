@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("projects/customers")
+@RequestMapping("projects/project_create/customers")
 @Slf4j
 public class CustomerController {
     private final CustomerRepository customerRepository;
@@ -52,14 +52,14 @@ public class CustomerController {
         } catch (Exception ex) {
             model.addFlashAttribute("error", "Error creating publisher because of non unique publisher name");
         }
-        return "redirect:/projects/customers";
+        return "redirect:/projects/project_create/customers";
     }
 
     @GetMapping(("delete/{id}"))
     String delete(@PathVariable Integer id) {
         Optional<Customer> optionalCustomer = customerRepository.findById(id);
         optionalCustomer.ifPresent(customer -> customerRepository.deleteById(id));
-        return "redirect:/projects/customers";
+        return "redirect:/projects/project_create/customers";
     }
 }
 
