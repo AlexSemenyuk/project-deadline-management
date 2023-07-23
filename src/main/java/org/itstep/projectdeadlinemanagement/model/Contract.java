@@ -21,7 +21,7 @@ public class Contract {
     @Column(nullable = false, unique = true)
     private String number;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String name;
 
     @Column(nullable = false)

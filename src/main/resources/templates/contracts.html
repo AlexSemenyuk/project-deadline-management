@@ -13,6 +13,11 @@
                 <a class="btn btn-primary my-5 " th:href="@{/}">Back to main page</a>
             </div>
             <p>Welcome: <span th:text="${#authentication.name}"></span></p>
+            <div>
+                <a class="btn btn-primary my-2 "
+                   th:href="@{/contracts/types}">
+                    Go to Contract Types</a>
+            </div>
         </div>
         <div class="col-xl-10 text-center my-5">
             <h3>Select project for work with contracts</h3>

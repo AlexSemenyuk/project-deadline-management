@@ -2,15 +2,9 @@ package org.itstep.projectdeadlinemanagement.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.itstep.projectdeadlinemanagement.command.ProjectCommand;
-import org.itstep.projectdeadlinemanagement.model.ContractType;
-import org.itstep.projectdeadlinemanagement.model.Customer;
-import org.itstep.projectdeadlinemanagement.model.Project;
-import org.itstep.projectdeadlinemanagement.model.ProjectCondition;
-import org.itstep.projectdeadlinemanagement.repository.ContractTypeRepository;
-import org.itstep.projectdeadlinemanagement.repository.CustomerRepository;
-import org.itstep.projectdeadlinemanagement.repository.ProjectConditionRepository;
-import org.itstep.projectdeadlinemanagement.repository.ProjectRepository;
+import org.itstep.projectdeadlinemanagement.command.ContractCommand;
+import org.itstep.projectdeadlinemanagement.model.*;
+import org.itstep.projectdeadlinemanagement.repository.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,8 +20,9 @@ import java.util.Optional;
 @Slf4j
 public class ContractCreateController {
     private final ProjectRepository projectRepository;
+    private final ContractRepository contractRepository;
     private final ContractTypeRepository contractTypeRepository;
-    private final ProjectConditionRepository projectConditionRepository;
+
 
 
     @GetMapping("/{id}")
@@ -41,47 +36,23 @@ public class ContractCreateController {
         return "contract_create";
     }
 
+    @PostMapping("/{id}")
+    public String create(@PathVariable Integer id, ContractCommand command) {
+        log.info("ContractCommand {}", command);
+        Optional<ContractType> optionalContractType = contractTypeRepository.findById(command.contractTypeId());
+        Optional<Project> optionalProject = projectRepository.findById(id);
+        if (optionalContractType.isPresent() && optionalProject.isPresent()){
+            ContractType contractType = optionalContractType.get();
+            Project project = optionalProject.get();
+            Contract contract = Contract.fromCommand(command);
+            contract.setContractType(contractType);
+            contract.setProject(project);
+            contractRepository.save(contract);
+        }
+        return "redirect:/contracts/project_contracts/{id}";
+    }
 
-//    @GetMapping("delete/{id}")
-//    public String delete(@PathVariable Integer id) {
-//        Optional<Project> optionalProject = projectRepository.findById(id);
-//        optionalProject.ifPresent(project -> projectRepository.deleteById(id));
-//        return "redirect:/projects";
-//    }
-//
-//    @GetMapping(("/edit/{id}"))
-//    String datails(@PathVariable Integer id, Model model) {
-//        Optional<Project> optionalProject = projectRepository.findById(id);
-//        if (optionalProject.isPresent()){
-//            Project project = optionalProject.get();
-//            model.addAttribute("project", project);
-//            model.addAttribute("customers", customerRepository.findAll());
-//            model.addAttribute("idCustomer", project.getCustomer().getId());
-//            model.addAttribute("idProjectCondition", project.getProjectCondition().getId());
-//            model.addAttribute("projectConditions", projectConditionRepository.findAll());
-//        }
-//        return "projects_edit";
-//    }
-//    @PostMapping(("edit/{id}"))
-//    String update(@PathVariable Integer id, ProjectCommand command) {
-//        log.info("ProjectCommand {}", command);
-//        Optional<Project> optionalProject = projectRepository.findById(id);
-//        Optional<Customer> optionalCustomer = customerRepository.findById(command.customerId());
-//        Optional<ProjectCondition> optionalProjectCondition = projectConditionRepository.findById(command.projectConditionId());
-//        if (optionalProject.isPresent() &&
-//                optionalProjectCondition.isPresent() &&
-//                optionalCustomer.isPresent()){
-//            Project project = optionalProject.get();
-//            project.setNumber(command.number());
-//            ProjectCondition projectCondition = optionalProjectCondition.get();
-//            Customer customer = optionalCustomer.get();
-//            project.setCustomer(customer);
-//            project.setProjectCondition(projectCondition);
-//            project.setStart(command.start());
-//            project.setDeadline(command.deadline());
-//            projectRepository.save(project);
-//        }
-//        return "redirect:/projects/project_details/edit/{id}";
-//    }
+
+
 }
 

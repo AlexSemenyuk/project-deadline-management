@@ -19,15 +19,6 @@
                 <a class="btn btn-primary" th:text="'Create new contract'"
                    th:href="@{/contracts/project_contracts/contract_create/{id}(id=${projectContract.id})}" />
             </div>
-<!--            <div>-->
-<!--                <a class="btn btn-primary my-2" th:text="Edit"-->
-<!--                   th:href="@{/contracts/contract_details/edit/{id}(id=${project.id})}" />-->
-<!--            </div>-->
-<!--            <div>-->
-<!--                <a class="btn btn-primary my-2" th:text="Delete"-->
-<!--                   th:href="@{/projects/project_details/delete/{id}(id=${project.id})}" />-->
-<!--            </div>-->
-
         </div>
         <div class="col-xl-10 text-center my-5">
             <h3>Your project</h3>
@@ -62,7 +53,6 @@
                 </tr>
                 </tbody>
             </table>
-            <p>Project Lists - Part(Number:Name) - Amount</p>
             <h3>Project Contracts</h3>
             <table  class="table">
                 <thead>
@@ -77,14 +67,19 @@
                 </tr>
                 </thead>
                 <tbody>
-<!--                <tr th:each="contract: ${project.contracts}">-->
-<!--                    <td th:scope="row" th:text="${contract.id}"></td>-->
-<!--                    <td th:text="${contract.number}"></td>-->
-<!--                    <td th:text="${contract.name}"></td>-->
-<!--                    <td th:text="${contract.start}"></td>-->
-<!--                    <td th:text="${contract.deadline}"></td>-->
-<!--                    <td th:text="${contract.contractType.name}"></td>-->
-<!--                </tr>-->
+                <tr th:each="contract: ${projectContract.contracts}">
+                    <td th:scope="row" th:text="${contract.id}"></td>
+                    <td th:text="${contract.number}"></td>
+                    <td th:text="${contract.name}"></td>
+                    <td th:text="${contract.start}"></td>
+                    <td th:text="${contract.deadline}"></td>
+                    <td th:text="${contract.contractType.name}"></td>
+                    <td>
+                        <a th:text="Edit"
+                           th:href="@{/contracts/project_contracts/{id}/edit/{contractId}(id=${projectContract.id}, contractId=${contract.id})}" />
+                        |
+                        <a th:text="Delete" th:href="@{/contracts/project_contracts/{id}/delete/{contractId}(id=${projectContract.id}, contractId=${contract.id})}" /></td>
+                </tr>
                 </tbody>
             </table>
         </div>
