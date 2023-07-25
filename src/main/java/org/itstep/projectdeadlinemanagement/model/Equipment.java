@@ -31,7 +31,7 @@ public class Equipment {
     private Division division;
 
     @OneToMany(mappedBy = "equipment")
-    private List<TermPart> partTerms = new ArrayList<>();
+    private List<TechnologyPart> partTerms = new ArrayList<>();
 
     @OneToMany(mappedBy = "equipment")
     private List<AssemblyTerm> assemblyTerms = new ArrayList<>();

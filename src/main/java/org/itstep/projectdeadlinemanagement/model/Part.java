@@ -27,7 +27,7 @@ public class Part {
     private List<Assembly> assemblies = new ArrayList<>();
 
     @OneToMany(mappedBy = "part")
-    private List<TermPart> termParts = new ArrayList<>();
+    private List<TechnologyPart> termParts = new ArrayList<>();
 
     @OneToMany(mappedBy = "part")
     private List<ProjectList> projectLists = new ArrayList<>();

@@ -5,17 +5,16 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.itstep.projectdeadlinemanagement.command.TermPartCommand;
-
+import org.itstep.projectdeadlinemanagement.command.TechnologyPartCommand;
 
 
 @Entity
 @Data
-@Table(name = "term_parts")
+@Table(name = "technology_parts")
 @NoArgsConstructor
 @ToString(exclude = {"part", "equipment"})
 @EqualsAndHashCode(exclude = {"part", "equipment"})
-public class TermPart {
+public class TechnologyPart {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -33,7 +32,7 @@ public class TermPart {
     private Equipment equipment;
 
 
-    public TermPart(Integer number, Integer operationTime) {
+    public TechnologyPart(Integer number, Integer operationTime) {
         this.number = number;
         this.operationTime = operationTime;
     }
@@ -48,8 +47,8 @@ public class TermPart {
         this.equipment = equipment;
     }
 
-    public static TermPart fromCommand(TermPartCommand command) {
-        return new TermPart(command.number(), command.operationTime());
+    public static TechnologyPart fromCommand(TechnologyPartCommand command) {
+        return new TechnologyPart(command.number(), command.operationTime());
     }
 }
 

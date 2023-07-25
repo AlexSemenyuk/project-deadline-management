@@ -41,15 +41,20 @@ public class TaskService {
 
         Part[] part = new Part[1];
         part[0] = null;
+
+        LocalDateTime [] productionStart = new LocalDateTime[1];
+
         optionalProject.ifPresent(project -> {
             projectNumber[0] = project.getNumber();
-            start[0] = project.getStart();
+            productionStart[0] = formProductionStart(project);
             project.getProjectLists().forEach(projectList -> {
                 part[0] = projectList.getPart();
                 amount[0] = projectList.getAmount();
                 for (int i = 0; i < amount[0]; i++) {
                     lotNumber[0] = i + 1;
-                    part[0].getTermParts().forEach(termPart -> {
+//                    part[0].getTermParts().forEach(termPart -> {
+                    start[0] = productionStart[0];
+                    for (TechnologyPart termPart: part[0].getTermParts()) {
                         task[0] = Task.formTask(projectNumber[0],
                                 part[0].getNumber(),
                                 part[0].getName(),
@@ -63,12 +68,37 @@ public class TaskService {
                         optionalTaskCondition.ifPresent(task[0]::setTaskCondition);
                         task[0].setProject(project);
                         tasks.add(task[0]);
-                    });
+                        start[0] = start[0].plusHours(termPart.getOperationTime());
+                    }
+//                    });
                 }
             });
         });
         taskRepository.saveAll(tasks);
         return tasks;
+    }
+
+    private LocalDateTime formProductionStart(Project project) {
+        LocalDateTime productionStart = project.getStart();
+        // DesignTerm + TechnologyTerm
+        LocalDateTime designAndTechnologyTMP = productionStart
+                .plusDays(project.getDesignTerm())
+                .plusDays(project.getTechnologyTerm());
+        // Max from contract.getDeadline
+        List<Contract> contracts = project.getContracts();
+        LocalDateTime  contractTMP = project.getStart();
+        for (Contract contract: contracts){
+            if (contract.getDeadline().compareTo(contractTMP) >= 0) {
+                contractTMP = contract.getDeadline();
+            }
+        }
+
+        if (designAndTechnologyTMP.compareTo(contractTMP) >= 0){
+            productionStart = designAndTechnologyTMP;
+        } else {
+            productionStart = contractTMP;
+        }
+        return productionStart;
     }
 
 

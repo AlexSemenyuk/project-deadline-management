@@ -7,7 +7,6 @@ import org.itstep.projectdeadlinemanagement.command.ProjectCommand;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -33,14 +32,14 @@ public class Project {
 
     private int designTerm = 0;
 
+    private int technologyTerm = 0;
+
     @Column(nullable = false)
     private LocalDateTime deadline;
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private ProjectCondition projectCondition;
 
-    //    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-//    private List<Task> tasks = new ArrayList<>();
     @OneToMany(mappedBy = "project")
     private List<Task> tasks = new ArrayList<>();
 
@@ -52,12 +51,6 @@ public class Project {
         this.start = start;
         this.deadline = deadline;
     }
-//    public Project(Integer number, LocalDateTime start, int designTerm, LocalDateTime deadline) {
-//        this.number = number;
-//        this.start = start;
-//        this.designTerm = designTerm;
-//        this.deadline = deadline;
-//    }
 
     public void setCustomer(Customer customer) {
         customer.getProjects().add(this);

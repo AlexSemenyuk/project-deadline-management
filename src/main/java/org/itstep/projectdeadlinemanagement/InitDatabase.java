@@ -13,7 +13,6 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -29,7 +28,7 @@ public class InitDatabase implements CommandLineRunner {
     private final EquipmentRepository equipmentRepository;
     private final ProjectRepository projectRepository;
     private final ProjectListRepository projectListRepository;
-    private final TermPartRepository termPartRepository;
+    private final TechnologyPartRepository termPartRepository;
     private final TaskService taskService;
     private final ProductionPlanService productionPlanService;
     private final ContractTypeRepository contractTypeRepository;
@@ -92,56 +91,57 @@ public class InitDatabase implements CommandLineRunner {
         // 8. Создание Project с ProjectLists
         addProject(new ProjectCommand(
                 1001, null, 1,
-                LocalDateTime.parse("2023-07-23T00:00"), LocalDateTime.parse("2023-07-30T00:00"),
+                LocalDateTime.parse("2023-07-01T00:00"), LocalDateTime.parse("2023-07-30T00:00"),
                 1));
         addProjectList(1, new ProjectListCommand(1, 2));
         addProjectList(1, new ProjectListCommand(3, 3));
 
-        addProject(new ProjectCommand(
-                1002, null, 2,
-                LocalDateTime.parse("2023-07-21T00:00"), LocalDateTime.parse("2023-07-28T00:00"),
-                1));
-        addProjectList(2, new ProjectListCommand(2, 3));
-        addProjectList(2, new ProjectListCommand(4, 1));
+//        addProject(new ProjectCommand(
+//                1002, null, 2,
+//                LocalDateTime.parse("2023-07-21T00:00"), LocalDateTime.parse("2023-07-28T00:00"),
+//                1));
+//        addProjectList(2, new ProjectListCommand(2, 3));
+//        addProjectList(2, new ProjectListCommand(4, 1));
+//
+//        addProject(new ProjectCommand(
+//                1003, null, 3,
+//                LocalDateTime.parse("2023-07-18T00:00"), LocalDateTime.parse("2023-07-27T00:00"),
+//                1));
+//        addProjectList(3, new ProjectListCommand(5, 3));
+//        addProjectList(3, new ProjectListCommand(6, 5));
 
-        addProject(new ProjectCommand(
-                1003, null, 3,
-                LocalDateTime.parse("2023-07-18T00:00"), LocalDateTime.parse("2023-07-27T00:00"),
-                1));
-        addProjectList(3, new ProjectListCommand(5, 3));
-        addProjectList(3, new ProjectListCommand(6, 5));
-
-        addProject(new ProjectCommand(
-                1004, null, 4,
-                LocalDateTime.parse("2023-07-15T00:00"), LocalDateTime.parse("2023-07-26T00:00"),
-                1));
-        addProjectList(4, new ProjectListCommand(5, 1));
-        addProjectList(4, new ProjectListCommand(8, 2));
+//        addProject(new ProjectCommand(
+//                1004, null, 4,
+//                LocalDateTime.parse("2023-07-15T00:00"), LocalDateTime.parse("2023-07-26T00:00"),
+//                1));
+//        addProjectList(4, new ProjectListCommand(5, 1));
+//        addProjectList(4, new ProjectListCommand(8, 2));
 
         // 9. Term for parts of project / Нормирование труда
         // Project 1001
-        addTermPart(new TermPartCommand(1, 1, 1, 3));
-        addTermPart(new TermPartCommand(1, 2, 2, 2));
-        addTermPart(new TermPartCommand(1, 3, 3, 5));
-        addTermPart(new TermPartCommand(3, 1, 1, 2));
-        addTermPart(new TermPartCommand(3, 2, 3, 4));
+        addTermPart(new TechnologyPartCommand(1, 1, 1, 3));
+        addTermPart(new TechnologyPartCommand(1, 2, 2, 2));
+        addTermPart(new TechnologyPartCommand(1, 3, 3, 5));
+        addTermPart(new TechnologyPartCommand(3, 1, 1, 2));
+        addTermPart(new TechnologyPartCommand(3, 2, 3, 4));
         // Project 1002
-        addTermPart(new TermPartCommand(2, 1, 4, 1));
-        addTermPart(new TermPartCommand(2, 2, 5, 3));
-        addTermPart(new TermPartCommand(2, 3, 6, 2));
-        addTermPart(new TermPartCommand(4, 1, 5, 2));
-        addTermPart(new TermPartCommand(4, 2, 6, 4));
+//        addTermPart(new TechnologyPartCommand(2, 1, 4, 1));
+//        addTermPart(new TechnologyPartCommand(2, 2, 5, 3));
+//        addTermPart(new TechnologyPartCommand(2, 3, 6, 2));
+//        addTermPart(new TechnologyPartCommand(4, 1, 5, 2));
+//        addTermPart(new TechnologyPartCommand(4, 2, 6, 4));
         // Project 1003
-        addTermPart(new TermPartCommand(5, 1, 3, 1));
-        addTermPart(new TermPartCommand(5, 2, 4, 3));
-        addTermPart(new TermPartCommand(5, 3, 7, 5));
-        addTermPart(new TermPartCommand(6, 1, 7, 2));
-        addTermPart(new TermPartCommand(6, 2, 9, 4));
+//        addTermPart(new TechnologyPartCommand(5, 1, 3, 1));
+//        addTermPart(new TechnologyPartCommand(5, 2, 4, 3));
+//        addTermPart(new TechnologyPartCommand(5, 3, 7, 5));
+//        addTermPart(new TechnologyPartCommand(6, 1, 7, 2));
+//        addTermPart(new TechnologyPartCommand(6, 2, 9, 4));
         // Project 1004
-        addTermPart(new TermPartCommand(8, 1, 1, 2));
-        addTermPart(new TermPartCommand(8, 2, 7, 4));
+//        addTermPart(new TechnologyPartCommand(8, 1, 1, 2));
+//        addTermPart(new TechnologyPartCommand(8, 2, 7, 4));
 
         // 10. Создание состояний task (Production, Stop, Ок, Archive)
+        taskConditionRepository.save(new TaskCondition("New"));
         taskConditionRepository.save(new TaskCondition("Production"));
         taskConditionRepository.save(new TaskCondition("Ок"));
         taskConditionRepository.save(new TaskCondition("Design"));
@@ -149,10 +149,10 @@ public class InitDatabase implements CommandLineRunner {
         taskConditionRepository.save(new TaskCondition("Archive"));
 
         // Формирование Tasks и ProductionPlans
-        productionPlanService.formProductionPlans(taskService.formTasks(1));
-        productionPlanService.formProductionPlans(taskService.formTasks(2));
-        productionPlanService.formProductionPlans(taskService.formTasks(3));
-        productionPlanService.formProductionPlans(taskService.formTasks(4));
+//        productionPlanService.formProductionPlans(taskService.formTasks(1));
+//        productionPlanService.formProductionPlans(taskService.formTasks(2));
+//        productionPlanService.formProductionPlans(taskService.formTasks(3));
+//        productionPlanService.formProductionPlans(taskService.formTasks(4));
 
         // 11. ContractTypes
         contractTypeRepository.save( new ContractType("Metal"));
@@ -162,18 +162,18 @@ public class InitDatabase implements CommandLineRunner {
         // Project 1001
         addContract(1, new ContractCommand(
                 "№10000-1", "Закупка металла",
-                LocalDateTime.parse("2023-07-23T00:00"),
-                LocalDateTime.parse("2023-07-28T00:00"),
+                LocalDateTime.parse("2023-07-10T00:00"),
+                LocalDateTime.parse("2023-07-18T00:00"),
                 1));
         addContract(1, new ContractCommand(
                 "№10000-2", "Закупка металла",
-                LocalDateTime.parse("2023-07-23T00:00"),
-                LocalDateTime.parse("2023-07-30T00:00"),
+                LocalDateTime.parse("2023-07-10T00:00"),
+                LocalDateTime.parse("2023-07-15T00:00"),
                 1));
         addContract(1, new ContractCommand(
                 "№10000-3", "Закупка металла",
-                LocalDateTime.parse("2023-07-23T00:00"),
-                LocalDateTime.parse("2023-07-30T00:00"),
+                LocalDateTime.parse("2023-07-10T00:00"),
+                LocalDateTime.parse("2023-07-16T00:00"),
                 1));
 
     }
@@ -228,13 +228,13 @@ public class InitDatabase implements CommandLineRunner {
         });
     }
 
-    private void addTermPart(TermPartCommand command) {
+    private void addTermPart(TechnologyPartCommand command) {
         Optional<Part> optionalPart = partRepository.findById(command.partId());
         Optional<Equipment> optionalEquipment = equipmentRepository.findById(command.equipmentId());
         if (optionalPart.isPresent() && optionalEquipment.isPresent()) {
             Part part = optionalPart.get();
             Equipment equipment = optionalEquipment.get();
-            TermPart termPart = TermPart.fromCommand(command);
+            TechnologyPart termPart = TechnologyPart.fromCommand(command);
             termPart.setPart(part);
             termPart.setEquipment(equipment);
             termPartRepository.save(termPart);

@@ -5,8 +5,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 
 @Entity
@@ -40,7 +38,7 @@ public class Task {
     private Integer lotNumber;
 
     @Column(nullable = false)
-    private LocalDateTime start;
+    private LocalDateTime startProduction;
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private TaskCondition taskCondition;
@@ -52,14 +50,14 @@ public class Task {
     private ProductionPlan productionPlan;
 
     public Task(Integer projectNumber, Integer partNumber, String partName, Integer termNumber,
-                Integer operationTime, Integer lotNumber, LocalDateTime start) {
+                Integer operationTime, Integer lotNumber, LocalDateTime startProduction) {
         this.projectNumber = projectNumber;
         this.partNumber = partNumber;
         this.partName = partName;
         this.termNumber = termNumber;
         this.operationTime = operationTime;
         this.lotNumber = lotNumber;
-        this.start = start;
+        this.startProduction = startProduction;
     }
 
     public void setEquipment(Equipment equipment) {
@@ -77,8 +75,8 @@ public class Task {
     }
 
     public static Task formTask(Integer projectNumber, Integer partNumber, String partName,
-                                Integer termNumber, Integer operationTime, Integer lotNumber, LocalDateTime start) {
-        return new Task(projectNumber, partNumber, partName, termNumber, operationTime, lotNumber, start);
+                                Integer termNumber, Integer operationTime, Integer lotNumber, LocalDateTime startProduction) {
+        return new Task(projectNumber, partNumber, partName, termNumber, operationTime, lotNumber, startProduction);
     }
 
 }

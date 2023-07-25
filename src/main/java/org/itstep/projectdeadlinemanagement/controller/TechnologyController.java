@@ -38,7 +38,7 @@ public class TechnologyController {
     @PostMapping
     public String create(Integer id, Model model) {
         Optional<Project> optionalProject = projectRepository.findById(id);
-        String redirect = "redirect:/technologies/term_parts/" + id;
+        String redirect = "redirect:/technologies/technology_parts/" + id;
         return redirect;
     }
 }

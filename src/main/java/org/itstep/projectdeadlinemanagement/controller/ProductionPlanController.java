@@ -44,20 +44,20 @@ public class ProductionPlanController {
         Month month = DATE.getMonth();
         model.addAttribute("month", month);
 
-        if (!productionPlans.isEmpty()){
-            // Данные в общую таблицу
-            List<ChartEquipmentCommand> chartEquipmentCommands = productionPlanService.formChartPlanCommand(equipmentList, daysOfMonth);
-            model.addAttribute("chartEquipmentCommands", chartEquipmentCommands);
-            // Данные за день
-            List<ChartPlanCommand> chartPlanCommandListPerDay = new CopyOnWriteArrayList<>();
-            model.addAttribute("chartPlanCommandListPerDay",
-                    chartEquipmentCommands.get(0).getChartDaysCommands().get(0).getChartPlanCommandList());
-
-            String parameter = chartEquipmentCommands.get(0).getEquipment() + ";" +
-                    month + " , " +
-                    chartEquipmentCommands.get(0).getChartDaysCommands().get(0).getDayNumber();
-            model.addAttribute("parameter", parameter);
-        }
+//        if (!productionPlans.isEmpty()){
+//            // Данные в общую таблицу
+//            List<ChartEquipmentCommand> chartEquipmentCommands = productionPlanService.formChartPlanCommand(equipmentList, daysOfMonth);
+//            model.addAttribute("chartEquipmentCommands", chartEquipmentCommands);
+//            // Данные за день
+//            List<ChartPlanCommand> chartPlanCommandListPerDay = new CopyOnWriteArrayList<>();
+//            model.addAttribute("chartPlanCommandListPerDay",
+//                    chartEquipmentCommands.get(0).getChartDaysCommands().get(0).getChartPlanCommandList());
+//
+//            String parameter = chartEquipmentCommands.get(0).getEquipment() + ";" +
+//                    month + " , " +
+//                    chartEquipmentCommands.get(0).getChartDaysCommands().get(0).getDayNumber();
+//            model.addAttribute("parameter", parameter);
+//        }
         return "production_plans";
     }
 
@@ -85,7 +85,7 @@ public class ProductionPlanController {
             int dayNumber = Integer.parseInt(tmpId[0]);
             int equipmentId = Integer.parseInt(tmpId[1]);
 
-            List<ChartPlanCommand> chartPlanCommandListPerDay = new CopyOnWriteArrayList<>();
+//            List<ChartPlanCommand> chartPlanCommandListPerDay = new CopyOnWriteArrayList<>();
             model.addAttribute("chartPlanCommandListPerDay",
                     chartEquipmentCommands.get(equipmentId - 1).getChartDaysCommands().get(dayNumber - 1).getChartPlanCommandList());
 
@@ -93,27 +93,6 @@ public class ProductionPlanController {
                     month + " , " +
                     chartEquipmentCommands.get(equipmentId - 1).getChartDaysCommands().get(dayNumber - 1).getDayNumber();
             model.addAttribute("parameter", parameter);
-
-
-
-//            List<ChartPlanCommand> chartPlanCommandListPerDay = new CopyOnWriteArrayList<>();
-//
-//            label:
-//            for (ChartEquipmentCommand e: chartEquipmentCommands) {
-//                if (equipmentId == e.getEquipmentId()){
-//                    for (ChartDaysCommand d: e.getChartDaysCommands()){
-//                        if (dayNumber == d.getDayNumber()){
-//                            d.getChartPlanCommandList().forEach(plan -> {
-//                                chartPlanCommandListPerDay.add(plan);
-//                            });
-//                            chartPlanCommandListPerDay.forEach(System.out::println);
-//                            model.addAttribute("chartPlanCommandListPerDay", chartPlanCommandListPerDay);
-//                            break label;
-//                        }
-//                    }
-//                }
-//            }
-
         }
         return "production_plans";
     }
