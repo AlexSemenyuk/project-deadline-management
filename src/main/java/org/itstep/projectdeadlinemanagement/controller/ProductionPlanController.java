@@ -2,10 +2,7 @@ package org.itstep.projectdeadlinemanagement.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.itstep.projectdeadlinemanagement.command.ChartDaysCommand;
 import org.itstep.projectdeadlinemanagement.command.ChartEquipmentCommand;
-import org.itstep.projectdeadlinemanagement.command.ChartPlanCommand;
-import org.itstep.projectdeadlinemanagement.model.Equipment;
 import org.itstep.projectdeadlinemanagement.model.ProductionPlan;
 import org.itstep.projectdeadlinemanagement.repository.*;
 import org.itstep.projectdeadlinemanagement.service.ProductionPlanService;
@@ -18,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.*;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 @Controller
 @RequiredArgsConstructor
@@ -33,67 +29,52 @@ public class ProductionPlanController {
 
     @GetMapping
     public String home(Model model) {
-        List<Equipment> equipmentList = equipmentRepository.findAll();
-        model.addAttribute("equipmentList", equipmentList);
 
-        List<ProductionPlan> productionPlans = productionPlanRepository.findAll();
-        model.addAttribute("productionPlans", productionPlans);
+        List<ProductionPlan> productionPlansPerCurrentMonth = productionPlanService.formPlansOfCurrentMonth(DATE);
+        model.addAttribute("productionPlans", productionPlansPerCurrentMonth);
 
-        // Количество дней в месяце и месяц
-        int daysOfMonth = productionPlanService.getDaysOfMonth(DATE);
         Month month = DATE.getMonth();
         model.addAttribute("month", month);
 
-//        if (!productionPlans.isEmpty()){
-//            // Данные в общую таблицу
-//            List<ChartEquipmentCommand> chartEquipmentCommands = productionPlanService.formChartPlanCommand(equipmentList, daysOfMonth);
-//            model.addAttribute("chartEquipmentCommands", chartEquipmentCommands);
-//            // Данные за день
-//            List<ChartPlanCommand> chartPlanCommandListPerDay = new CopyOnWriteArrayList<>();
-//            model.addAttribute("chartPlanCommandListPerDay",
-//                    chartEquipmentCommands.get(0).getChartDaysCommands().get(0).getChartPlanCommandList());
-//
-//            String parameter = chartEquipmentCommands.get(0).getEquipment() + ";" +
-//                    month + " , " +
-//                    chartEquipmentCommands.get(0).getChartDaysCommands().get(0).getDayNumber();
-//            model.addAttribute("parameter", parameter);
-//        }
+        // Данные в общую таблицу
+        List<ChartEquipmentCommand> chartEquipmentCommands = productionPlanService.formChart(productionPlansPerCurrentMonth, DATE);
+        model.addAttribute("chartEquipmentCommands", chartEquipmentCommands);
+        // Данные за день
+        model.addAttribute("productionPlansPerDay",
+                chartEquipmentCommands.get(0).getChartDaysCommands().get(0).getProductionPlans());
+
+        String equipmentAndDayParameter = chartEquipmentCommands.get(0).getEquipment() + ";" +
+                month + " , " +
+                chartEquipmentCommands.get(0).getChartDaysCommands().get(0).getDayNumber();
+        model.addAttribute("parameter", equipmentAndDayParameter);
         return "production_plans";
     }
 
     @GetMapping("/{id}")
     String datails(@PathVariable String id, Model model) {
 
-        List<Equipment> equipmentList = equipmentRepository.findAll();
-        model.addAttribute("equipmentList", equipmentList);
+        List<ProductionPlan> productionPlansPerCurrentMonth = productionPlanService.formPlansOfCurrentMonth(DATE);
+        model.addAttribute("productionPlans", productionPlansPerCurrentMonth);
 
-        List<ProductionPlan> productionPlans = productionPlanRepository.findAll();
-        model.addAttribute("productionPlans", productionPlans);
-
-        // Количество дней в месяце и месяц
-        int daysOfMonth = productionPlanService.getDaysOfMonth(DATE);
         Month month = DATE.getMonth();
         model.addAttribute("month", month);
 
-        if (!productionPlans.isEmpty()){
-            // Данные в общую таблицу
-            List<ChartEquipmentCommand> chartEquipmentCommands = productionPlanService.formChartPlanCommand(equipmentList, daysOfMonth);
-            model.addAttribute("chartEquipmentCommands", chartEquipmentCommands);
+        // Данные в общую таблицу
+        List<ChartEquipmentCommand> chartEquipmentCommands = productionPlanService.formChart(productionPlansPerCurrentMonth, DATE);
+        model.addAttribute("chartEquipmentCommands", chartEquipmentCommands);
+        // Данные за день
+        String[] tmpId = id.split(":");
+        int dayNumber = Integer.parseInt(tmpId[0]);
+        int equipmentId = Integer.parseInt(tmpId[1]);
 
-            // Данные за день
-            String [] tmpId = id.split(":");
-            int dayNumber = Integer.parseInt(tmpId[0]);
-            int equipmentId = Integer.parseInt(tmpId[1]);
+        List<ProductionPlan> productionPlansPerDay = chartEquipmentCommands.get(equipmentId - 1).getChartDaysCommands().get(dayNumber - 1).getProductionPlans();
+        model.addAttribute("productionPlansPerDay", productionPlansPerDay);
 
-//            List<ChartPlanCommand> chartPlanCommandListPerDay = new CopyOnWriteArrayList<>();
-            model.addAttribute("chartPlanCommandListPerDay",
-                    chartEquipmentCommands.get(equipmentId - 1).getChartDaysCommands().get(dayNumber - 1).getChartPlanCommandList());
+        String equipmentAndDayParameter = chartEquipmentCommands.get(equipmentId - 1).getEquipment() + ";" +
+                month + " , " +
+                chartEquipmentCommands.get(equipmentId - 1).getChartDaysCommands().get(dayNumber - 1).getDayNumber();
+        model.addAttribute("parameter", equipmentAndDayParameter);
 
-            String parameter = chartEquipmentCommands.get(equipmentId - 1).getEquipment() + "; " +
-                    month + " , " +
-                    chartEquipmentCommands.get(equipmentId - 1).getChartDaysCommands().get(dayNumber - 1).getDayNumber();
-            model.addAttribute("parameter", parameter);
-        }
         return "production_plans";
     }
 

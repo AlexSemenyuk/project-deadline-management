@@ -44,28 +44,28 @@
         <div class="text-center">
             <h3>Chart</h3>
         </div>
-<!--        <table class="table">-->
-<!--            <thead>-->
-<!--                <tr>-->
-<!--                    <th class="colEquipment" th:scope="col">Equipment</th>-->
-<!--                    <th class="days text-center" th:scope="col" th:each="d: ${chartEquipmentCommands[0].chartDaysCommands}" th:text="${d.dayNumber}" ></th>-->
-<!--                </tr>-->
-<!--                </thead>-->
-<!--                <tbody>-->
-<!--                <tr th:each="chartE: ${chartEquipmentCommands}">-->
-<!--                <td class="colEquipment" th:scope="col"-->
-<!--                    th:text="${chartE.equipment}">-->
-<!--                </td>-->
-<!--                <td th:each="day: ${chartE.chartDaysCommands}" th:scope="col" class="days text-center">-->
-<!--                    <a th:text="${day.planPerDay}" th:href="@{/production_plans/{id}(id=${day.dayNumber + ':' + chartE.equipmentId})}" />-->
-<!--                </td>-->
-<!--            </tr>-->
-<!--            </tbody>-->
-<!--        </table>-->
+        <table class="table">
+            <thead>
+                <tr>
+                    <th class="colEquipment" th:scope="col">Equipment</th>
+                    <th class="days text-center" th:scope="col" th:each="d: ${chartEquipmentCommands[0].chartDaysCommands}" th:text="${d.dayNumber}" ></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="chartE: ${chartEquipmentCommands}">
+                    <td class="colEquipment" th:scope="col"
+                        th:text="${chartE.equipment}">
+                    </td>
+                    <td th:each="day: ${chartE.chartDaysCommands}" th:scope="col" class="days text-center">
+                        <a th:text="${day.planPerDay}" th:href="@{/production_plans/{id}(id=${day.dayNumber + ':' + chartE.equipmentId})}" />
+                    </td>
+            </tr>
+            </tbody>
+        </table>
         <div class="text-center">
             <h3 th:text="'Plans per day (' + ${parameter} + ')'"></h3>
         </div>
-        <div th:if="${chartPlanCommandListPerDay != null}">
+        <div th:if="${productionPlansPerDay != null}">
         <table class="table">
             <thead>
             <tr>
@@ -74,6 +74,7 @@
                 <th th:scope="col">Part</th>
                 <th th:scope="col">Equipment</th>
                 <th th:scope="col">Queue on Equipment</th>
+                <th th:scope="col">Term Number</th>
                 <th th:scope="col">Operation Time</th>
                 <th th:scope="col">Lot Number</th>
                 <th th:scope="col">Current Start</th>
@@ -82,24 +83,25 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="planCommand: ${chartPlanCommandListPerDay}">
+            <tr th:each="planCommand: ${productionPlansPerDay}">
                 <td th:scope="row" th:text="${planCommand.id}"></td>
-                <td th:text="${planCommand.projectNumber}"></td>
-                <td th:text="${planCommand.part}"></td>
-                <td th:text="${planCommand.equipment}"></td>
+                <td th:text="${planCommand.task.projectNumber}"></td>
+                <td th:text="${planCommand.task.partNumber + '-' + planCommand.task.partName}"></td>
+                <td th:text="${planCommand.equipment.number + '-' + planCommand.equipment.name}"></td>
                 <td th:text="${planCommand.number}"></td>
-                <td th:text="${planCommand.operationTime}"></td>
-                <td th:text="${planCommand.lotNumber}"></td>
-                <td th:text="${planCommand.lotNumber}"></td>
+                <td th:text="${planCommand.task.termNumber}"></td>
+                <td th:text="${planCommand.task.operationTime}"></td>
+                <td th:text="${planCommand.task.lotNumber}"></td>
+                <td th:text="${planCommand.task.lotNumber}"></td>
                 <td th:text="${planCommand.currentStart}"></td>
-                <td th:text="${planCommand.projectStart}"></td>
-                <td th:text="${planCommand.condition}"></td>
+                <td th:text="${planCommand.task.startProduction}"></td>
+                <td th:text="${planCommand.task.taskCondition.name}"></td>
             </tr>
             </tbody>
         </table>
         </div>
         <div class="text-center">
-            <h3>Plans per month / ????????????</h3>
+            <h3>Plans per month</h3>
         </div>
         <table class="table  display compact"  id="example" style="width:100%">
             <thead>
@@ -128,7 +130,7 @@
                 <td th:text="${p.task.operationTime}"></td>
                 <td th:text="${p.task.lotNumber}"></td>
                 <td th:text="${p.currentStart}"></td>
-                <td th:text="${p.task.getStartProduction}"></td>
+                <td th:text="${p.task.startProduction}"></td>
                 <td th:text="${p.task.taskCondition.name}"></td>
             </tr>
             </tbody>

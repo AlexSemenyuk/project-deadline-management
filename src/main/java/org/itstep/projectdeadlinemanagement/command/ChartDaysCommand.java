@@ -1,12 +1,14 @@
 package org.itstep.projectdeadlinemanagement.command;
 
+import org.itstep.projectdeadlinemanagement.model.ProductionPlan;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class ChartDaysCommand {
     private int dayNumber;
     private int planPerDay;
-    List<ChartPlanCommand> chartPlanCommandList = new ArrayList<>();
+    List<ProductionPlan> productionPlans = new ArrayList<>();
 
     public ChartDaysCommand(int dayNumber) {
         this.dayNumber = dayNumber;
@@ -28,12 +30,12 @@ public class ChartDaysCommand {
         this.planPerDay = planPerDay;
     }
 
-    public List<ChartPlanCommand> getChartPlanCommandList() {
-        return chartPlanCommandList;
+    public List<ProductionPlan> getProductionPlans() {
+        return productionPlans;
     }
 
-    public void setChartPlanCommandList(List<ChartPlanCommand> chartPlanCommandList) {
-        this.chartPlanCommandList = chartPlanCommandList;
+    public void setProductionPlans(List<ProductionPlan> productionPlans) {
+        this.productionPlans = productionPlans;
     }
 
     @Override
@@ -41,7 +43,7 @@ public class ChartDaysCommand {
         return "ChartDaysCommand{" +
                 "dayNumber=" + dayNumber +
                 ", planPerDay=" + planPerDay +
-                ", chartPlanCommandList=" + chartPlanCommandList +
+                ", productionPlans=" + productionPlans +
                 '}';
     }
 }
