@@ -1,4 +1,200 @@
+/* Common */
+:root {
+    /* text */
+    --text-primary: "Roboto", "Arial", sans-serif;
 
+    /* common colors (include text color) */
+    --color-text-primary: rgba(0, 0, 0, 1);
+    --color-text-secondary: rgba(245, 245, 245, 1);
+    --color-text-alternanive: rgba(35, 147, 188, 1);
+    --color-text-pink: rgb(73, 115, 103);
+    --color-text-dark: rgb(29, 29, 29, 1);
+
+    --color-text-button-light: rgba(13, 110, 253, 1);
+    --color-text-button-dark: rgba(16, 149, 193, 1);
+
+
+    /* background */
+    --color-background-body-light: rgb(255, 255, 255, 1);
+    --color-background-body-dark: rgba(29, 29, 29, 1);
+    --color-background-body-dark2: rgba(50, 50, 50, 1);
+    --color-background-body-dark3: rgba(170, 170, 170, 0.5);
+    --color-background-body-dark4: rgba(210, 210, 210, 1);
+    --color-background-section-dark: rgba(20, 30, 38, 1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    text-decoration: none;
+    box-sizing: border-box;
+}
+
+body {
+    transition: 1s;
+    font-family: var(--text-primary);
+    min-height: 100%;
+    background-color: var(--color-background-body-dark4);
+    /*display: flex;*/
+    /*flex-direction: column;*/
+}
+
+.title {
+    color: var(--color-text-secondary);
+    font-weight: 700;
+    padding-left: 400px;
+}
+
+.user {
+    color: var(--color-text-alternanive);
+    font-weight: 700;
+}
+
+.aside_menu {
+    background-color: var(--color-background-body-dark3);
+    height: 100%;
+    padding: 5vh 30px;
+    border-right: 3px solid var(--color-background-body-dark2);
+}
+
+.title_h {
+    font-size: 24px;
+    margin-bottom: 50px;
+    color: var(--color-text-primary);
+    font-weight: 700;
+    padding-left: 30px;
+}
+
+.title_s {
+    color: var(--color-text-primary);
+    font-weight: 700;
+}
+
+.list_menu {
+    list-style: none;
+    padding: 0;
+}
+
+.list_menu_sub {
+    list-style: none;
+    padding: 0;
+}
+
+.link_menu {
+    font-size: 24px;
+    color: var(--color-text-primary);
+    text-decoration: none;
+    cursor: pointer;
+    border-left: 2px solid var(--color-text-primary);
+    padding-left: 10px;
+}
+
+.link_menu_sub {
+    font-size: 24px;
+    color: var(--color-text-dark);
+    text-decoration: none;
+    cursor: pointer;
+    border-left: 2px solid var(--color-text-primary);
+    margin-left: 20px;
+    padding-left: 10px;
+}
+.link_menu_active {
+    font-size: 24px;
+    text-decoration: none;
+    color: var(--color-text-alternanive);
+    padding-left: 15px;
+    border-left: 2px solid var(--color-text-alternanive);
+}
+
+.link_menu_sub_active {
+    font-size: 24px;
+    text-decoration: none;
+    color: var(--color-text-alternanive);
+    margin-left: 20px;
+    padding-left: 15px;
+    border-left: 2px solid var(--color-text-alternanive);
+}
+
+.link_menu:hover {
+    color: var(--color-text-alternanive);
+    padding-left: 15px;
+    transition: all 0.3s ease;
+    border-left: 2px solid var(--color-text-alternanive);
+}
+
+.link_menu_sub:hover {
+    color: var(--color-text-alternanive);
+    padding-left: 15px;
+    transition: all 0.3s ease;
+    border-left: 2px solid var(--color-text-alternanive);
+}
+
+.link_menu:active {
+    color: var(--color-text-alternanive);
+    padding-left: 15px;
+    border-left: 2px solid var(--color-text-alternanive);
+}
+
+.link_menu_sub:active {
+    color: var(--color-text-alternanive);
+    padding-left: 15px;
+    border-left: 2px solid var(--color-text-alternanive);
+}
+
+.item_menu,
+.item_menu_sub{
+    margin: 20px 0;
+}
+
+
+.free {
+    background-color: var(--color-background-body-dark4);
+    padding: 20px 20px;
+}
+
+.instruction_h,
+.text_h {
+    text-align: center;
+    font-weight: 700;
+    font-size: 24px;
+}
+
+.instruction_item {
+    font-size: 18px;
+    font-weight: 400;
+}
+
+.table_sm {
+    font-size: 18px;
+}
+
+.td_st {
+    font-weight: 700;
+}
+
+
+#flexSwitchCheckChecked {
+    cursor: pointer;
+}
+
+.line {
+    width: 100%;
+}
+
+.main {
+    /*height: 85vh;*/
+    flex: 1 1 auto;
+}
+
+
+.btn {
+    cursor: pointer;
+    transition: transform 500ms ease;
+}
+
+.btn:hover {
+    transform: scale(1.05);
+}
 
 
 

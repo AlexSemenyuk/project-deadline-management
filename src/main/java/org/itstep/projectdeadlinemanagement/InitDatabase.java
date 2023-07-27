@@ -38,12 +38,12 @@ public class InitDatabase implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         // 1. Тип дивизиона (подготовка / производство)
-        divisionTypeRepository.save( new DivisionType("Preparation"));
-        divisionTypeRepository.save(new DivisionType("Production"));
+        divisionTypeRepository.save( new DivisionType("Підготовка"));
+        divisionTypeRepository.save(new DivisionType("Виробництво"));
 
         // 2. Создание дивизионов (конструкторский отдел, технологический отдел, мх-1 (механо-сборочный цех №1), мх-2, мх-3)
-        addDivision(new DivisionCommand("Design", 1));
-        addDivision(new DivisionCommand("Technology", 1));
+//        addDivision(new DivisionCommand("Design", 1));
+//        addDivision(new DivisionCommand("Technology", 1));
         addDivision(new DivisionCommand("Мх-1", 2));
         addDivision(new DivisionCommand("Мх-2", 2));
         addDivision(new DivisionCommand("Мх-3", 2));

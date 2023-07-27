@@ -29,16 +29,23 @@ import java.util.stream.Collectors;
 @RequestMapping("/equipments")
 public class EquipmentController {
     private final DivisionRepository divisionRepository;
+    private final DivisionTypeRepository divisionTypeRepository;
     private final EquipmentRepository equipmentRepository;
 
     @GetMapping
     public String home(Model model) {
         List<Equipment> equipments = equipmentRepository.findAll();
         model.addAttribute("equipments", equipments);
-        List<Division> divisions = divisionRepository.findAll()
-                .stream().filter(d -> d.getDivisionType().getName().equals("Production"))
-                .collect(Collectors.toList());
-        model.addAttribute("divisions", divisions);
+        Optional<DivisionType> optionalDivisionType = divisionTypeRepository.findById(2);
+        if (optionalDivisionType.isPresent()) {
+            DivisionType divType = optionalDivisionType.get();
+            List<Division> divisions = divisionRepository.findAll()
+                    .stream().filter(d -> d.getDivisionType().getName().equals(divType.getName()))
+                    .collect(Collectors.toList());
+            model.addAttribute("divisions", divisions);
+        }
+
+
         return "equipments";
     }
 
