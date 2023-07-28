@@ -9,6 +9,8 @@
     --color-text-alternanive: rgba(35, 147, 188, 1);
     --color-text-pink: rgb(73, 115, 103);
     --color-text-dark: rgb(29, 29, 29, 1);
+    --color-text-finish: rgb(29, 80, 28, 1);
+    --color-text-finish-hover: rgb(17, 239, 9, 1);
 
     --color-text-button-light: rgba(13, 110, 253, 1);
     --color-text-button-dark: rgba(16, 149, 193, 1);
@@ -35,8 +37,10 @@ body {
     font-family: var(--text-primary);
     min-height: 100%;
     background-color: var(--color-background-body-dark4);
-    /*display: flex;*/
-    /*flex-direction: column;*/
+}
+
+.height-constraint {
+    overflow-y: auto;
 }
 
 .title {
@@ -53,13 +57,13 @@ body {
 .aside_menu {
     background-color: var(--color-background-body-dark3);
     height: 100%;
-    padding: 5vh 30px;
+    padding: 3vh 20px;
     border-right: 3px solid var(--color-background-body-dark2);
 }
 
 .title_h {
     font-size: 24px;
-    margin-bottom: 50px;
+    margin-bottom: 20px;
     color: var(--color-text-primary);
     font-weight: 700;
     padding-left: 30px;
@@ -81,7 +85,7 @@ body {
 }
 
 .link_menu {
-    font-size: 24px;
+    font-size: 22px;
     color: var(--color-text-primary);
     text-decoration: none;
     cursor: pointer;
@@ -90,7 +94,7 @@ body {
 }
 
 .link_menu_sub {
-    font-size: 24px;
+    font-size: 22px;
     color: var(--color-text-dark);
     text-decoration: none;
     cursor: pointer;
@@ -99,7 +103,7 @@ body {
     padding-left: 10px;
 }
 .link_menu_active {
-    font-size: 24px;
+    font-size: 22px;
     text-decoration: none;
     color: var(--color-text-alternanive);
     padding-left: 15px;
@@ -107,7 +111,7 @@ body {
 }
 
 .link_menu_sub_active {
-    font-size: 24px;
+    font-size: 22px;
     text-decoration: none;
     color: var(--color-text-alternanive);
     margin-left: 20px;
@@ -146,6 +150,22 @@ body {
     margin: 20px 0;
 }
 
+.link_menu_sub_finish {
+    font-size: 24px;
+    color: var(--color-text-finish);
+    text-decoration: none;
+    cursor: pointer;
+    border-left: 2px solid var(--color-text-finish);
+    margin-left: 20px;
+    padding-left: 10px;
+}
+
+.link_menu_sub_finish:hover {
+    color: var(--color-text-alternanive);
+    padding-left: 13px;
+    transition: all 0.3s ease;
+    border-left: 2px solid var(--color-text-alternanive);
+}
 
 .free {
     background-color: var(--color-background-body-dark4);
@@ -157,6 +177,25 @@ body {
     text-align: center;
     font-weight: 700;
     font-size: 24px;
+}
+
+.text_h1 {
+    text-align: left;
+    font-weight: 700;
+    font-size: 18px;
+}
+
+
+.text_p {
+    text-align: left;
+    font-weight: 400;
+    font-size: 16px;
+}
+
+.text_p1 {
+    text-align: left;
+    font-weight: 700;
+    font-size: 16px;
 }
 
 .instruction_item {

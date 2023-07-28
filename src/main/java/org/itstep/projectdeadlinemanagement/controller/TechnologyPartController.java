@@ -60,7 +60,6 @@ public class TechnologyPartController {
 
     @GetMapping(("{id}/delete/{termPartId}"))
     String delete(@PathVariable Integer id, @PathVariable Integer termPartId) {
-
         Optional<TechnologyPart> optionalTermPart = termPartRepository.findById(termPartId);
         optionalTermPart.ifPresent(term -> termPartRepository.deleteById(termPartId));
         return "redirect:/technologies/technology_parts/{id}";
