@@ -71,7 +71,7 @@
                 <div class="row">
                     <div class="col-xl-12">
                         <h2 class="text_h" th:text="'План виробництва (' + ${month} + ')'"></h2>
-                        <table class="table_sm table table-striped table-hover table-bordered border-secondary-subtle">
+                        <table class="table_sm table table-striped  table-bordered border-secondary-subtle">
                             <thead>
                                 <tr>
                                     <th class="text_n1 text-center" >Equipment</th>
@@ -80,10 +80,10 @@
                             </thead>
                             <tbody>
                                 <tr th:each="chartE: ${chartEquipmentCommands}">
-                                    <td class="text_n" th:text="${chartE.equipment}">
+                                    <td class="text_b tx" th:text="${chartE.equipment}">
                                     </td>
-                                    <td class="text_n text-center" th:each="day: ${chartE.chartDaysCommands}">
-                                        <a class="text_a" th:text="${day.planPerDay}" th:href="@{/production_plans/{id}(id=${day.dayNumber + ':' + chartE.equipmentId})}" />
+                                    <td class="text_a tx text-center" th:each="day: ${chartE.chartDaysCommands}">
+                                        <a class="text_a tx" th:text="${day.planPerDay}" th:href="@{/production_plans/{id}(id=${day.dayNumber + ':' + chartE.equipmentId})}" />
                                     </td>
                                 </tr>
                             </tbody>

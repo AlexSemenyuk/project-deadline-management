@@ -210,20 +210,42 @@ body {
 .text_a{
     text-decoration: none;
     color: var(--text-primary);
+    font-size: 14px;
+    font-weight: 400;
 }
 
-.text_a:hover{
+.text_a.tx:hover{
     text-decoration: none;
-    color: var(--color-text-button-light);
-    cursor: pointer;
-    transform: scale(1.1);
-}
-
-.text_a:active{
-    text-decoration: none;
+    background-color: var(--color-text-button-light);
     color: var(--color-text-secondary);
-    background-color: var(--color-background-body-dark);
+    cursor: pointer;
+    transform: scale(1.2);
+    font-size: 14px;
+    font-weight: 400;
 }
+
+.text_b{
+    text-decoration: none;
+    color: var(--text-primary);
+    font-size: 14px;
+    font-weight: 400;
+}
+
+.text_b.tx:hover{
+    text-decoration: none;
+    background-color: var(--color-text-button-light);
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 400;
+}
+
+/*.text_a:active{*/
+/*    text-decoration: none;*/
+/*    background-color: var(--color-text-secondary);*/
+/*    color: var(--color-text-secondary);*/
+
+/*}*/
 
 .instruction_item {
     font-size: 18px;
