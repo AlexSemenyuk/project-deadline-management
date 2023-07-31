@@ -197,14 +197,16 @@ body {
     font-size: 16px;
 }
 
-.text_n1 {
+.text_n1  {
     font-weight: 700;
     font-size: 14px;
+    padding: 0;
 }
 
 .text_n {
     font-weight: 400;
     font-size: 14px;
+    padding: 0;
 }
 
 .text_a{
@@ -222,13 +224,15 @@ body {
     transform: scale(1.2);
     font-size: 14px;
     font-weight: 400;
+
 }
 
-.text_b{
+.text_b.tx{
     text-decoration: none;
     color: var(--text-primary);
     font-size: 14px;
     font-weight: 400;
+    padding: 0 0 0 5px;
 }
 
 .text_b.tx:hover{
@@ -238,6 +242,7 @@ body {
     cursor: pointer;
     font-size: 14px;
     font-weight: 400;
+    padding: 0 0 0 10px;
 }
 
 /*.text_a:active{*/

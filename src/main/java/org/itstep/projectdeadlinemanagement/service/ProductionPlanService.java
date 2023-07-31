@@ -9,6 +9,7 @@ import org.itstep.projectdeadlinemanagement.model.Task;
 import org.itstep.projectdeadlinemanagement.repository.*;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
@@ -130,10 +131,10 @@ public class ProductionPlanService {
     }
 
 
-    public int getDaysOfMonth(LocalDateTime date) {
+    public int getDaysOfMonth(LocalDate date) {
         int year = date.getYear();
         int month = date.getMonthValue();
-        int day = date.getDayOfMonth();
+//        int day = date.getDayOfMonth();
         int[] dayInMonths = new int[]{31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
         int dayOfMonth = 0;
         boolean leapYear = false;
@@ -153,13 +154,14 @@ public class ProductionPlanService {
         return dayOfMonth;
     }
 
-    public List<ProductionPlan> formPlansOfCurrentMonth(LocalDateTime date) {
+    public List<ProductionPlan> formPlansOfCurrentMonth(LocalDate date) {
+
         List<ProductionPlan> plansOfCurrentMonth = new CopyOnWriteArrayList<>();
         List<ProductionPlan> productionPlanList = productionPlanRepository.findAll();
         int year = date.getYear();
         int month = date.getMonthValue();
         int daysOfMonth = getDaysOfMonth(date);
-        System.out.println("year = " + year + ", month = " + month + ", daysOfMonth = " + daysOfMonth);
+//        System.out.println("year = " + year + ", month = " + month + ", daysOfMonth = " + daysOfMonth);
         productionPlanList.forEach(plan -> {
             if (plan.getCurrentStart().getYear() == year &&
                     plan.getCurrentStart().getMonthValue() == month) {
@@ -170,10 +172,11 @@ public class ProductionPlanService {
         return plansOfCurrentMonth;
     }
 
-    public List<ChartEquipmentCommand> formChart(List<ProductionPlan> productionPlans, LocalDateTime date) {
+    public List<ChartEquipmentCommand> formChart(List<ProductionPlan> productionPlans, LocalDate date) {
         int year = date.getYear();
         int month = date.getMonthValue();
         int daysOfMonth = getDaysOfMonth(date);
+
         List<Equipment> equipmentList = equipmentRepository.findAll();
         List<ChartEquipmentCommand> chartEquipmentCommands = new CopyOnWriteArrayList<>();
 
@@ -216,9 +219,9 @@ public class ProductionPlanService {
         int[] remainder = new int[1];
         int [] planPerDay = new int[1];
         chartEquipmentCommands.forEach(chartEquipmentCommand -> {
-            System.out.println("chartEquipmentCommand.getEquipment() = " + chartEquipmentCommand.getEquipment());
+//            System.out.println("chartEquipmentCommand.getEquipment() = " + chartEquipmentCommand.getEquipment());
             chartEquipmentCommand.getChartDaysCommands().forEach(chartDaysCommand -> {
-                System.out.println("chartDaysCommand.getDayNumber() = " + chartDaysCommand.getDayNumber());
+//                System.out.println("chartDaysCommand.getDayNumber() = " + chartDaysCommand.getDayNumber());
                 sum[0] = 0;
                 if (sumPrev[0] > 0){
                     if (sumPrev[0] > HOURS_PER_DAY){
@@ -228,12 +231,12 @@ public class ProductionPlanService {
                         sum[0] += sumPrev[0];
                         sumPrev[0] = 0;
                     }
-                    System.out.println("sum = " + sum[0] + "   - sumPrev");
+//                    System.out.println("sum = " + sum[0] + "   - sumPrev");
                 }
                 if (chartDaysCommand.getProductionPlans().size() > 0) {
                     for (ProductionPlan plan : chartDaysCommand.getProductionPlans()) {
                         int hour = plan.getCurrentStart().getHour();
-                        System.out.println("hour = " + hour);
+//                        System.out.println("hour = " + hour);
                         if (hour + plan.getTask().getOperationTime() <= HOURS_PER_DAY){
                             sum[0] += plan.getTask().getOperationTime();
                         } else {
@@ -242,10 +245,10 @@ public class ProductionPlanService {
                             sum[0] += remainder[0];
                             remainder[0] = 0;
                         }
-                        System.out.println("sum = " + sum[0] + "   - ProductionPlan");
+//                        System.out.println("sum = " + sum[0] + "   - ProductionPlan");
                     }
                 }
-                System.out.println("sum = " + sum[0] + "   - Total");
+//                System.out.println("sum = " + sum[0] + "   - Total");
                 planPerDay[0] = sum[0] * 100 / HOURS_PER_DAY;
                 chartDaysCommand.setPlanPerDay(planPerDay[0]);
             });
@@ -254,6 +257,17 @@ public class ProductionPlanService {
         return chartEquipmentCommands;
     }
 
+    public String formDate(LocalDate dateTmp) {
+        int month = dateTmp.getMonthValue();
+        int year = dateTmp.getYear();
+        String date = "";
+        if (month < 10) {
+            date = year + "-0" + month;
+        } else {
+            date = year + "-" + month;
+        }
+        return date;
+    }
 }
 
 
