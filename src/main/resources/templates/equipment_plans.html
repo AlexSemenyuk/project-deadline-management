@@ -81,7 +81,11 @@
                             <thead>
                             <tr>
                                 <th class="text_n1 text-center p-0" >Equipment</th>
-                                <th class="text_n1 px-1 text-center py-0" th:each="d: ${chartEquipmentCommands[0].chartDaysCommands}" th:text="${d.dayNumber}" ></th>
+                                <th class="text_n1 px-1 text-center py-0"
+                                    th:each="d: ${chartEquipmentCommands[0].chartDaysCommands}"
+                                    th:text="${d.dayNumber.getDayOfMonth()}" >
+
+                                </th>
                             </tr>
                             </thead>
                             <tbody>

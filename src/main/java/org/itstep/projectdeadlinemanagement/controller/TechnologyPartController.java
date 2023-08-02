@@ -86,6 +86,7 @@ public class TechnologyPartController {
         });
         return "technology_terms";
     }
+
     @PostMapping("/{id}/technology_terms")
     public String addTerm(@PathVariable Integer id, Integer technologyTerm,  Model model) {
         Optional<Project> optionalProject = projectRepository.findById(id);

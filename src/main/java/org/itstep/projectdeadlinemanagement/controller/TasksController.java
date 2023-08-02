@@ -30,8 +30,9 @@ public class TasksController {
     private final ProductionPlanService productionPlanService;
     private final TaskConditionRepository taskConditionRepository;
     private final EquipmentRepository equipmentRepository;
+
     @GetMapping
-    public String home(Model model) {
+    public String find(Model model) {
         List<Project> tmpProjects = projectRepository.findAll();
         List<Project> projects = new CopyOnWriteArrayList<>();
         for (Project p:tmpProjects){
@@ -42,7 +43,25 @@ public class TasksController {
         model.addAttribute("projects", projects);
         return "tasks";
     }
-
+//    @GetMapping("/{id}")
+//    public String home(@PathVariable int id, Model model) {
+//
+//        List<Project> tmpProjects = projectRepository.findAll();
+//        List<Project> projects = new CopyOnWriteArrayList<>();
+//        for (Project p:tmpProjects){
+//            if (p.getProjectCondition().getName().equals("Production")){
+//                projects.add(p);
+//            }
+//        }
+//        model.addAttribute("projects", projects);
+//
+//        Optional<Project> optionalProject = projectRepository.findById(id);
+//        optionalProject.ifPresent(currentProject ->{
+//            model.addAttribute("currentProject", currentProject);
+//        });
+//        return "tasks";
+//    }
+//
     @PostMapping
     public String create(Integer id, String form, Model model) {
         if (form != null){

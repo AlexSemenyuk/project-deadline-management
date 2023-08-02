@@ -2,7 +2,9 @@ package org.itstep.projectdeadlinemanagement.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.itstep.projectdeadlinemanagement.command.ProjectCommand;
 
 import java.time.LocalDateTime;
@@ -12,6 +14,8 @@ import java.util.List;
 @Entity
 @Data
 @Table(name = "projects")
+//@EqualsAndHashCode(exclude = "tasks")
+//@ToString(exclude = "tasks")
 @NoArgsConstructor
 public class Project {
     @Id

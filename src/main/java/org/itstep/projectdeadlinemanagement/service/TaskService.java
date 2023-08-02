@@ -88,12 +88,12 @@ public class TaskService {
         List<Contract> contracts = project.getContracts();
         LocalDateTime  contractTMP = project.getStart();
         for (Contract contract: contracts){
-            if (contract.getDeadline().compareTo(contractTMP) >= 0) {
+            if (contract.getDeadline().isAfter(contractTMP)) {
                 contractTMP = contract.getDeadline();
             }
         }
 
-        if (designAndTechnologyTMP.compareTo(contractTMP) >= 0){
+        if (designAndTechnologyTMP.isAfter(contractTMP)){
             productionStart = designAndTechnologyTMP;
         } else {
             productionStart = contractTMP;

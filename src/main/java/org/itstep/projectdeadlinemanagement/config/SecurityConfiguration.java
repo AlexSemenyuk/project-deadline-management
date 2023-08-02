@@ -8,7 +8,9 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.core.userdetails.User;
@@ -22,11 +24,14 @@ import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+
 import javax.sql.DataSource;
 
 @EnableWebSecurity
 @Configuration
-public class SecurityConfiguration {
+public class SecurityConfiguration  {
+
+
     @Bean
     public DataSource dataSource() {
         return new EmbeddedDatabaseBuilder()
@@ -66,7 +71,6 @@ public class SecurityConfiguration {
         return detailsManager;
     }
 
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
@@ -75,6 +79,7 @@ public class SecurityConfiguration {
                                 .requestMatchers("/").permitAll()
 //                                .requestMatchers("/").hasAnyRole("USER", "EDITOR", "ADMIN")
                                 .requestMatchers(AntPathRequestMatcher.antMatcher("/h2-console/**")).permitAll()
+                                .requestMatchers(AntPathRequestMatcher.antMatcher("/api/**")).permitAll()
                                 .requestMatchers(HttpMethod.GET, "/divisions").hasAnyRole("ADMIN", "PRODUCT", "EQUIPMENT", "USER")
                                 .requestMatchers(HttpMethod.POST, "/divisions").hasAnyRole("ADMIN", "PRODUCT", "EQUIPMENT", "USER")
                                 .requestMatchers(HttpMethod.GET, "/divisions/edit/**").hasAnyRole("ADMIN", "PRODUCT", "EQUIPMENT", "USER")
@@ -120,6 +125,8 @@ public class SecurityConfiguration {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
+
 
 }
 

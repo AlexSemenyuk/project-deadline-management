@@ -1,41 +1,34 @@
 package org.itstep.projectdeadlinemanagement.command;
 
+
+import lombok.Getter;
+import lombok.Setter;
 import org.itstep.projectdeadlinemanagement.model.ProductionPlan;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ChartDaysCommand {
-    private int dayNumber;
+    public static final String BLACK = "black";
+    public static final String RED = "red";
+    public static final String GREEN = "green";
+    public static final String BLUE = "blue";
+    @Getter @Setter
+    private LocalDate dayNumber;
+
+    // Процент загрузки оборудования в день
+    @Getter @Setter
     private int planPerDay;
+
+    @Getter @Setter
+    private String dayColor;
+
+    @Getter @Setter
     List<ProductionPlan> productionPlans = new ArrayList<>();
 
-    public ChartDaysCommand(int dayNumber) {
+    public ChartDaysCommand(LocalDate dayNumber) {
         this.dayNumber = dayNumber;
-    }
-
-    public int getDayNumber() {
-        return dayNumber;
-    }
-
-    public void setDayNumber(int dayNumber) {
-        this.dayNumber = dayNumber;
-    }
-
-    public int getPlanPerDay() {
-        return planPerDay;
-    }
-
-    public void setPlanPerDay(int planPerDay) {
-        this.planPerDay = planPerDay;
-    }
-
-    public List<ProductionPlan> getProductionPlans() {
-        return productionPlans;
-    }
-
-    public void setProductionPlans(List<ProductionPlan> productionPlans) {
-        this.productionPlans = productionPlans;
     }
 
     @Override
@@ -43,6 +36,7 @@ public class ChartDaysCommand {
         return "ChartDaysCommand{" +
                 "dayNumber=" + dayNumber +
                 ", planPerDay=" + planPerDay +
+                ", dayColor='" + dayColor + '\'' +
                 ", productionPlans=" + productionPlans +
                 '}';
     }

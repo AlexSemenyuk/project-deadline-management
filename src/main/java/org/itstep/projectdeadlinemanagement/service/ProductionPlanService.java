@@ -45,7 +45,6 @@ public class ProductionPlanService {
             productionPlans.forEach(productionPlan -> {
                 if (Objects.equals(productionPlan.getEquipment().getNumber(), equipment.getNumber())) {
                     count[0]++;
-//                    currentDeadlineTmp[0] = currentStartPlusOperationTime(productionPlan);
                 }
             });
 
@@ -67,26 +66,35 @@ public class ProductionPlanService {
     }
 
     private void formCurrentStart() {
-        // Дата по списку ProductionPlans для данного оборудования
+        // Дата + время, описывающее окончание предыдущего по списку ProductionPlans для данного оборудования
         LocalDateTime[] currentDeadlineTmp = new LocalDateTime[2];
-
-//        int[] count = new int[1];
         List<Equipment> equipmentList = equipmentRepository.findAll();
-//        List<ProductionPlan>[] productionPlans = new List<ProductionPlan>[1];
+
         List<ProductionPlan> productionPlans = productionPlanRepository.findAll()
                 .stream()
                 .sorted(Comparator.comparing(ProductionPlan::getNumber))
                 .collect(Collectors.toList());
+
         equipmentList.forEach(equipment -> {
+//            if (equipment != null) {
+//                System.out.println(equipment.getNumber() + "-" + equipment.getName());
+//            }
+
+            // DateTime является CurrentStart для текущего (является Deadline, с учетом OperationTime от предыдущего ProductionPlan с состоянием не "New")
             currentDeadlineTmp[0] = null;
+            // DateTime является CurrentStart для текущего с учетом termNumber
             currentDeadlineTmp[1] = null;
+
             productionPlans.forEach(plan -> {
                 if (Objects.equals(plan.getEquipment().getNumber(), equipment.getNumber())) {
+
                     if (!plan.getTask().getTaskCondition().getName().equals("New")) {
+                        // Определение start для текущего (окончание предыдущего ProductionPlan)
                         currentDeadlineTmp[0] = currentStartPlusOperationTime(plan);
-                    } else {
+                    } else {                                                // Работаем только с состоянием "New"
                         // Проверка currentDeadline с предыдущего по TermNumber значения (partNumber = const, lotNumber=const)
-                        if (currentDeadlineTmp[0] != null) {        // Есть очередь - в конец
+                        if (currentDeadlineTmp[0] != null) {                // Есть очередь (есть предыдущий) - в конец
+                            // Коррекция по termNumber
                             if (plan.getTask().getTermNumber() > 1) {
                                 currentDeadlineTmp[1] = getCurrentDeadlineFromPreviousTermNumber(plan);
                                 if (currentDeadlineTmp[1].isAfter(currentDeadlineTmp[0])) {
@@ -95,6 +103,7 @@ public class ProductionPlanService {
                             }
                         } else {                                    // Если нет очереди - дата task
                             currentDeadlineTmp[0] = plan.getTask().getStartProduction();
+                            currentDeadlineTmp[0] = excludeWeekend(currentDeadlineTmp[0]);
                         }
                         plan.setCurrentStart(currentDeadlineTmp[0]);
                         productionPlanRepository.save(plan);
@@ -106,10 +115,35 @@ public class ProductionPlanService {
     }
 
     private LocalDateTime currentStartPlusOperationTime(ProductionPlan productionPlan) {
+        LocalDateTime rezult = productionPlan.getCurrentStart();
+//        System.out.println("rezult1 = " + rezult);
+
+        rezult = excludeWeekend(rezult);
+//        System.out.println("rezult2 = " + rezult);
+
         int timeTMP = productionPlan.getCurrentStart().getHour() + productionPlan.getTask().getOperationTime();
         int days = timeTMP / HOURS_PER_DAY;
         int hours = timeTMP % HOURS_PER_DAY;
-        return productionPlan.getCurrentStart().plusDays(days).withHour(hours);
+        rezult = rezult.plusDays(days).withHour(hours);
+
+//        System.out.println("rezult3 = " + rezult);
+
+        rezult = excludeWeekend(rezult);
+
+//        System.out.println("rezult4 = " + rezult);
+        return rezult;
+    }
+
+    private static LocalDateTime excludeWeekend(LocalDateTime date) {
+        switch (date.getDayOfWeek().toString()) {
+            case "SUNDAY" -> {
+                return date.plusDays(1);
+            }
+            case "SATURDAY" -> {
+                return date.plusDays(2);
+            }
+        }
+        return date;
     }
 
     // Сохранение цепочки termNumber - Получение currentDeadline с предыдущего по TermNumber значения (partNumber = const, lotNumber=const)
@@ -124,35 +158,11 @@ public class ProductionPlanService {
                     Objects.equals(plan.getTask().getLotNumber(), productionPlan.getTask().getLotNumber()) &&
                     termNumberCurrent == termNumberPrevious + 1) {
                 previousCurrentDeadline[0] = currentStartPlusOperationTime(plan);
-
             }
         });
         return previousCurrentDeadline[0];
     }
 
-
-    public int getDaysOfMonth(LocalDate date) {
-        int year = date.getYear();
-        int month = date.getMonthValue();
-//        int day = date.getDayOfMonth();
-        int[] dayInMonths = new int[]{31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-        int dayOfMonth = 0;
-        boolean leapYear = false;
-        if (year % 100 == 0) {
-            if (year % 400 == 0) {
-                leapYear = true;
-            }
-        } else {
-            if (year % 4 == 0) {
-                leapYear = true;
-            }
-        }
-        if (leapYear) {
-            dayInMonths[1] = 29;
-        }
-        dayOfMonth = dayInMonths[month - 1];
-        return dayOfMonth;
-    }
 
     public List<ProductionPlan> formPlansOfCurrentMonth(LocalDate date) {
 
@@ -183,7 +193,8 @@ public class ProductionPlanService {
         for (Equipment e : equipmentList) {
             ChartEquipmentCommand chartEquipmentCommand = new ChartEquipmentCommand(e.getId(), e.getNumber() + "-" + e.getName());
             for (int i = 0; i < daysOfMonth; i++) {
-                ChartDaysCommand chartDaysCommand = new ChartDaysCommand(i + 1);
+                LocalDate dayNumber = LocalDate.of(year, month, i + 1);
+                ChartDaysCommand chartDaysCommand = new ChartDaysCommand(dayNumber);
 
                 if (productionPlans.size() > 0) {
                     for (ProductionPlan plan : productionPlans) {
@@ -193,65 +204,145 @@ public class ProductionPlanService {
                         }
                     }
                 }
-//                int planPerDay = formPlanPerDay(chartDaysCommand);
-//                chartDaysCommand.setPlanPerDay(planPerDay);
+
+                chartDaysCommand.setDayColor(ChartDaysCommand.BLACK);
                 chartEquipmentCommand.getChartDaysCommands().add(chartDaysCommand);
             }
             chartEquipmentCommands.add(chartEquipmentCommand);
         }
-        chartEquipmentCommands = formPlanPerDay(chartEquipmentCommands);
+        chartEquipmentCommands = formPlanPerDayAndParameterPerMonth(chartEquipmentCommands);
         return chartEquipmentCommands;
     }
 
-//    private int formPlanPerDay(ChartDaysCommand chartDaysCommand) {
-//        int[] sum = new int[1];
-//        sum[0] = 0;
-//        if (chartDaysCommand.getProductionPlans().size() > 0) {
-//            for (ProductionPlan plan : chartDaysCommand.getProductionPlans()) {
-//                sum[0] += plan.getTask().getOperationTime();
-//            }
-//        }
-//        return sum[0] * 100 / HOURS_PER_DAY;
-//    }
-    private List<ChartEquipmentCommand> formPlanPerDay(List<ChartEquipmentCommand> chartEquipmentCommands) {
+    public int planHoursPerMonth(LocalDate date) {
+        int year = date.getYear();
+        int month = date.getMonthValue();
+        int daysOfMonth = getDaysOfMonth(date);
+        int sum = 0;
+        for (int i = 0; i < daysOfMonth; i++) {
+            LocalDate dateTmp = LocalDate.of(year, month, i + 1);
+            if (!dateTmp.getDayOfWeek().toString().equals("SUNDAY") &&
+                    !dateTmp.getDayOfWeek().toString().equals("SATURDAY")) {
+                sum += HOURS_PER_DAY;
+            }
+        }
+        return sum;
+    }
+
+    private List<ChartEquipmentCommand> formPlanPerDayAndParameterPerMonth(List<ChartEquipmentCommand> chartEquipmentCommands) {
+        // Количество часов в день
         int[] sum = new int[1];
+        // Остаток от задания предыдущего дня
         int[] sumPrev = new int[1];
+        // Время до полной смены в текущем дне
         int[] remainder = new int[1];
-        int [] planPerDay = new int[1];
+        // Дневная загрузка оборудования от плана (процент)
+        int[] planPerDay = new int[1];
+        // Количество часов в месяц
+        int[] sumTotal = new int[1];
+        // Количество выполненных часов в месяц ("ОК")
+        int[] sumDone = new int[1];
+        // Количество планируемых часов на текущую дату
+        int[] sumOnCurrentDate = new int[1];
+
+        String[] currentDayColorTmp = new String[1];
+
+        LocalDate dateTmp = chartEquipmentCommands.get(0).getChartDaysCommands().get(0).getDayNumber();
+        int planHoursPerMonth = planHoursPerMonth(dateTmp);
         chartEquipmentCommands.forEach(chartEquipmentCommand -> {
 //            System.out.println("chartEquipmentCommand.getEquipment() = " + chartEquipmentCommand.getEquipment());
+            sumTotal[0] = 0;
+            sumDone[0] = 0;
+            sumOnCurrentDate[0] = 0;
+
             chartEquipmentCommand.getChartDaysCommands().forEach(chartDaysCommand -> {
+                currentDayColorTmp[0] = ChartDaysCommand.BLACK;
+                System.out.println("Обнова - currentDayColorTmp = " + currentDayColorTmp[0]);
+
 //                System.out.println("chartDaysCommand.getDayNumber() = " + chartDaysCommand.getDayNumber());
                 sum[0] = 0;
-                if (sumPrev[0] > 0){
-                    if (sumPrev[0] > HOURS_PER_DAY){
-                        sum[0] = HOURS_PER_DAY;
-                        sumPrev[0] -= HOURS_PER_DAY;
-                    } else {
-                        sum[0] += sumPrev[0];
-                        sumPrev[0] = 0;
+                if (!chartDaysCommand.getDayNumber().getDayOfWeek().toString().equals("SUNDAY") &&
+                        !chartDaysCommand.getDayNumber().getDayOfWeek().toString().equals("SATURDAY")) {
+                    if (sumPrev[0] > 0) {
+                        if (sumPrev[0] > HOURS_PER_DAY) {
+                            sum[0] = HOURS_PER_DAY;
+                            sumPrev[0] -= HOURS_PER_DAY;
+                        } else {
+                            sum[0] += sumPrev[0];
+                            sumPrev[0] = 0;
+                        }
+                    }
+                    if (chartDaysCommand.getProductionPlans().size() > 0) {
+                        for (ProductionPlan plan : chartDaysCommand.getProductionPlans()) {
+                            int hour = plan.getCurrentStart().getHour();
+//                        System.out.println("hour = " + hour);
+                            if (hour + plan.getTask().getOperationTime() <= HOURS_PER_DAY) {
+                                sum[0] += plan.getTask().getOperationTime();
+                            } else {
+                                remainder[0] = HOURS_PER_DAY - hour;
+                                sumPrev[0] = plan.getTask().getOperationTime() - remainder[0];
+                                sum[0] += remainder[0];
+                                remainder[0] = 0;
+                            }
+//                        System.out.println("sum = " + sum[0] + "   - ProductionPlan");
+                        }
+                    }
+//                System.out.println("sum = " + sum[0] + "   - Total");
+                    planPerDay[0] = sum[0] * 100 / HOURS_PER_DAY;
+                    sumTotal[0] += sum[0];
+
+                    if (chartDaysCommand.getProductionPlans().size() > 0) {
+                        chartDaysCommand.getProductionPlans().forEach(p -> {
+                            if (p.getTask().getTaskCondition().getName().equals("Ок")) {
+                                sumDone[0] += p.getTask().getOperationTime();
+                            }
+                            if ((p.getCurrentStart()).isBefore(LocalDateTime.now())) {
+                                sumOnCurrentDate[0] += p.getTask().getOperationTime();
+                            }
+                        });
                     }
 //                    System.out.println("sum = " + sum[0] + "   - sumPrev");
+                } else {
+                    planPerDay[0] = 0;
                 }
+                // Определение цвета дня
                 if (chartDaysCommand.getProductionPlans().size() > 0) {
-                    for (ProductionPlan plan : chartDaysCommand.getProductionPlans()) {
-                        int hour = plan.getCurrentStart().getHour();
-//                        System.out.println("hour = " + hour);
-                        if (hour + plan.getTask().getOperationTime() <= HOURS_PER_DAY){
-                            sum[0] += plan.getTask().getOperationTime();
-                        } else {
-                            remainder[0] = HOURS_PER_DAY - hour;
-                            sumPrev[0] = plan.getTask().getOperationTime() - remainder[0];
-                            sum[0] += remainder[0];
-                            remainder[0] = 0;
+                    chartDaysCommand.getProductionPlans().forEach(p -> {
+                        if (chartDaysCommand.getDayNumber().isBefore(LocalDate.now())) {
+                            if (currentDayColorTmp[0].equals("black") || currentDayColorTmp[0].equals("green")) {
+                                if (p.getTask().getTaskCondition().getName().equals("Ок")) {
+                                    currentDayColorTmp[0] = ChartDaysCommand.GREEN;
+                                } else {
+                                    currentDayColorTmp[0] = ChartDaysCommand.RED;
+                                }
+                            } else {
+                                currentDayColorTmp[0] = ChartDaysCommand.RED;
+                            }
+//
+//                            if (p.getTask().getTaskCondition().getName().equals("Ок") &&
+//                                    (currentDayColorTmp[0].equals("black") || currentDayColorTmp[0].equals("green"))){
+//                                currentDayColorTmp[0] = ChartDaysCommand.GREEN;
+//                            } else {
+//                                currentDayColorTmp[0] = ChartDaysCommand.RED;
+//                            }
+                            System.out.println("currentDayColorTmp = " + currentDayColorTmp[0]);
                         }
-//                        System.out.println("sum = " + sum[0] + "   - ProductionPlan");
-                    }
+                    });
                 }
-//                System.out.println("sum = " + sum[0] + "   - Total");
-                planPerDay[0] = sum[0] * 100 / HOURS_PER_DAY;
+                chartDaysCommand.setDayColor(currentDayColorTmp[0]);
                 chartDaysCommand.setPlanPerDay(planPerDay[0]);
+
             });
+            if (sumTotal[0] != 0) {
+                chartEquipmentCommand.setFactHoursPerMonth(sumTotal[0]);
+                chartEquipmentCommand.setPlanFromTheTotal(sumTotal[0] * 100 / planHoursPerMonth);
+                chartEquipmentCommand.setDoneFromPlan(sumDone[0] * 100 / sumTotal[0]);
+                chartEquipmentCommand.setPlanForTheCurrentDate(sumOnCurrentDate[0] * 100 / sumTotal[0]);
+            } else {
+                chartEquipmentCommand.setPlanFromTheTotal(0);
+                chartEquipmentCommand.setDoneFromPlan(0);
+                chartEquipmentCommand.setPlanForTheCurrentDate(0);
+            }
         });
 
         return chartEquipmentCommands;
@@ -267,6 +358,28 @@ public class ProductionPlanService {
             date = year + "-" + month;
         }
         return date;
+    }
+
+    public int getDaysOfMonth(LocalDate date) {
+        int year = date.getYear();
+        int month = date.getMonthValue();
+        int[] dayInMonths = new int[]{31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+        int dayOfMonth = 0;
+        boolean leapYear = false;
+        if (year % 100 == 0) {
+            if (year % 400 == 0) {
+                leapYear = true;
+            }
+        } else {
+            if (year % 4 == 0) {
+                leapYear = true;
+            }
+        }
+        if (leapYear) {
+            dayInMonths[1] = 29;
+        }
+        dayOfMonth = dayInMonths[month - 1];
+        return dayOfMonth;
     }
 }
 

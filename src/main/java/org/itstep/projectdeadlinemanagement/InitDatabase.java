@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -48,19 +49,18 @@ public class InitDatabase implements CommandLineRunner {
         addDivision(new DivisionCommand("Мх-2", 2));
         addDivision(new DivisionCommand("Мх-3", 2));
 
-
         // 3. Создание оборудования
-        addEquipment(new EquipmentCommand(11, "Токарный", 3));
-        addEquipment(new EquipmentCommand(12, "Фрезерный", 3));
-        addEquipment(new EquipmentCommand(13, "Шлифовальный", 3));
+        addEquipment(new EquipmentCommand(11, "Токарный", 1));
+        addEquipment(new EquipmentCommand(12, "Фрезерный", 1));
+        addEquipment(new EquipmentCommand(13, "Шлифовальный", 1));
 
-        addEquipment(new EquipmentCommand(21, "Расточной", 4));
-        addEquipment(new EquipmentCommand(22, "Фрезерный", 4));
-        addEquipment(new EquipmentCommand(23, "Долбежный", 4));
+        addEquipment(new EquipmentCommand(21, "Расточной", 2));
+        addEquipment(new EquipmentCommand(22, "Фрезерный", 2));
+        addEquipment(new EquipmentCommand(23, "Долбежный", 2));
 
-        addEquipment(new EquipmentCommand(31, "Продольно-фрезерный", 5));
-        addEquipment(new EquipmentCommand(32, "Фрезерный", 5));
-        addEquipment(new EquipmentCommand(33, "Расточной", 5));
+        addEquipment(new EquipmentCommand(31, "Продольно-фрезерный", 3));
+        addEquipment(new EquipmentCommand(32, "Фрезерный", 3));
+        addEquipment(new EquipmentCommand(33, "Расточной", 3));
 
 
         // 4. Создание Parts / деталей
@@ -82,65 +82,13 @@ public class InitDatabase implements CommandLineRunner {
         projectConditionRepository.save(new ProjectCondition("Production"));
         projectConditionRepository.save(new ProjectCondition("Archive"));
 
-        // 7. Создание Customer / Зыказчиков
+        // 7. Создание Customer / Заказчиков
         customerRepository.save(new Customer("Запорожсталь", "Запорожье"));
         customerRepository.save(new Customer("Арселор Миттал Кривой Рог", "Кривой Рог"));
         customerRepository.save(new Customer("ArcelorMittalGalati", "Galati"));
         customerRepository.save(new Customer("U.S.Steel Kosice", "Kosice"));
 
-        // 8. Создание Project с ProjectLists
-        addProject(new ProjectCommand(
-                1001, null, 1,
-                LocalDateTime.parse("2023-07-01T00:00"), LocalDateTime.parse("2023-07-30T00:00"),
-                1));
-        addProjectList(1, new ProjectListCommand(1, 2));
-        addProjectList(1, new ProjectListCommand(3, 3));
-
-//        addProject(new ProjectCommand(
-//                1002, null, 2,
-//                LocalDateTime.parse("2023-07-21T00:00"), LocalDateTime.parse("2023-07-28T00:00"),
-//                1));
-//        addProjectList(2, new ProjectListCommand(2, 3));
-//        addProjectList(2, new ProjectListCommand(4, 1));
-//
-//        addProject(new ProjectCommand(
-//                1003, null, 3,
-//                LocalDateTime.parse("2023-07-18T00:00"), LocalDateTime.parse("2023-07-27T00:00"),
-//                1));
-//        addProjectList(3, new ProjectListCommand(5, 3));
-//        addProjectList(3, new ProjectListCommand(6, 5));
-
-//        addProject(new ProjectCommand(
-//                1004, null, 4,
-//                LocalDateTime.parse("2023-07-15T00:00"), LocalDateTime.parse("2023-07-26T00:00"),
-//                1));
-//        addProjectList(4, new ProjectListCommand(5, 1));
-//        addProjectList(4, new ProjectListCommand(8, 2));
-
-        // 9. Term for parts of project / Нормирование труда
-        // Project 1001
-        addTermPart(new TechnologyPartCommand(1, 1, 1, 3));
-        addTermPart(new TechnologyPartCommand(1, 2, 2, 2));
-        addTermPart(new TechnologyPartCommand(1, 3, 3, 5));
-        addTermPart(new TechnologyPartCommand(3, 1, 1, 2));
-        addTermPart(new TechnologyPartCommand(3, 2, 3, 4));
-        // Project 1002
-//        addTermPart(new TechnologyPartCommand(2, 1, 4, 1));
-//        addTermPart(new TechnologyPartCommand(2, 2, 5, 3));
-//        addTermPart(new TechnologyPartCommand(2, 3, 6, 2));
-//        addTermPart(new TechnologyPartCommand(4, 1, 5, 2));
-//        addTermPart(new TechnologyPartCommand(4, 2, 6, 4));
-        // Project 1003
-//        addTermPart(new TechnologyPartCommand(5, 1, 3, 1));
-//        addTermPart(new TechnologyPartCommand(5, 2, 4, 3));
-//        addTermPart(new TechnologyPartCommand(5, 3, 7, 5));
-//        addTermPart(new TechnologyPartCommand(6, 1, 7, 2));
-//        addTermPart(new TechnologyPartCommand(6, 2, 9, 4));
-        // Project 1004
-//        addTermPart(new TechnologyPartCommand(8, 1, 1, 2));
-//        addTermPart(new TechnologyPartCommand(8, 2, 7, 4));
-
-        // 10. Создание состояний task (Production, Stop, Ок, Archive)
+        // 8. Создание состояний task (Production, Stop, Ок, Archive)
         taskConditionRepository.save(new TaskCondition("New"));
         taskConditionRepository.save(new TaskCondition("Production"));
         taskConditionRepository.save(new TaskCondition("Ок"));
@@ -148,19 +96,29 @@ public class InitDatabase implements CommandLineRunner {
         taskConditionRepository.save(new TaskCondition("Technology"));
         taskConditionRepository.save(new TaskCondition("Archive"));
 
-        // Формирование Tasks и ProductionPlans
-//        productionPlanService.formProductionPlans(taskService.formTasks(1));
-//        productionPlanService.formProductionPlans(taskService.formTasks(2));
-//        productionPlanService.formProductionPlans(taskService.formTasks(3));
-//        productionPlanService.formProductionPlans(taskService.formTasks(4));
-
-        // 11. ContractTypes
+        // 9. ContractTypes
         contractTypeRepository.save( new ContractType("Metal"));
         contractTypeRepository.save( new ContractType("Component"));
 
-        // 12. Формирование contracts
+
+        // 10. Создание Project
         // Project 1001
-        addContract(1, new ContractCommand(
+        addProject(new ProjectCommand(
+                1001, null, 1,
+                LocalDateTime.parse("2023-07-01T00:00"), LocalDateTime.parse("2023-07-30T00:00"),
+                1));
+        addProjectList(1, new ProjectListCommand(1, 2));        // ProjectLists
+        addProjectList(1, new ProjectListCommand(3, 3));
+        addDesignTerm(1, 10);                                      // DesignTerm
+
+        addTermPart(new TechnologyPartCommand(1, 1, 1, 3));     // TermPart
+        addTermPart(new TechnologyPartCommand(1, 2, 2, 2));
+        addTermPart(new TechnologyPartCommand(1, 3, 3, 5));
+        addTermPart(new TechnologyPartCommand(3, 1, 1, 2));
+        addTermPart(new TechnologyPartCommand(3, 2, 3, 4));
+        addTechnologyTerm(1, 11);                               // TechnologyTerm
+
+        addContract(1, new ContractCommand(                                   // Contracts
                 "№10000-1", "Закупка металла",
                 LocalDateTime.parse("2023-07-10T00:00"),
                 LocalDateTime.parse("2023-07-18T00:00"),
@@ -175,6 +133,77 @@ public class InitDatabase implements CommandLineRunner {
                 LocalDateTime.parse("2023-07-10T00:00"),
                 LocalDateTime.parse("2023-07-16T00:00"),
                 1));
+
+//        productionPlanService.formProductionPlans(taskService.formTasks(1));
+
+        // Project 1002
+        addProject(new ProjectCommand(
+                1002, null, 2,
+                LocalDateTime.parse("2023-07-21T00:00"), LocalDateTime.parse("2023-08-28T00:00"),
+                1));
+        addProjectList(2, new ProjectListCommand(2, 3));        // ProjectLists
+        addProjectList(2, new ProjectListCommand(4, 1));
+        addDesignTerm(2, 5);                                      // DesignTerm
+
+        addTermPart(new TechnologyPartCommand(2, 1, 4, 1));     // TermPart
+        addTermPart(new TechnologyPartCommand(2, 2, 5, 3));
+        addTermPart(new TechnologyPartCommand(2, 3, 6, 2));
+        addTermPart(new TechnologyPartCommand(4, 1, 5, 2));
+        addTermPart(new TechnologyPartCommand(4, 2, 6, 4));
+        addTechnologyTerm(2, 7);                               // TechnologyTerm
+
+        addContract(2, new ContractCommand(                                   // Contracts
+                "№10000-4", "Закупка металла",
+                LocalDateTime.parse("2023-07-27T00:00"),
+                LocalDateTime.parse("2023-08-10T00:00"),
+                1));
+
+//        productionPlanService.formProductionPlans(taskService.formTasks(2));
+
+        // Project 1003
+        addProject(new ProjectCommand(
+                1003, null, 3,
+                LocalDateTime.parse("2023-07-18T00:00"), LocalDateTime.parse("2023-08-15T00:00"),
+                1));
+        addProjectList(3, new ProjectListCommand(5, 3));
+        addProjectList(3, new ProjectListCommand(6, 5));
+        addDesignTerm(3, 8);
+
+        addTermPart(new TechnologyPartCommand(5, 1, 3, 1));
+        addTermPart(new TechnologyPartCommand(5, 2, 4, 3));
+        addTermPart(new TechnologyPartCommand(5, 3, 7, 5));
+        addTermPart(new TechnologyPartCommand(6, 1, 7, 2));
+        addTermPart(new TechnologyPartCommand(6, 2, 9, 4));
+        addTechnologyTerm(3, 8);
+
+        addContract(3, new ContractCommand(                                   // Contracts
+                "№10000-5", "Закупка металла",
+                LocalDateTime.parse("2023-07-24T00:00"),
+                LocalDateTime.parse("2023-08-08T00:00"),
+                1));
+
+//        productionPlanService.formProductionPlans(taskService.formTasks(3));
+
+        // Project 1004
+        addProject(new ProjectCommand(
+                1004, null, 4,
+                LocalDateTime.parse("2023-07-15T00:00"), LocalDateTime.parse("2023-07-26T00:00"),
+                1));
+        addProjectList(4, new ProjectListCommand(5, 1));
+        addProjectList(4, new ProjectListCommand(8, 2));
+        addDesignTerm(4, 6);
+
+        addTermPart(new TechnologyPartCommand(8, 1, 1, 2));
+        addTermPart(new TechnologyPartCommand(8, 2, 7, 4));
+        addTechnologyTerm(4, 6);
+
+        addContract(4, new ContractCommand(
+                "№10000-6", "Закупка металла",
+                LocalDateTime.parse("2023-07-25T00:00"),
+                LocalDateTime.parse("2023-08-03T00:00"),
+                1));
+
+//        productionPlanService.formProductionPlans(taskService.formTasks(4));
 
     }
 
@@ -228,6 +257,14 @@ public class InitDatabase implements CommandLineRunner {
         });
     }
 
+    private void addDesignTerm(int projectId, int designTerm) {
+        Optional<Project> optionalProject = projectRepository.findById(projectId);
+        optionalProject.ifPresent(project -> {
+            project.setDesignTerm(designTerm);
+            projectRepository.save(project);
+        });
+    }
+
     private void addTermPart(TechnologyPartCommand command) {
         Optional<Part> optionalPart = partRepository.findById(command.partId());
         Optional<Equipment> optionalEquipment = equipmentRepository.findById(command.equipmentId());
@@ -241,9 +278,19 @@ public class InitDatabase implements CommandLineRunner {
         }
     }
 
-    private void addContract(int id, ContractCommand command) {
+    private void addTechnologyTerm(int projectId, int technologyTerm) {
+        Optional<Project> optionalProject = projectRepository.findById(projectId);
+        if (optionalProject.isPresent()){
+            Project project = optionalProject.get();
+            project.setTechnologyTerm(technologyTerm);
+            projectRepository.save(project);
+        }
+    }
+
+    private void addContract(int projectId, ContractCommand command) {
+        Optional<Project> optionalProject = projectRepository.findById(projectId);
         Optional<ContractType> optionalContractType = contractTypeRepository.findById(command.contractTypeId());
-        Optional<Project> optionalProject = projectRepository.findById(id);
+
         if (optionalContractType.isPresent() && optionalProject.isPresent()){
             ContractType contractType = optionalContractType.get();
             Project project = optionalProject.get();
