@@ -7,10 +7,12 @@ import org.itstep.projectdeadlinemanagement.repository.ProjectRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -32,6 +34,25 @@ public class ProjectController {
         Optional<Project> optionalProject = projectRepository.findById(id);
         String redirect = "redirect:/projects/project_details/" + id;
         return redirect;
+    }
+
+    @GetMapping("/details/{projectNumber}")
+    public String datails(@PathVariable Integer projectNumber, Model model) {
+        System.out.println("projectNumber = " + projectNumber);
+        List<Project> projects = projectRepository.findAll();
+        int id = 0;
+        System.out.println("id = " + id);
+        if (!projects.isEmpty()) {
+            for (Project project: projects){
+                System.out.println("project.getNumber() = " + project.getNumber());
+                if (Objects.equals(project.getNumber(), projectNumber)){
+                    id = project.getId();
+                    break;
+                }
+            }
+        }
+        System.out.println("id = " + id);
+        return "redirect:/projects/project_details/" + id;
     }
 }
 

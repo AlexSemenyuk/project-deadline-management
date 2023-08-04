@@ -219,6 +219,16 @@
                                     </table>
                                 </details>
                             </li>
+                            <li>
+<!--                                <a class="text-dark px-1" th:href="@{/api/v1/chart/{id}(id=${project.id})}">-->
+<!--                                   Start-->
+<!--                                </a>-->
+                                <input id="csrfToken" th:name="${_csrf.parameterName}" type="hidden" th:value="${_csrf.token}">
+                                <button type="button" th:name="${project.id}" id="start">start</button>
+<!--                                <div>-->
+<!--                                    <canvas id="myChart"></canvas>-->
+<!--                                </div>-->
+                            </li>
                         </ol>
                     </div>
                 </div>
@@ -241,10 +251,147 @@
 <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
 <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.5/js/dataTables.bootstrap5.min.js"></script>
+<!--<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>-->
+
 <script>
     new DataTable('#example');
     new DataTable('#example1');
     new DataTable('#example2');
+
+    const start = document.getElementById("start");
+
+    class ProjectChart {
+        project
+        design
+        technology
+        contracts
+        production
+
+        constructor(project, design, technology, contracts, production) {
+            this.project = project;
+            this.design = design;
+            this.technology = technology;
+            this.contracts = contracts;
+            this.production = production;
+        }
+
+        get project() {
+            return this.project;
+        }
+
+        set project(project) {
+            this.project = project;
+        }
+
+        get design() {
+            return this.design;
+        }
+
+        set design(design) {
+            this.design = design;
+        }
+        get technology() {
+            return this.technology;
+        }
+
+        set technology(technology) {
+            this.technology = technology;
+        }
+        get contracts() {
+            return this.contracts;
+        }
+
+        set contracts(contracts) {
+            this.contracts = contracts;
+        }
+        get production() {
+            return this.production;
+        }
+
+        set production(production) {
+            this.production = production;
+        }
+    }
+
+
+    function projectChartResponse (json) {
+        console.log(json)
+
+        const project = json.project;
+        const design = json.design;
+        const technology = json.technology;
+        const contracts = json.contracts;
+        const production = json.production;
+        const projectChart = new ProjectChart(project, design, technology, contracts, production);
+        projectChart.project.start = new Date(project.start);
+        projectChart.project.deadline = new Date(project.deadline);
+        projectChart.design.start = new Date(design.start);
+        projectChart.design.deadline = new Date(design.deadline);
+        projectChart.technology.start = new Date(technology.start);
+        projectChart.technology.deadline = new Date(technology.deadline);
+        projectChart.contracts.start = new Date(contracts.start);
+        projectChart.contracts.deadline = new Date(contracts.deadline);
+        projectChart.production.start = new Date(production.start);
+        projectChart.production.deadline = new Date(production.deadline);
+        console.dir(projectChart);
+        var projectChartArray;
+        console.log(projectChartArray);
+        // projectChartArray = [projectChart.project,
+        //                             projectChart.design,
+        //                             projectChart.technology,
+        //                             projectChart.contracts,
+        //                             projectChart.production ];
+        // console.dir(projectChartArray);
+    }
+
+
+    start.addEventListener('click', (e) => {
+        const id = e.target.name;
+        console.log('click id = ' + id);
+        const request = {
+            projectId: id
+        };
+        console.dir(request);
+
+        const csrfTokenInput = document.getElementById('csrfToken');
+        const csrfToken = csrfTokenInput.value;
+
+
+        const url = "/api/v1/chart/" + id;
+
+        fetch(`/api/v1/chart/${id}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+                'X-CSRF-TOKEN': csrfToken
+            },
+        })
+            .then(data => data.json())
+            .then(json => projectChartResponse(json));
+
+    });
+
+    const ctx = document.getElementById('myChart');
+
+    // new Chart(ctx, {
+    //     type: 'bar',
+    //     data: {
+    //         labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple'],
+    //         datasets: [{
+    //             label: '# of Votes',
+    //             // data: [12, 19, 3, 5, 2, 3],
+    //             data: projectChartArray,
+    //             borderWidth: 1
+    //         }]
+    //     },
+    //     options: {
+    //         scales: {
+    //             y: {
+    //                 beginAtZero: true
+    //             }
+    //         }
+    //     }
+    // });
+
 </script>
 </body>
 </html>

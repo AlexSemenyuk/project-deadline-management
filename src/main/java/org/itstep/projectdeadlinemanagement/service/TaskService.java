@@ -78,7 +78,7 @@ public class TaskService {
         return tasks;
     }
 
-    private LocalDateTime formProductionStart(Project project) {
+    public LocalDateTime formProductionStart(Project project) {
         LocalDateTime productionStart = project.getStart();
         // DesignTerm + TechnologyTerm
         LocalDateTime designAndTechnologyTMP = productionStart
