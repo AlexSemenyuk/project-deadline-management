@@ -1,129 +1,190 @@
-const ctx1 = document.getElementById('totalPlan').getContext('2d');
-// ctx.canvas.parentNode.style.height = '600px';
-// ctx.canvas.parentNode.style.width = '600px';
+// Получение данных для графика
+const start = document.getElementById("start");
 
-let labels = ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'];
-let operationTimes = [12, 19, 3, 5, 2, 3];
-let operationTimes1 = [18, 2, 10, 15, 2, 3];
-new Chart(ctx1, {
-    type: 'bar',
-    data: {
-        labels: labels,         // Значения по Х
-        datasets: [{
-            label: 'Project deadlines',         //  Подпись графика
-            data: operationTimes,               //  Значения по Y
-            backgroundColor: ['Red'],
-            borderWidth: 1                      //  Толщина линии
-        },
-            {
-                label: 'Project deadlines',         //  Подпись графика
-                data: operationTimes1,         //  Значения по Y
-                backgroundColor: ['Purple'],
-                borderWidth: 1                      //  Толщина линии
-            }]
-    },
-    options: {
-        indexAxis: 'y',
-        scales: {
-            x: {
-                stacked: true
-            },
-            y: {
-                ticks: {
-                    crossAlign: 'far',
-                },
-                stacked: true
-            }
-        }
+class ProjectChart {
+    project
+    design
+    technology
+    contracts
+    production
+
+    constructor(project, design, technology, contracts, production) {
+        this.project = project;
+        this.design = design;
+        this.technology = technology;
+        this.contracts = contracts;
+        this.production = production;
     }
+
+    get project() {
+        return this.project;
+    }
+
+    set project(project) {
+        this.project = project;
+    }
+
+    get design() {
+        return this.design;
+    }
+
+    set design(design) {
+        this.design = design;
+    }
+
+    get technology() {
+        return this.technology;
+    }
+
+    set technology(technology) {
+        this.technology = technology;
+    }
+
+    get contracts() {
+        return this.contracts;
+    }
+
+    set contracts(contracts) {
+        this.contracts = contracts;
+    }
+
+    get production() {
+        return this.production;
+    }
+
+    set production(production) {
+        this.production = production;
+    }
+}
+
+function projectChartResponse(json) {
+    console.log(json)
+    // projectChart с данными в виде строки
+    const project = json.project;
+    const design = json.design;
+    const technology = json.technology;
+    const contracts = json.contracts;
+    const production = json.production;
+    const projectChart = new ProjectChart(project, design, technology, contracts, production);
+    // projectChart с данными в виде Date
+    // projectChart.project.start = new Date(project.start);
+    // projectChart.project.deadline = new Date(project.deadline);
+    // projectChart.design.start = new Date(design.start);
+    // projectChart.design.deadline = new Date(design.deadline);
+    // projectChart.technology.start = new Date(technology.start);
+    // projectChart.technology.deadline = new Date(technology.deadline);
+    // projectChart.contracts.start = new Date(contracts.start);
+    // projectChart.contracts.deadline = new Date(contracts.deadline);
+    // projectChart.production.start = new Date(production.start);
+    // projectChart.production.deadline = new Date(production.deadline);
+    console.dir(projectChart);
+
+    const tmpp = projectChart.project.start;
+    console.log("tmpp" + tmpp);
+
+    // Работа с графиком №1
+    const data = {
+        labels: ['Design', 'Technology', 'Contracts', 'Production', 'Project in general'],
+        datasets: [{
+            label: 'Project deadline',
+            data: [
+                // ['2023-07-01', '2023-07-05'],
+                [projectChart.design.start, projectChart.design.deadline],
+                [projectChart.technology.start, projectChart.technology.deadline],
+                [projectChart.contracts.start, projectChart.contracts.deadline],
+                [projectChart.production.start, projectChart.production.deadline],
+                [projectChart.project.start, projectChart.project.deadline]
+            ],
+            backgroundColor: [
+                'rgba(75, 192, 192, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgb(81,169,21, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 26, 104, 1)',
+                'rgba(153, 102, 255, 1)'
+            ],
+            borderColor: [
+                'rgba(75, 192, 192, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgb(81,169,21, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 26, 104, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)',
+                'rgba(0, 0, 0, 1)'
+            ],
+            barPercentage: 0.8
+            // borderWidth: 1
+        }]
+    };
+
+    // config
+        const config = {
+            type: 'bar',
+            data,
+            options: {
+                indexAxis: 'y',
+                scales: {
+                    x: {
+                        min: '2023-07-01',
+                        type: 'time',
+                        time: {
+                            unit: 'day'
+                        }
+                    },
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        };
+
+    // render init block
+        const myChart = new Chart(
+            document.getElementById('myChart'),
+            config
+        );
+
+    // Instantly assign Chart.js version
+        const chartVersion = document.getElementById('chartVersion');
+        chartVersion.innerText = Chart.version;
+
+}
+
+// По событию click
+start.addEventListener('click', (e) => {
+    const id = e.target.name;
+    console.log('click id = ' + id);
+    const request = {
+        projectId: id
+    };
+    console.dir(request);
+
+    // Получили значения csrfToken
+    const csrfTokenInput = document.getElementById('csrfToken');
+    const csrfToken = csrfTokenInput.value;
+
+    // const url = "/api/v1/chart/" + id;
+
+    fetch(`/api/v1/chart/${id}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+            'X-CSRF-TOKEN': csrfToken
+        },
+    })
+        .then(data => data.json())
+        .then(json => projectChartResponse(json));
+
+
+
+
 });
 
-// Chart.defaults.backgroundColor = '#9BD0F5';      // Указан в функции
-Chart.defaults.borderColor = '#36A2EB';             //
-Chart.defaults.color = '#000';
-
-const date = new Date();
-const month = date.getMonth() + 1;
-let day = month.getDay();
-console.log(month);
-console.log(day);
-
-// --------------------------------------
-var canvas = document.getElementById("totalPlan2");
-var ctx = canvas.getContext("2d");
-
-var circle = function (x, y, radius, z) {
-    ctx.beginPath ();
-    ctx.arc(x, y, radius, 0, Math.PI*2, false);
-    if (z) {ctx.stroke();}
-    else {ctx.fill();}
-};
-
-ctx.lineWidth = 2;
-ctx.strokeStyle = "Black";
-
-
-ctx.fillStyle = "Green";
-circle (100, 100, 30, false);
-
-ctx.fillStyle = "Orange";
-circle (200, 100, 20, true);
-
-ctx.fillStyle = "Blue";
-circle (300, 100, 10, false);
 
 
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-//
-//
-// var canvas = document.getElementById("totalPlan2");
-// var ctx2 = canvas.getContext("2d");
-//
-// var circle = function (x, y, radius, z) {
-//     ctx2.beginPath ();
-//     ctx2.arc(x, y, radius, 0, Math.PI*2, false);
-//     if (z) {ctx2.stroke();}
-//     else {ctx2.fill();}
-// };
-//
-// ctx2.lineWidth = 4;
-// ctx2.strokeStyle = "Black";
-//
-// var drawSnowMan = function (x, y){
-//     //Рисуем голову
-//     circle (x, y, 20, true);
-//     //Рисуем туловище
-//     circle (x, y+20+30, 30, true);
-//     //Рисуем глаза
-//     ctx2.fillStyle = "Black";
-//     circle (x-6, y-5, 4, false);
-//     circle (x+6, y-5, 4, false);
-//     //Рисуем рот
-//     ctx2.fillStyle = "Yellow";
-//     circle (x, y+5, 4, false);
-//     //Рисуем пуговицы
-//     ctx2.fillStyle = "Black";
-//     circle (x, y+20+30-16, 4, false);
-//     circle (x, y+20+30, 4, false);
-//     circle (x, y+20+30+16, 4, false);
-// };
-// drawSnowMan(50,50);
-// drawSnowMan(200,150);
-// drawSnowMan(200,400);
-//
-//
 
