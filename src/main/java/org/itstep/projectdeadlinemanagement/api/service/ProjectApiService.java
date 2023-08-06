@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -107,7 +108,7 @@ public class ProjectApiService {
                 dateTmp[0] = null;
                 daysTmp[0] = 0;
                 productionPlans.forEach(plan -> {
-                    if (plan.getTask().getProjectNumber() == project.getNumber()){
+                    if (Objects.equals(plan.getTask().getProjectNumber(), project.getNumber())){
                         daysTmp[0] = plan.getTask().getOperationTime() / TimeService.HOURS_PER_DAY;
                         reminderTmp[0] = plan.getTask().getOperationTime() % TimeService.HOURS_PER_DAY;
                         if (reminderTmp[0] > 0){
