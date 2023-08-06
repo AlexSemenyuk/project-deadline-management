@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 
@@ -12,6 +13,8 @@ import java.time.LocalDateTime;
 @Data
 @Table(name = "tasks")
 @NoArgsConstructor
+@EqualsAndHashCode(exclude = "productionPlan")
+@ToString(exclude = "productionPlan")
 public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

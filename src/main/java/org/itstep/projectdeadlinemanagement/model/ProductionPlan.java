@@ -2,7 +2,10 @@ package org.itstep.projectdeadlinemanagement.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
+
 import java.time.LocalDateTime;
 
 
@@ -10,6 +13,8 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "production_plans")
 @NoArgsConstructor
+//@EqualsAndHashCode(exclude = "task")
+//@ToString(exclude = "equipment")
 public class ProductionPlan {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

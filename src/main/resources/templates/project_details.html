@@ -120,28 +120,28 @@
                         <table class="table_sm table table-striped table-hover table-bordered border-secondary-subtle" style="width:100%;">
                             <thead>
                             <tr>
-                                <th class="td_st col-xl-1 px-1 text-center">Id</th>
-                                <th class="td_st col-xl-1 text-center">Номер</th>
-                                <th class="td_st col-xl-1 text-center">Замовник</th>
-                                <th class="td_st col-xl-1 text-center ">ЧРК (днів)</th>
-                                <th class="td_st col-xl-1 text-center ">ЧРТ (днів)</th>
-                                <th class="td_st col-xl-2 text-center">Початок</th>
-                                <th class="td_st col-xl-2 text-center">Закінчення</th>
-                                <th class="td_st col-xl-1 text-center ">Стан</th>
-                                <th class="td_st col-xl-1 text-center">Примітка</th>
+                                <th class="text_n1 col-xl-1 px-1 text-center">Id</th>
+                                <th class="text_n1 col-xl-1 text-center">Номер</th>
+                                <th class="text_n1 col-xl-1 text-center">Замовник</th>
+                                <th class="text_n1 col-xl-1 text-center ">ЧРК (роб. днів)</th>
+                                <th class="text_n1 col-xl-1 text-center ">ЧРТ (роб. днів)</th>
+                                <th class="text_n1 col-xl-2 text-center">Початок</th>
+                                <th class="text_n1 col-xl-2 text-center">Закінчення</th>
+                                <th class="text_n1 col-xl-1 text-center ">Стан</th>
+                                <th class="text_n1 col-xl-1 text-center">Примітка</th>
                             </tr>
                             </thead>
                             <tbody>
                             <tr>
-                                <td class="col-xl-1 text-center" th:text="${project.id}"></td>
-                                <td class="col-xl-1 px-1"  th:text="${project.number}"></td>
-                                <td class="col-xl-1 text-center" th:text="${project.customer.name}"></td>
-                                <td class="col-xl-1 text-center" th:text="${project.designTerm}"></td>
-                                <td class="col-xl-1 text-center" th:text="${project.technologyTerm}"></td>
-                                <td class="col-xl-2 text-center" th:text="${project.start}"></td>
-                                <td class="col-xl-2 text-center" th:text="${project.deadline}"></td>
-                                <td class="col-xl-1 px-1 text-center" th:text="${project.projectCondition.name}"></td>
-                                <td class="col-xl-1 text-center">
+                                <td class="text_n col-xl-1 text-center" th:text="${project.id}"></td>
+                                <td class="text_n col-xl-1 px-1"  th:text="${project.number}"></td>
+                                <td class="text_n col-xl-1 text-center" th:text="${project.customer.name}"></td>
+                                <td class="text_n col-xl-1 text-center" th:text="${project.designTerm}"></td>
+                                <td class="text_n col-xl-1 text-center" th:text="${project.technologyTerm}"></td>
+                                <td class="text_n col-xl-2 text-center" th:text="${project.start}"></td>
+                                <td class="text_n col-xl-2 text-center" th:text="${project.deadline}"></td>
+                                <td class="text_n col-xl-1 px-1 text-center" th:text="${project.projectCondition.name}"></td>
+                                <td class="text_n col-xl-1 text-center">
                                     <div class="row">
                                         <div class="col-xl-6 text-center">
                                             <a class="text-dark px-1" th:href="@{/projects/project_details/edit/{id}(id=${project.id})}">
@@ -163,30 +163,30 @@
                             <li class="text_p">ЧРК - Час розробки конструктора</li>
                             <li class="text_p">ЧРТ - Час розробки технолога</li>
                             <li class="text_p1">
-                                <div class="col-xl-6">
+                                <div class="col-xl-8">
                                     <details>
                                         <summary class="sum-item">Список деталей щодо проекту</summary>
                                         <table id="example" class="table_sm table table-striped table-hover table-bordered border-secondary-subtle" style="width:100%;">
                                             <thead>
                                             <tr>
-                                                <th class="text_p1 col-xl-2 px-1 text-center">Id</th>
-                                                <th class="text_p1 col-xl-4 text-center">Номер</th>
-                                                <th class="text_p1 col-xl-3 text-center">Назва</th>
-                                                <th class="text_p1 col-xl-3 text-center">Кількість (штук)</th>
+                                                <th class="text_n1 col-xl-2 px-1 text-center">Id</th>
+                                                <th class="text_n1 col-xl-4 text-center">Номер</th>
+                                                <th class="text_n1 col-xl-3 text-center">Назва</th>
+                                                <th class="text_n1 col-xl-3 text-center">Кількість (штук)</th>
                                             </tr>
                                             </thead>
                                             <tbody>
                                             <tr th:each="p: ${project.projectLists}">
-                                                <td class="text_p1 col-xl-2 text-center" th:text="${p.part.id}"></td>
-                                                <td class="text_p col-xl-4 px-1"  th:text="${p.part.number}"></td>
-                                                <td class="text_p col-xl-3 px-1"  th:text="${p.part.name}"></td>
-                                                <td class="text_p col-xl-3 text-center"  th:text="${p.amount}"></td>
+                                                <td class="text_n col-xl-2 text-center" th:text="${p.part.id}"></td>
+                                                <td class="text_n col-xl-4 px-1"  th:text="${p.part.number}"></td>
+                                                <td class="text_n col-xl-3 px-1"  th:text="${p.part.name}"></td>
+                                                <td class="text_n col-xl-3 text-center"  th:text="${p.amount}"></td>
                                             </tr>
                                             </tbody>
                                         </table>
                                     </details>
                                 </div>
-                                <div class="col-xl-6"></div>
+                                <div class="col-xl-4"></div>
                             </li>
                             <li class="text_p1">
                                 <div class="col-xl-8">
@@ -195,22 +195,22 @@
                                         <table id="example1" class="table_sm table table-striped table-hover table-bordered border-secondary-subtle" style="width:100%;">
                                             <thead>
                                             <tr>
-                                                <th class="text_p1 col-xl-1 px-1 text-center">Id</th>
-                                                <th class="text_p1 col-xl-2 px-1 ">Номер</th>
-                                                <th class="text_p1 col-xl-2 px-1 ">Назва</th>
-                                                <th class="text_p1 col-xl-2 px-1 text-center">Початок</th>
-                                                <th class="text_p1 col-xl-2 px-1 text-center">Закінчення</th>
-                                                <th class="text_p1 col-xl-1 text-center">Тип</th>
+                                                <th class="text_n1 col-xl-1 px-1 text-center">Id</th>
+                                                <th class="text_n1 col-xl-2 px-1 ">Номер</th>
+                                                <th class="text_n1 col-xl-2 px-1 ">Назва</th>
+                                                <th class="text_n1 col-xl-2 px-1 text-center">Початок</th>
+                                                <th class="text_n1 col-xl-2 px-1 text-center">Закінчення</th>
+                                                <th class="text_n1 col-xl-1 text-center">Тип</th>
                                             </tr>
                                             </thead>
                                             <tbody>
                                             <tr th:each="contract: ${project.contracts}">
-                                                <td class="text_p1 col-xl-1 text-center" th:text="${contract.id}"></td>
-                                                <td class="text_p col-xl-2 px-1"  th:text="${contract.number}"></td>
-                                                <td class="text_p col-xl-2 px-1"  th:text="${contract.name}"></td>
-                                                <td class="text_p col-xl-2 text-center"  th:text="${contract.start}"></td>
-                                                <td class="text_p col-xl-2 text-center"  th:text="${contract.deadline}"></td>
-                                                <td class="text_p col-xl-1 text-center"  th:text="${contract.contractType.name}"></td>
+                                                <td class="text_n col-xl-1 text-center" th:text="${contract.id}"></td>
+                                                <td class="text_n col-xl-2 px-1"  th:text="${contract.number}"></td>
+                                                <td class="text_n col-xl-2 px-1"  th:text="${contract.name}"></td>
+                                                <td class="text_n col-xl-2 text-center"  th:text="${contract.start}"></td>
+                                                <td class="text_n col-xl-2 text-center"  th:text="${contract.deadline}"></td>
+                                                <td class="text_n col-xl-1 text-center"  th:text="${contract.contractType.name}"></td>
                                             </tr>
                                             </tbody>
                                         </table>
@@ -224,28 +224,28 @@
                                     <table id="example2" class="table_sm table table-striped table-hover table-bordered border-secondary-subtle" style="width:100%;">
                                         <thead>
                                         <tr>
-                                            <th class="text_p1 col-xl-1 px-1 text-center align-items-center">Id</th>
-                                            <th class="text_p1 col-xl-1 text-center align-items-center">Номер проекту</th>
-                                            <th class="text_p1 col-xl-2 text-center align-items-center">Обладнання</th>
-                                            <th class="text_p1 col-xl-2 text-center align-items-center">Деталь</th>
-                                            <th class="text_p1 col-xl-1 text-center align-items-center">Номер операції</th>
-                                            <th class="text_p1 col-xl-1 text-center align-items-center">Час операції</th>
-                                            <th class="text_p1 col-xl-1 text-center align-items-center">Номер партії</th>
-                                            <th class="text_p1 col-xl-2 text-center align-items-center">Початок виробництва</th>
-                                            <th class="text_p1 col-xl-1 text-center align-items-center">Стан</th>
+                                            <th class="text_n1 col-xl-1 px-1 text-center align-items-center">Id</th>
+                                            <th class="text_n1 col-xl-1 text-center align-items-center">Номер проекту</th>
+                                            <th class="text_n1 col-xl-2 text-center align-items-center">Обладнання</th>
+                                            <th class="text_n1 col-xl-2 text-center align-items-center">Деталь</th>
+                                            <th class="text_n1 col-xl-1 text-center align-items-center">Номер операції</th>
+                                            <th class="text_n1 col-xl-1 text-center align-items-center">Час операції</th>
+                                            <th class="text_n1 col-xl-1 text-center align-items-center">Номер партії</th>
+                                            <th class="text_n1 col-xl-2 text-center align-items-center">Початок виробництва</th>
+                                            <th class="text_n1 col-xl-1 text-center align-items-center">Стан</th>
                                         </tr>
                                         </thead>
                                         <tbody>
                                         <tr th:each="task: ${project.tasks}">
-                                            <td class="text_p col-xl-1 text-center" th:text="${task.id}"></td>
-                                            <td class="text_p col-xl-1 text-center"  th:text="${task.projectNumber}"></td>
-                                            <td class="text_p col-xl-2 px-1"  th:text="${task.equipment.number + '-' + task.equipment.name}"></td>
-                                            <td class="text_p col-xl-2 px-1"  th:text="${task.partNumber + ' - ' + task.partName}"></td>
-                                            <td class="text_p col-xl-1 text-center"  th:text="${task.termNumber}"></td>
-                                            <td class="text_p col-xl-1 text-center"  th:text="${task.operationTime}"></td>
-                                            <td class="text_p col-xl-1 text-center"  th:text="${task.lotNumber}"></td>
-                                            <td class="text_p col-xl-2 text-center"  th:text="${task.startProduction}"></td>
-                                            <td class="text_p col-xl-1 text-center"  th:text="${task.taskCondition.name}"></td>
+                                            <td class="text_n col-xl-1 text-center" th:text="${task.id}"></td>
+                                            <td class="text_n col-xl-1 text-center"  th:text="${task.projectNumber}"></td>
+                                            <td class="text_n col-xl-2 px-1"  th:text="${task.equipment.number + '-' + task.equipment.name}"></td>
+                                            <td class="text_n col-xl-2 px-1"  th:text="${task.partNumber + ' - ' + task.partName}"></td>
+                                            <td class="text_n col-xl-1 text-center"  th:text="${task.termNumber}"></td>
+                                            <td class="text_n col-xl-1 text-center"  th:text="${task.operationTime}"></td>
+                                            <td class="text_n col-xl-1 text-center"  th:text="${task.lotNumber}"></td>
+                                            <td class="text_n col-xl-2 text-center"  th:text="${task.startProduction}"></td>
+                                            <td class="text_n col-xl-1 text-center"  th:text="${task.taskCondition.name}"></td>
                                         </tr>
                                         </tbody>
                                     </table>
@@ -266,17 +266,6 @@
                                     </div>
                                 </div>
 
-
-<!--                                <div>-->
-<!--                                    <canvas id="myChart1" width="800" height="300"></canvas>-->
-<!--                                </div>-->
-<!--                                <div>-->
-<!--                                    <canvas id="myChart"></canvas>-->
-<!--                                </div>-->
-
-<!--                                <div>-->
-<!--                                    <canvas id="myChart2"></canvas>-->
-<!--                                </div>-->
                             </li>
                         </ol>
                     </div>
@@ -300,12 +289,6 @@
 <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
 <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.5/js/dataTables.bootstrap5.min.js"></script>
-<!--<script src="https://cdnjs.com/libraries/Chart.js"></script>-->
-<!--<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>-->
-<!--<script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.2/dist/chart.min.js"></script>-->
-<!--<script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.2/dist/chart.min.js"></script>-->
-<!--<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-gantt@1.1.0/dist/chartjs-plugin-gantt.min.js"></script>-->
-<!--<script src="https://cdn.jsdelivr.net/npm/chartjs-chart-gantt@1.0.2/dist/chartjs-chart-gantt.min.js"></script>-->
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js/dist/chart.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
 <script>

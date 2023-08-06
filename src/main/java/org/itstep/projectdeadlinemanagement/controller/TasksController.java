@@ -43,6 +43,7 @@ public class TasksController {
         model.addAttribute("projects", projects);
         return "tasks";
     }
+
 //    @GetMapping("/{id}")
 //    public String home(@PathVariable int id, Model model) {
 //

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Component
@@ -31,6 +32,7 @@ public class InitDatabase implements CommandLineRunner {
     private final ProjectListRepository projectListRepository;
     private final TechnologyPartRepository termPartRepository;
     private final TaskService taskService;
+    private final ProductionPlanRepository productionPlanRepository;
     private final ProductionPlanService productionPlanService;
     private final ContractTypeRepository contractTypeRepository;
     private final ContractRepository contractRepository;
@@ -109,99 +111,101 @@ public class InitDatabase implements CommandLineRunner {
                 1));
         addProjectList(1, new ProjectListCommand(1, 2));        // ProjectLists
         addProjectList(1, new ProjectListCommand(3, 3));
-        addDesignTerm(1, 10);                                      // DesignTerm
+        addDesignTerm(1, 7);                                      // DesignTerm
+
 
         addTermPart(new TechnologyPartCommand(1, 1, 1, 3));     // TermPart
         addTermPart(new TechnologyPartCommand(1, 2, 2, 2));
         addTermPart(new TechnologyPartCommand(1, 3, 3, 5));
         addTermPart(new TechnologyPartCommand(3, 1, 1, 2));
         addTermPart(new TechnologyPartCommand(3, 2, 3, 4));
-        addTechnologyTerm(1, 11);                               // TechnologyTerm
+        addTechnologyTerm(1, 7);                               // TechnologyTerm
+
 
         addContract(1, new ContractCommand(                                   // Contracts
                 "№10000-1", "Закупка металла",
-                LocalDateTime.parse("2023-07-10T00:00"),
+                LocalDateTime.parse("2023-07-12T00:00"),
                 LocalDateTime.parse("2023-07-18T00:00"),
                 1));
         addContract(1, new ContractCommand(
                 "№10000-2", "Закупка металла",
-                LocalDateTime.parse("2023-07-10T00:00"),
+                LocalDateTime.parse("2023-07-09T00:00"),
                 LocalDateTime.parse("2023-07-15T00:00"),
                 1));
         addContract(1, new ContractCommand(
                 "№10000-3", "Закупка металла",
-                LocalDateTime.parse("2023-07-10T00:00"),
+                LocalDateTime.parse("2023-07-11T00:00"),
                 LocalDateTime.parse("2023-07-16T00:00"),
                 1));
 
-//        productionPlanService.formProductionPlans(taskService.formTasks(1));
+        productionPlanService.formProductionPlans(taskService.formTasks(1));
 
         // Project 1002
-        addProject(new ProjectCommand(
-                1002, null, 2,
-                LocalDateTime.parse("2023-07-21T00:00"), LocalDateTime.parse("2023-08-28T00:00"),
-                1));
-        addProjectList(2, new ProjectListCommand(2, 3));        // ProjectLists
-        addProjectList(2, new ProjectListCommand(4, 1));
-        addDesignTerm(2, 5);                                      // DesignTerm
-
-        addTermPart(new TechnologyPartCommand(2, 1, 4, 1));     // TermPart
-        addTermPart(new TechnologyPartCommand(2, 2, 5, 3));
-        addTermPart(new TechnologyPartCommand(2, 3, 6, 2));
-        addTermPart(new TechnologyPartCommand(4, 1, 5, 2));
-        addTermPart(new TechnologyPartCommand(4, 2, 6, 4));
-        addTechnologyTerm(2, 7);                               // TechnologyTerm
-
-        addContract(2, new ContractCommand(                                   // Contracts
-                "№10000-4", "Закупка металла",
-                LocalDateTime.parse("2023-07-27T00:00"),
-                LocalDateTime.parse("2023-08-10T00:00"),
-                1));
+//        addProject(new ProjectCommand(
+//                1002, null, 2,
+//                LocalDateTime.parse("2023-07-21T00:00"), LocalDateTime.parse("2023-08-28T00:00"),
+//                1));
+//        addProjectList(2, new ProjectListCommand(2, 3));        // ProjectLists
+//        addProjectList(2, new ProjectListCommand(4, 1));
+//        addDesignTerm(2, 5);                                      // DesignTerm
+//
+//        addTermPart(new TechnologyPartCommand(2, 1, 4, 1));     // TermPart
+//        addTermPart(new TechnologyPartCommand(2, 2, 5, 3));
+//        addTermPart(new TechnologyPartCommand(2, 3, 6, 2));
+//        addTermPart(new TechnologyPartCommand(4, 1, 5, 2));
+//        addTermPart(new TechnologyPartCommand(4, 2, 6, 4));
+//        addTechnologyTerm(2, 7);                               // TechnologyTerm
+//
+//        addContract(2, new ContractCommand(                                   // Contracts
+//                "№10000-4", "Закупка металла",
+//                LocalDateTime.parse("2023-07-27T00:00"),
+//                LocalDateTime.parse("2023-08-10T00:00"),
+//                1));
 
 //        productionPlanService.formProductionPlans(taskService.formTasks(2));
 
         // Project 1003
-        addProject(new ProjectCommand(
-                1003, null, 3,
-                LocalDateTime.parse("2023-07-18T00:00"), LocalDateTime.parse("2023-08-15T00:00"),
-                1));
-        addProjectList(3, new ProjectListCommand(5, 3));
-        addProjectList(3, new ProjectListCommand(6, 5));
-        addDesignTerm(3, 8);
-
-        addTermPart(new TechnologyPartCommand(5, 1, 3, 1));
-        addTermPart(new TechnologyPartCommand(5, 2, 4, 3));
-        addTermPart(new TechnologyPartCommand(5, 3, 7, 5));
-        addTermPart(new TechnologyPartCommand(6, 1, 7, 2));
-        addTermPart(new TechnologyPartCommand(6, 2, 9, 4));
-        addTechnologyTerm(3, 8);
-
-        addContract(3, new ContractCommand(                                   // Contracts
-                "№10000-5", "Закупка металла",
-                LocalDateTime.parse("2023-07-24T00:00"),
-                LocalDateTime.parse("2023-08-08T00:00"),
-                1));
+//        addProject(new ProjectCommand(
+//                1003, null, 3,
+//                LocalDateTime.parse("2023-07-18T00:00"), LocalDateTime.parse("2023-08-15T00:00"),
+//                1));
+//        addProjectList(3, new ProjectListCommand(5, 3));
+//        addProjectList(3, new ProjectListCommand(6, 5));
+//        addDesignTerm(3, 8);
+//
+//        addTermPart(new TechnologyPartCommand(5, 1, 3, 1));
+//        addTermPart(new TechnologyPartCommand(5, 2, 4, 3));
+//        addTermPart(new TechnologyPartCommand(5, 3, 7, 5));
+//        addTermPart(new TechnologyPartCommand(6, 1, 7, 2));
+//        addTermPart(new TechnologyPartCommand(6, 2, 9, 4));
+//        addTechnologyTerm(3, 8);
+//
+//        addContract(3, new ContractCommand(                                   // Contracts
+//                "№10000-5", "Закупка металла",
+//                LocalDateTime.parse("2023-07-24T00:00"),
+//                LocalDateTime.parse("2023-08-08T00:00"),
+//                1));
 
 //        productionPlanService.formProductionPlans(taskService.formTasks(3));
 
         // Project 1004
-        addProject(new ProjectCommand(
-                1004, null, 4,
-                LocalDateTime.parse("2023-07-15T00:00"), LocalDateTime.parse("2023-07-26T00:00"),
-                1));
-        addProjectList(4, new ProjectListCommand(5, 1));
-        addProjectList(4, new ProjectListCommand(8, 2));
-        addDesignTerm(4, 6);
-
-        addTermPart(new TechnologyPartCommand(8, 1, 1, 2));
-        addTermPart(new TechnologyPartCommand(8, 2, 7, 4));
-        addTechnologyTerm(4, 6);
-
-        addContract(4, new ContractCommand(
-                "№10000-6", "Закупка металла",
-                LocalDateTime.parse("2023-07-25T00:00"),
-                LocalDateTime.parse("2023-08-03T00:00"),
-                1));
+//        addProject(new ProjectCommand(
+//                1004, null, 4,
+//                LocalDateTime.parse("2023-07-15T00:00"), LocalDateTime.parse("2023-07-26T00:00"),
+//                1));
+//        addProjectList(4, new ProjectListCommand(5, 1));
+//        addProjectList(4, new ProjectListCommand(8, 2));
+//        addDesignTerm(4, 6);
+//
+//        addTermPart(new TechnologyPartCommand(8, 1, 1, 2));
+//        addTermPart(new TechnologyPartCommand(8, 2, 7, 4));
+//        addTechnologyTerm(4, 6);
+//
+//        addContract(4, new ContractCommand(
+//                "№10000-6", "Закупка металла",
+//                LocalDateTime.parse("2023-07-25T00:00"),
+//                LocalDateTime.parse("2023-08-03T00:00"),
+//                1));
 
 //        productionPlanService.formProductionPlans(taskService.formTasks(4));
 

@@ -20,6 +20,7 @@ public class TaskService {
     private final TaskRepository taskRepository;
     private final TaskConditionRepository taskConditionRepository;
     private final EquipmentRepository equipmentRepository;
+//    private final ProductionPlanService productionPlanService;
 
     public List<Task> formTasks(Integer id) {
         List<Task> tasks = new CopyOnWriteArrayList<>();
@@ -68,7 +69,9 @@ public class TaskService {
                         optionalTaskCondition.ifPresent(task[0]::setTaskCondition);
                         task[0].setProject(project);
                         tasks.add(task[0]);
-                        start[0] = start[0].plusHours(termPart.getOperationTime());
+                        start[0] = TimeService.localDateTimeAddHours(start[0], termPart.getOperationTime());
+//                        start[0] = start[0].plusHours(termPart.getOperationTime());
+
                     }
 //                    });
                 }
@@ -79,11 +82,17 @@ public class TaskService {
     }
 
     public LocalDateTime formProductionStart(Project project) {
-        LocalDateTime productionStart = project.getStart();
-        // DesignTerm + TechnologyTerm
-        LocalDateTime designAndTechnologyTMP = productionStart
-                .plusDays(project.getDesignTerm())
-                .plusDays(project.getTechnologyTerm());
+        LocalDateTime productionStart;
+        // DesignTerm
+        LocalDateTime startTMP = TimeService.excludeWeekend(project.getStart());
+        LocalDateTime deadlineTMP = TimeService.localDateTimeAddDays(startTMP, project.getDesignTerm());
+//        LocalDateTime deadlineTMP = startAddDays(startTMP, project.getDesignTerm());
+
+        // TechnologyTerm
+        startTMP = TimeService.excludeWeekend(deadlineTMP.plusDays(1));
+        deadlineTMP = TimeService.localDateTimeAddDays(startTMP, project.getDesignTerm());
+//        deadlineTMP = startAddDays(startTMP, project.getDesignTerm());
+
         // Max from contract.getDeadline
         List<Contract> contracts = project.getContracts();
         LocalDateTime  contractTMP = project.getStart();
@@ -92,12 +101,14 @@ public class TaskService {
                 contractTMP = contract.getDeadline();
             }
         }
+//        System.out.println("contractTMP = " + contractTMP);
 
-        if (designAndTechnologyTMP.isAfter(contractTMP)){
-            productionStart = designAndTechnologyTMP;
+        if (deadlineTMP.isAfter(contractTMP)){
+            productionStart = TimeService.excludeWeekend(deadlineTMP.plusDays(1));
         } else {
-            productionStart = contractTMP;
+            productionStart = TimeService.excludeWeekend(contractTMP.plusDays(1));
         }
+//        System.out.println("productionStart = " + productionStart);
         return productionStart;
     }
 

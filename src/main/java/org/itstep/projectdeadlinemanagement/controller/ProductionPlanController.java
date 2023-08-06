@@ -9,6 +9,7 @@ import org.itstep.projectdeadlinemanagement.model.ProductionPlan;
 import org.itstep.projectdeadlinemanagement.model.TaskCondition;
 import org.itstep.projectdeadlinemanagement.repository.*;
 import org.itstep.projectdeadlinemanagement.service.ProductionPlanService;
+import org.itstep.projectdeadlinemanagement.service.TimeService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -35,8 +36,8 @@ public class ProductionPlanController {
     public String home(Model model, HttpSession session) {
 
         if (session.getAttribute("tmp") == null && session.getAttribute("tmpDate") == null){
-            String currentDate = productionPlanService.formDate(DATE);
-            System.out.println("currentDate = " + currentDate);
+            String currentDate = TimeService.formDate(DATE);
+//            System.out.println("currentDate = " + currentDate);
             session.setAttribute("tmp", currentDate);
             session.setAttribute("tmpDate", DATE);
         }
@@ -143,7 +144,7 @@ public class ProductionPlanController {
         LocalDate date = LocalDate.of(Integer.parseInt(dateTmp[0]), Integer.parseInt(dateTmp[1]), 1);
 //        System.out.println("month = " + month);
 //        System.out.println("date = " + date);
-        String currentDate = productionPlanService.formDate(date);
+        String currentDate = TimeService.formDate(date);
 
         session.setAttribute("tmp", currentDate);
         session.setAttribute("tmpDate", date);

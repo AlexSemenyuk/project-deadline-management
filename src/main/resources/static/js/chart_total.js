@@ -66,17 +66,6 @@ function projectChartResponse(json) {
     const contracts = json.contracts;
     const production = json.production;
     const projectChart = new ProjectChart(project, design, technology, contracts, production);
-    // projectChart с данными в виде Date
-    // projectChart.project.start = new Date(project.start);
-    // projectChart.project.deadline = new Date(project.deadline);
-    // projectChart.design.start = new Date(design.start);
-    // projectChart.design.deadline = new Date(design.deadline);
-    // projectChart.technology.start = new Date(technology.start);
-    // projectChart.technology.deadline = new Date(technology.deadline);
-    // projectChart.contracts.start = new Date(contracts.start);
-    // projectChart.contracts.deadline = new Date(contracts.deadline);
-    // projectChart.production.start = new Date(production.start);
-    // projectChart.production.deadline = new Date(production.deadline);
     console.dir(projectChart);
 
     const tmpp = projectChart.project.start;
@@ -126,7 +115,7 @@ function projectChartResponse(json) {
                 indexAxis: 'y',
                 scales: {
                     x: {
-                        min: '2023-07-01',
+                        min: projectChart.project.start,
                         type: 'time',
                         time: {
                             unit: 'day'
@@ -175,9 +164,6 @@ start.addEventListener('click', (e) => {
     })
         .then(data => data.json())
         .then(json => projectChartResponse(json));
-
-
-
 
 });
 
