@@ -19,14 +19,14 @@
         * {
             margin: 0;
             padding: 0;
-            font-family: sans-serif;
+            /*font-family: sans-serif;*/
         }
-        .chartMenu {
-            width: 100vw;
-            height: 40px;
-            background: #1A1A1A;
-            color: rgba(54, 162, 235, 1);
-        }
+        /*.chartMenu {*/
+        /*    !*width: 100vw;*!*/
+        /*    height: 20px;*/
+        /*    background: #1A1A1A;*/
+        /*    color: rgba(54, 162, 235, 1);*/
+        /*}*/
         .chartMenu p {
             padding: 10px;
             font-size: 20px;
@@ -40,11 +40,15 @@
         /*    justify-content: center;*/
         /*}*/
         .chartBox {
-            width: 700px;
+            display: block;
+            width: 1000px;
+            height: 300px;
             padding: 20px;
-            border-radius: 20px;
-            border: solid 3px rgba(54, 162, 235, 1);
+            border-radius: 5px;
+            /*border: solid 3px rgba(54, 162, 235, 1);*/
+            border: solid 2px rgba(75, 75, 75, 1);
             background: white;
+            font-size: 14px;
         }
     </style>
 </head>
@@ -251,21 +255,23 @@
                                     </table>
                                 </details>
                             </li>
-                            <li>
 <!--                                <a class="text-dark px-1" th:href="@{/api/v1/chart/{id}(id=${project.id})}">-->
 <!--                                   Start-->
 <!--                                </a>-->
                                 <input id="csrfToken" th:name="${_csrf.parameterName}" type="hidden" th:value="${_csrf.token}">
-                                <button type="button" th:name="${project.id}" id="start">start</button>
+<!--                                <button type="button" th:name="${project.id}" id="start">start</button>-->
                                 <div class="chartMenu" style="display: none">
                                     <p>WWW.CHARTJS3.COM (Chart JS <span id="chartVersion"></span>)</p>
                                 </div>
-                                <div class="chartCard">
-                                    <div class="chartBox">
-                                        <canvas id="myChart"></canvas>
+                            <li class="text_p1">
+                                <details id="chartDetails" th:name="${project.id}">
+                                    <summary class="sum-item" >Графік проекту</summary>
+                                    <div class="chartCard">
+                                        <div class="chartBox">
+                                            <canvas id="myChart"></canvas>
+                                        </div>
                                     </div>
-                                </div>
-
+                                </details>
                             </li>
                         </ol>
                     </div>

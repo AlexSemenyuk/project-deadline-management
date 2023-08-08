@@ -61,8 +61,8 @@ public class ProjectApiService {
 
             designTmp[0].setStart(start[0]);
             designTmp[0].setDeadline(deadline[0]);
-            System.out.println("designTmp[0].getStart() = " + designTmp[0].getStart());
-            System.out.println("designTmp[0].getDeadline() = " + designTmp[0].getDeadline());
+//            System.out.println("designTmp[0].getStart() = " + designTmp[0].getStart());
+//            System.out.println("designTmp[0].getDeadline() = " + designTmp[0].getDeadline());
 
             // TechnologyTerm
             start[0] = TimeService.excludeWeekend(designTmp[0].getDeadline().plusDays(1));
@@ -70,8 +70,8 @@ public class ProjectApiService {
 
             technologyTmp[0].setStart(start[0]);
             technologyTmp[0].setDeadline(deadline[0]);
-            System.out.println("technologyTmp[0].getStart() = " + technologyTmp[0].getStart());
-            System.out.println("technologyTmp[0].getDeadline() = " + technologyTmp[0].getDeadline());
+//            System.out.println("technologyTmp[0].getStart() = " + technologyTmp[0].getStart());
+//            System.out.println("technologyTmp[0].getDeadline() = " + technologyTmp[0].getDeadline());
 
             // Contracts
             start[0] = LocalDate.from(project.getDeadline());
@@ -92,8 +92,8 @@ public class ProjectApiService {
 
             contractsTmp[0].setStart(start[0]);
             contractsTmp[0].setDeadline(deadline[0]);
-            System.out.println("contractsTmp[0].getStart() = " + contractsTmp[0].getStart());
-            System.out.println("contractsTmp[0].getDeadline() = " + contractsTmp[0].getDeadline());
+//            System.out.println("contractsTmp[0].getStart() = " + contractsTmp[0].getStart());
+//            System.out.println("contractsTmp[0].getDeadline() = " + contractsTmp[0].getDeadline());
 
             // Max from DesignOrTechnologyDeadline or Contracts
             if (technologyTmp[0].getDeadline().isAfter(contractsTmp[0].getDeadline())){
@@ -125,8 +125,8 @@ public class ProjectApiService {
             }
             productionTmp[0].setStart(start[0]);
             productionTmp[0].setDeadline(deadline[0]);
-            System.out.println("productionTmp[0].getStart() = " + productionTmp[0].getStart());
-            System.out.println("productionTmp[0].getDeadline() = " + productionTmp[0].getDeadline());
+//            System.out.println("productionTmp[0].getStart() = " + productionTmp[0].getStart());
+//            System.out.println("productionTmp[0].getDeadline() = " + productionTmp[0].getDeadline());
 
         });
 
