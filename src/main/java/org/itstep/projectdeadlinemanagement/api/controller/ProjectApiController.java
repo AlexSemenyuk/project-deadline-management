@@ -9,18 +9,11 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1")
 @RequiredArgsConstructor
 public class ProjectApiController {
-    private final ProjectApiService projectService;
+    private final ProjectApiService projectApiService;
     @PostMapping("/chart/{id}")
     ProjectChart chart (@PathVariable Integer id){
-        ProjectChart projectChart = projectService.formProjectChart(id);
+        ProjectChart projectChart = projectApiService.formProjectChart(id);
         return projectChart;
     }
 
-//    @PostMapping("/chart/{id}")
-//    ProjectChart chart (@PathVariable Integer id, , @RequestBody ProjectRequest request){
-////        ProjectChart projectChart = projectService.formProjectChart(id);
-//        System.out.println("id = " + id);
-//
-//        return "hello";
-//    }
 }

@@ -1,5 +1,5 @@
 // Получение данных для графика
-const start = document.getElementById("start");
+// const start = document.getElementById("start");
 
 class ProjectChart {
     project

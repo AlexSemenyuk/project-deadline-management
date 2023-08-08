@@ -176,33 +176,37 @@
                                                 </thead>
                                                 <tbody>
                                                 <tr th:each="planCommand: ${productionPlansPerDay}">
-                                                    <td class="text_a col-xl-1 text-center "
+                                                    <td class="text_a ty col-xl-1 text-center "
                                                         th:text="${planCommand.id}"></td>
                                                     <td class="text_b tx col-xl-1 text-center">
                                                         <a class="text_b tx" th:text="${planCommand.task.projectNumber}"
                                                            th:href="@{/projects/details/{id}(id=${planCommand.task.projectNumber})}"/>
                                                     </td>
-                                                    <td class="text_b tx">
+                                                    <td class="text_b tx col-xl-1">
                                                         <a class="text_b tx" th:text="${planCommand.equipment.number + '-' + planCommand.equipment.name}"
                                                            th:href="@{/production_plans/equipment_plans/{id}(id=${planCommand.equipment.id})}"/>
                                                     </td>
-                                                    <td class="text_a col-xl-1 px-1 "
-                                                        th:text="${planCommand.task.partNumber + '-' + planCommand.task.partName}"></td>
-                                                    <td class="text_a col-xl-1 text-center "
+<!--                                                    <td class="text_a col-xl-1 px-1 "-->
+<!--                                                        th:text="${planCommand.task.partNumber + '-' + planCommand.task.partName}"></td>-->
+                                                    <td class="text_b tx col-xl-1">
+                                                        <a class="text_b tx " th:text="${planCommand.task.partNumber + '-' + planCommand.task.partName}"
+                                                           th:href="@{/parts/part_details/{id}(id=${planCommand.task.projectNumber + ':' + planCommand.task.partNumber})}"/>
+                                                    </td>
+                                                    <td class="text_a ty col-xl-1 text-center "
                                                         th:text="${planCommand.number}"></td>
-                                                    <td class="text_a col-xl-1 text-center "
+                                                    <td class="text_a ty col-xl-1 text-center "
                                                         th:text="${planCommand.task.termNumber}"></td>
-                                                    <td class="text_a col-xl-1 text-center "
+                                                    <td class="text_a ty col-xl-1 text-center "
                                                         th:text="${planCommand.task.operationTime}"></td>
-                                                    <td class="text_a col-xl-1 text-center "
+                                                    <td class="text_a ty col-xl-1 text-center "
                                                         th:text="${planCommand.task.lotNumber}"></td>
-                                                    <td class="text_a col-xl-1 text-center "
+                                                    <td class="text_a ty col-xl-1 text-center "
                                                         th:text="${planCommand.currentStart}"></td>
-                                                    <td class="text_a col-xl-1 text-center "
+                                                    <td class="text_a ty col-xl-1 text-center "
                                                         th:text="${planCommand.task.startProduction}"></td>
-                                                    <td class="text_a col-xl-1 text-center "
+                                                    <td class="text_a ty col-xl-1 text-center "
                                                         th:text="${planCommand.task.taskCondition.name}"></td>
-                                                    <td class="text_a col-xl-1 text-center">
+                                                    <td class="text_a ty col-xl-1 text-center">
                                                         <div class="row">
                                                             <div class="col-xl-12 text-center">
                                                                 <a class="text-dark px-1" th:href="@{/production_plans/edit/{id}(id=${planCommand.id})}">
@@ -243,30 +247,34 @@
                                                 </thead>
                                                 <tbody>
                                                 <tr th:each="p: ${productionPlans}">
-                                                    <td class="text_a col-xl-1 text-center " th:text="${p.id}"></td>
+                                                    <td class="text_a ty col-xl-1 text-center " th:text="${p.id}"></td>
                                                     <td class="text_b tx col-xl-1 text-center">
                                                         <a class="text_b tx" th:text="${p.task.projectNumber}"
                                                            th:href="@{/projects/details/{id}(id=${p.task.projectNumber})}"/>
                                                     </td>
-                                                    <td class="text_b tx">
-                                                        <a class="text_b tx" th:text="${p.equipment.number + '-' + p.equipment.name}"
+                                                    <td class="text_b tx col-xl-1">
+                                                        <a class="text_b tx " th:text="${p.equipment.number + '-' + p.equipment.name}"
                                                            th:href="@{/production_plans/equipment_plans/{id}(id=${p.equipment.id})}"/>
                                                     </td>
-                                                    <td class="text_a col-xl-1 px-1"
-                                                        th:text="${p.task.partNumber + '-' + p.task.partName}"></td>
-                                                    <td class="text_a col-xl-1 text-center "
+<!--                                                    <td class="text_a col-xl-1 px-1"-->
+<!--                                                        th:text="${p.task.partNumber + '-' + p.task.partName}"></td>-->
+                                                    <td class="text_b tx col-xl-1">
+                                                        <a class="text_b tx " th:text="${p.task.partNumber + '-' + p.task.partName}"
+                                                           th:href="@{/parts/part_details/{id}(id=${p.task.projectNumber + ':' + p.task.partNumber})}"/>
+                                                    </td>
+                                                    <td class="text_a ty col-xl-1 text-center "
                                                         th:text="${p.number}"></td>
-                                                    <td class="text_a col-xl-1 text-center "
+                                                    <td class="text_a ty col-xl-1 text-center "
                                                         th:text="${p.task.termNumber}"></td>
-                                                    <td class="text_a col-xl-1 text-center "
+                                                    <td class="text_a ty col-xl-1 text-center "
                                                         th:text="${p.task.operationTime}"></td>
-                                                    <td class="text_a col-xl-1 text-center "
+                                                    <td class="text_a ty col-xl-1 text-center "
                                                         th:text="${p.task.lotNumber}"></td>
-                                                    <td class="text_a col-xl-1 text-center "
+                                                    <td class="text_a ty col-xl-1 text-center "
                                                         th:text="${p.currentStart}"></td>
-                                                    <td class="text_a col-xl-1 text-center "
+                                                    <td class="text_a ty col-xl-1 text-center "
                                                         th:text="${p.task.startProduction}"></td>
-                                                    <td class="text_a col-xl-1 text-center "
+                                                    <td class="text_a ty col-xl-1 text-center "
                                                         th:text="${p.task.taskCondition.name}"></td>
                                                 </tr>
                                                 </tbody>

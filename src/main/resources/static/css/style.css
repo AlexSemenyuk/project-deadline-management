@@ -176,7 +176,7 @@ body {
 .text_h {
     text-align: center;
     font-weight: 700;
-    font-size: 24px;
+    font-size: 22px;
 }
 
 .text_h1 {
@@ -210,13 +210,22 @@ body {
     padding: 0;
     text-decoration: none;
 }
-
-.text_a{
+.text_a.tx{
     text-decoration: none;
     color: var(--text-primary);
     font-size: 14px;
     font-weight: 400;
+    padding: 0 2px 0 2px;
 }
+
+.text_a.ty{
+    text-decoration: none;
+    color: var(--text-primary);
+    font-size: 14px;
+    font-weight: 400;
+    padding: 0 0 0 5px;
+}
+
 
 .text_a.tx:hover{
     text-decoration: none;
@@ -226,6 +235,7 @@ body {
     transform: scale(1.2);
     font-size: 14px;
     font-weight: 400;
+    padding: 0 0 0 5px;
 }
 
 .text_b.tx{

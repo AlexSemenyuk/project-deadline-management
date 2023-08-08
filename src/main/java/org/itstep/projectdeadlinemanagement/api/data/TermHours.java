@@ -1,13 +1,14 @@
 package org.itstep.projectdeadlinemanagement.api.data;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
-
 @Data
+@AllArgsConstructor
 @NoArgsConstructor
-public class Term {
-    private LocalDate start;
-    private LocalDate deadline;
+public class TermHours {
+    private int start;
+    private int deadline;
 }
+

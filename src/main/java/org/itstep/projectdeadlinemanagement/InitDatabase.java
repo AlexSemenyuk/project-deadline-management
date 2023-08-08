@@ -107,7 +107,7 @@ public class InitDatabase implements CommandLineRunner {
         // Project 1001
         addProject(new ProjectCommand(
                 1001, null, 1,
-                LocalDateTime.parse("2023-07-01T00:00"), LocalDateTime.parse("2023-07-30T00:00"),
+                LocalDateTime.parse("2023-07-25T00:00"), LocalDateTime.parse("2023-08-20T00:00"),
                 1));
         addProjectList(1, new ProjectListCommand(1, 2));        // ProjectLists
         addProjectList(1, new ProjectListCommand(3, 3));
@@ -124,21 +124,23 @@ public class InitDatabase implements CommandLineRunner {
 
         addContract(1, new ContractCommand(                                   // Contracts
                 "№10000-1", "Закупка металла",
-                LocalDateTime.parse("2023-07-12T00:00"),
-                LocalDateTime.parse("2023-07-18T00:00"),
+                LocalDateTime.parse("2023-08-04T00:00"),
+                LocalDateTime.parse("2023-08-14T00:00"),
                 1));
         addContract(1, new ContractCommand(
                 "№10000-2", "Закупка металла",
-                LocalDateTime.parse("2023-07-09T00:00"),
-                LocalDateTime.parse("2023-07-15T00:00"),
+                LocalDateTime.parse("2023-08-05T00:00"),
+                LocalDateTime.parse("2023-08-11T00:00"),
                 1));
         addContract(1, new ContractCommand(
                 "№10000-3", "Закупка металла",
-                LocalDateTime.parse("2023-07-11T00:00"),
-                LocalDateTime.parse("2023-07-16T00:00"),
+                LocalDateTime.parse("2023-08-09T00:00"),
+                LocalDateTime.parse("2023-08-15T00:00"),
                 1));
 
         productionPlanService.formProductionPlans(taskService.formTasks(1));
+
+
 
         // Project 1002
 //        addProject(new ProjectCommand(

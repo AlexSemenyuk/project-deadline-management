@@ -2,15 +2,15 @@ package org.itstep.projectdeadlinemanagement.api.data;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Value;
+
 @Data
 @AllArgsConstructor
 public class ProjectChart {
-    private Term project;
-    private Term design;
-    private Term technology;
-    private Term contracts;
-    private Term production;
+    private TermDate project;
+    private TermDate design;
+    private TermDate technology;
+    private TermDate contracts;
+    private TermDate production;
 
 //    public Term getProject() {
 //        return project;

@@ -2,7 +2,7 @@ package org.itstep.projectdeadlinemanagement.api.service;
 
 import lombok.*;
 import org.itstep.projectdeadlinemanagement.api.data.ProjectChart;
-import org.itstep.projectdeadlinemanagement.api.data.Term;
+import org.itstep.projectdeadlinemanagement.api.data.TermDate;
 import org.itstep.projectdeadlinemanagement.model.ProductionPlan;
 import org.itstep.projectdeadlinemanagement.model.Project;
 import org.itstep.projectdeadlinemanagement.repository.ProductionPlanRepository;
@@ -28,16 +28,16 @@ public class ProjectApiService {
     public ProjectChart formProjectChart(int id) {
         LocalDate [] start = new LocalDate[1];
         LocalDate [] deadline = new LocalDate[1];
-        Term [] projectTmp = new Term[1];
-        projectTmp[0] = new Term();
-        Term [] designTmp = new Term[1];
-        designTmp[0] = new Term();
-        Term [] technologyTmp = new Term[1];
-        technologyTmp[0] = new Term();
-        Term [] contractsTmp = new Term[1];
-        contractsTmp[0] = new Term();
-        Term [] productionTmp = new Term[1];
-        productionTmp[0] = new Term();
+        TermDate[] projectTmp = new TermDate[1];
+        projectTmp[0] = new TermDate();
+        TermDate[] designTmp = new TermDate[1];
+        designTmp[0] = new TermDate();
+        TermDate[] technologyTmp = new TermDate[1];
+        technologyTmp[0] = new TermDate();
+        TermDate[] contractsTmp = new TermDate[1];
+        contractsTmp[0] = new TermDate();
+        TermDate[] productionTmp = new TermDate[1];
+        productionTmp[0] = new TermDate();
         LocalDate [] dateTmp = new LocalDate[1];
         int [] daysTmp = new int[1];
         int [] reminderTmp = new int[1];
