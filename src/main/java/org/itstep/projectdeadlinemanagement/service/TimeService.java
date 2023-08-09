@@ -96,4 +96,18 @@ public class TimeService {
         return date;
     }
 
+    public static int planHoursPerMonth(LocalDate date) {
+        int year = date.getYear();
+        int month = date.getMonthValue();
+        int daysOfMonth = TimeService.getDaysOfMonth(date);
+        int sum = 0;
+        for (int i = 0; i < daysOfMonth; i++) {
+            LocalDate dateTmp = LocalDate.of(year, month, i + 1);
+            if (!dateTmp.getDayOfWeek().toString().equals("SUNDAY") &&
+                    !dateTmp.getDayOfWeek().toString().equals("SATURDAY")) {
+                sum += TimeService.HOURS_PER_DAY;
+            }
+        }
+        return sum;
+    }
 }

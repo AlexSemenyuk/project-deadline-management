@@ -209,7 +209,10 @@ body {
     font-size: 14px;
     padding: 0;
     text-decoration: none;
+    padding: 0 2px 0 2px;
 }
+
+
 .text_a.tx{
     text-decoration: none;
     color: var(--text-primary);

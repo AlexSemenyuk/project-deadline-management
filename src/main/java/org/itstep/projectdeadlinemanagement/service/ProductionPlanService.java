@@ -185,21 +185,6 @@ public class ProductionPlanService {
         return chartEquipmentCommands;
     }
 
-    public int planHoursPerMonth(LocalDate date) {
-        int year = date.getYear();
-        int month = date.getMonthValue();
-        int daysOfMonth = TimeService.getDaysOfMonth(date);
-        int sum = 0;
-        for (int i = 0; i < daysOfMonth; i++) {
-            LocalDate dateTmp = LocalDate.of(year, month, i + 1);
-            if (!dateTmp.getDayOfWeek().toString().equals("SUNDAY") &&
-                    !dateTmp.getDayOfWeek().toString().equals("SATURDAY")) {
-                sum += TimeService.HOURS_PER_DAY;
-            }
-        }
-        return sum;
-    }
-
     private List<ChartEquipmentCommand> formPlanPerDayAndParameterPerMonth(List<ChartEquipmentCommand> chartEquipmentCommands) {
         // Количество часов в день
         int[] sum = new int[1];
@@ -219,7 +204,7 @@ public class ProductionPlanService {
         String[] currentDayColorTmp = new String[1];
 
         LocalDate dateTmp = chartEquipmentCommands.get(0).getChartDaysCommands().get(0).getDayNumber();
-        int planHoursPerMonth = planHoursPerMonth(dateTmp);
+        int planHoursPerMonth = TimeService.planHoursPerMonth(dateTmp);
         chartEquipmentCommands.forEach(chartEquipmentCommand -> {
 //            System.out.println("chartEquipmentCommand.getEquipment() = " + chartEquipmentCommand.getEquipment());
             sumTotal[0] = 0;

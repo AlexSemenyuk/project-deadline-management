@@ -30,6 +30,7 @@ public class ProductionPlanController {
     private final ProductionPlanService productionPlanService;
     private final TaskConditionRepository taskConditionRepository;
 
+
     private final LocalDate DATE = LocalDate.now();
 
     @GetMapping
@@ -83,7 +84,7 @@ public class ProductionPlanController {
 
         model.addAttribute("parameter", equipmentAndDayParameter);
 
-        int planHoursPerMonth = productionPlanService.planHoursPerMonth(dateForMonth);
+        int planHoursPerMonth = TimeService.planHoursPerMonth(dateForMonth);
         model.addAttribute("planHoursPerMonth", planHoursPerMonth);
 
     }

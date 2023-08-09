@@ -48,18 +48,12 @@
                     </li>
                     <li class="item_menu">
                         <a class="link_menu" th:href="@{/projects}">Проекти</a>
-                    </li>
-                    <li class="item_menu">
-                        <a class="link_menu" th:href="@{/designs}" >Конструктор</a>
-                    </li>
-                    <li class="item_menu">
-                        <a class="link_menu" th:href="@{/technologies}">Технолог</a>
                         <ul class="list_menu_sub">
                             <li  class="item_menu_sub">
-                                <a class="link_menu_sub" href="">Щодо проекту</a>
+                                <a class="link_menu_sub" th:href="@{/projects/project_details/{id}(id=${project.id})}">Щодо проекту</a>
                             </li>
                             <li  class="item_menu_sub">
-                                <a class="link_menu_sub_active" href="">Зміна проекту</a>
+                                <a class="link_menu_sub_active" th:href="@{/projects/project_details/edit/{id}(id=${project.id})}">Зміна проекту</a>
                             </li>
                             <li  class="item_menu_sub">
                                 <a class="link_menu_sub" th:href="@{/projects/project_create}">Створити проект</a>
@@ -71,6 +65,12 @@
                                 <a class="link_menu_sub" th:href="@{/projects/project_create/project_conditions}">Стан</a>
                             </li>
                         </ul>
+                    </li>
+                    <li class="item_menu">
+                        <a class="link_menu" th:href="@{/designs}" >Конструктор</a>
+                    </li>
+                    <li class="item_menu">
+                        <a class="link_menu" th:href="@{/technologies}">Технолог</a>
                     </li>
                     <li class="item_menu">
                         <a class="link_menu" th:href="@{/contracts}">Контракти</a>
