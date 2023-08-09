@@ -105,7 +105,7 @@ public class EquipmentPlanController {
     }
 
     private void formDateParameter(String month, HttpSession session) {
-        String [] dateTmp = month.split(":");
+        String [] dateTmp = month.split("-");
         LocalDate date = LocalDate.of(Integer.parseInt(dateTmp[0]), Integer.parseInt(dateTmp[1]), 1);
         System.out.println("month = " + month);
         System.out.println("date = " + date);
