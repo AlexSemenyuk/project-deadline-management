@@ -67,24 +67,25 @@ public class PartController {
         return "redirect:/parts";
     }
 
-//    @GetMapping(("edit/{id}"))
-//    String datails(@PathVariable Integer id, Model model) {
-//        Optional<Author> optionalAuthor = repository.findById(id);
-//        if (optionalAuthor.isPresent()){
-//            Author author = optionalAuthor.get();
-//            model.addAttribute("author", author);
-//        }
-//        return "author_edit";
-//    }
-//    @PostMapping(("edit/{id}"))
-//    String update(@PathVariable Integer id, AuthorCommand command) {
-//        Optional<Author> optionalAuthor = repository.findById(id);
-//        if (optionalAuthor.isPresent()){
-//            Author author = optionalAuthor.get();
-//            author.setFirstName(command.firstName());
-//            author.setLastName(command.lastName());
-//            repository.save(author);
-//        }
-//        return "redirect:/authors";
-//    }
+    @GetMapping(("edit/{id}"))
+    String findById(@PathVariable Integer id, Model model) {
+        Optional<Part> optionalPart = partRepository.findById(id);
+        if (optionalPart.isPresent()){
+            Part part = optionalPart.get();
+            model.addAttribute("part", part);
+        }
+        return "part_edit";
+    }
+
+    @PostMapping(("edit/{id}"))
+    String update(@PathVariable Integer id, PartCommand command) {
+        Optional<Part> optionalPart = partRepository.findById(id);
+        if (optionalPart.isPresent()){
+            Part part = optionalPart.get();
+            part.setNumber(command.number());
+            part.setName(command.name());
+            partRepository.save(part);
+        }
+        return "redirect:/parts/edit/{id}";
+    }
 }

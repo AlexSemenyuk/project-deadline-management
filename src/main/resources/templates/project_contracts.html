@@ -59,7 +59,7 @@
                         <a class="link_menu" th:href="@{/contracts}">Контракти</a>
                         <ul class="list_menu_sub">
                             <li  class="item_menu_sub">
-                                <a class="link_menu_sub_active" href="#">Щодо проекту</a>
+                                <a class="link_menu_sub_active" th:href="@{/contracts/project_contracts/{id}(id=${projectContract.id})}">Щодо проекту</a>
                             </li>
                             <li  class="item_menu_sub">
                                 <a class="link_menu_sub" th:href="@{/contracts/types}">Тип контракту</a>
@@ -125,19 +125,16 @@
                             <label class="form-label d-block me-1" >
                                 <input class="form-control bg-white border-3 rounded-0" name="number" placeholder="Номер контракту (унікальний)" required>
                             </label>
-<!--                            <br/>-->
+
                             <label class="form-label d-block me-1" >
                                 <input class="form-control bg-white border-3 rounded-0" name="name" placeholder="Назва контракту" required>
                             </label>
-<!--                            <br/>-->
                             <label class="form-label d-block me-1" >
                                 <input class="form-control bg-white border-3 rounded-0" type="datetime-local" name="start" placeholder="Початок контракту" required>
                             </label>
-<!--                            <br/>-->
                             <label class="form-label d-block me-1" >
                                 <input class="form-control bg-white border-3 rounded-0" type="datetime-local" name="deadline" placeholder="Закінчення контракту" required>
                             </label>
-<!--                            <br/>-->
                             <label class="form-label d-block me-1">
                                 Тип
                                 <select class="form-control bg-white border-3 rounded-0"  aria-label="Default select example" name="contractTypeId">
@@ -152,30 +149,30 @@
                             <table  class="table_sm table table-striped table-hover table-bordered border-secondary-subtle">
                                 <thead>
                                 <tr class="row">
-                                    <th class="td_st col-xl-6 text-center">Параметр</th>
-                                    <th class="td_st col-xl-6 text-center bg-">Значення</th>
+                                    <th class="text_n1 col-xl-6 text-center">Параметр</th>
+                                    <th class="text_n1 col-xl-6 text-center bg-">Значення</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <tr class="row">
-                                    <td class="td_st col-xl-6">Id</td>
-                                    <td  class="col-xl-6" th:text="${projectContract.id}" ></td>
+                                    <td class="text_n1 col-xl-6">Id</td>
+                                    <td  class="text_n col-xl-6" th:text="${projectContract.id}" ></td>
                                 </tr>
                                 <tr class="row">
-                                    <td class="td_st col-xl-6">Номер</td>
-                                    <td class="col-xl-6" th:text="${projectContract.number}"></td>
+                                    <td class="text_n1 col-xl-6">Номер</td>
+                                    <td class="text_n col-xl-6" th:text="${projectContract.number}"></td>
                                 </tr>
                                 <tr class="row">
-                                    <td class="td_st col-xl-6">Замовник</td>
-                                    <td class="col-xl-6" th:text="${projectContract.customer.name}"></td>
+                                    <td class="text_n1 col-xl-6">Замовник</td>
+                                    <td class="text_n col-xl-6" th:text="${projectContract.customer.name}"></td>
                                 </tr>
                                 <tr class="row">
-                                    <td class="td_st col-xl-6">Початок</td>
-                                    <td class="col-xl-6" th:text="${projectContract.start}"></td>
+                                    <td class="text_n1 col-xl-6">Початок</td>
+                                    <td class="text_n col-xl-6" th:text="${projectContract.start}"></td>
                                 </tr>
                                 <tr class="row">
-                                    <td class="td_st col-xl-6">Закінчення</td>
-                                    <td class="col-xl-6" th:text="${projectContract.deadline}"></td>
+                                    <td class="text_n1 col-xl-6">Закінчення</td>
+                                    <td class="text_n col-xl-6" th:text="${projectContract.deadline}"></td>
                                 </tr>
                                 </tbody>
                             </table>

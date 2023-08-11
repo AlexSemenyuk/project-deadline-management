@@ -62,6 +62,28 @@ public class DivisionTypeController {
         optionalDivisionType.ifPresent(divisionType -> divisionTypeRepository.deleteById(id));
         return "redirect:/divisions/types";
     }
+
+    @GetMapping(("edit/{id}"))
+    String findById(@PathVariable Integer id, Model model) {
+        Optional<DivisionType> optionalDivisionType = divisionTypeRepository.findById(id);
+        if (optionalDivisionType.isPresent()){
+            model.addAttribute("divisionType", optionalDivisionType.get());
+        }
+        return "division_types_edit";
+    }
+    @PostMapping(("edit/{id}"))
+    String edit(@PathVariable Integer id, @ModelAttribute @Validated DivisionTypeCommand command,
+                BindingResult bindingResult,
+                RedirectAttributes model) {
+        Optional<DivisionType> optionalDivisionType = divisionTypeRepository.findById(id);
+        if (optionalDivisionType.isPresent()){
+            DivisionType divisionType = optionalDivisionType.get();
+            divisionType.setName(command.name());
+            divisionTypeRepository.save(divisionType);
+        }
+        return "redirect:/divisions/types/edit/{id}";
+    }
+
 }
 
 

@@ -34,8 +34,6 @@ public class ProjectListController {
 
     @GetMapping("/{id}")
     public String home(@PathVariable Integer id, Model model) {
-//        List<Assembly> assemblies = assemblyRepository.findAll();
-//        model.addAttribute("assemblies", assemblies);
         Optional<Project> optionalProject = projectRepository.findById(id);
         optionalProject.ifPresent(project -> {
             model.addAttribute("project", project);
@@ -43,7 +41,6 @@ public class ProjectListController {
         });
         List<Part> parts = partRepository.findAll();
         model.addAttribute("parts", parts);
-//        model.addAttribute("project_lists", projectListRepository.findAll());
         return "project_lists";
     }
 
@@ -51,12 +48,6 @@ public class ProjectListController {
     public String create(@PathVariable Integer id,
                          ProjectListCommand command) {
         log.info("ProjectListCommand {}", command);
-//        Optional<Assembly> optionalAssembly = assemblyRepository.findById(command.assemblyId());
-//        optionalAssembly.ifPresent(assembly -> {
-//            ProjectList projectList = ProjectList.fromCommand(command);
-//            projectList.setAssembly(assembly);
-//            projectListRepository.save(projectList);
-//        });
         Optional<Project> optionalProject = projectRepository.findById(id);
         optionalProject.ifPresent(project -> {
             Optional<Part> optionalPart = partRepository.findById(command.partId());
@@ -71,6 +62,49 @@ public class ProjectListController {
 
         return "redirect:/projects/project_details/project_lists/{id}";
     }
+
+    @GetMapping("/{id}/edit/{listId}")
+    public String findById(@PathVariable Integer id, @PathVariable Integer listId, Model model) {
+
+        Optional<Project> optionalProject = projectRepository.findById(id);
+        Optional<ProjectList> optionalProjectList = projectListRepository.findById(listId);
+
+        if (optionalProject.isPresent() && optionalProjectList.isPresent()){
+            Project project = optionalProject.get();
+            ProjectList projectList = optionalProjectList.get();
+            model.addAttribute("project", project);
+            model.addAttribute("projectList", projectList);
+        }
+        List<Part> parts = partRepository.findAll();
+        model.addAttribute("parts", parts);
+        return "project_list_edit";
+    }
+
+    @PostMapping("/{id}/edit/{listId}")
+    public String edit(@PathVariable Integer id, @PathVariable Integer listId, ProjectListCommand command) {
+
+        Optional<Project> optionalProject = projectRepository.findById(id);
+        Optional<ProjectList> optionalProjectList = projectListRepository.findById(listId);
+        Optional<Part> optionalPart = partRepository.findById(command.partId());
+
+        if (optionalProject.isPresent() &&
+                optionalProjectList.isPresent() &&
+                optionalPart.isPresent()){
+            Project project = optionalProject.get();
+            ProjectList projectList = optionalProjectList.get();
+            Part part = optionalPart.get();
+            for (ProjectList pList: project.getProjectLists()){
+                if (Objects.equals(pList.getId(), projectList.getId())){
+                    pList.setPart(part);
+                    pList.setAmount(command.amount());
+                    projectListRepository.save(pList);
+                    break;
+                }
+            }
+        }
+        return "redirect:/projects/project_details/project_lists/{id}/edit/{listId}";
+    }
+
 
     @GetMapping("/{id}/delete/{listId}")
     public String delete(@PathVariable Integer id, @PathVariable Integer listId) {

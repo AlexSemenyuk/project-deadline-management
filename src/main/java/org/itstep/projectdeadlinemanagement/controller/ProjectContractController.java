@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.hibernate.dialect.lock.OptimisticEntityLockException;
 import org.itstep.projectdeadlinemanagement.command.ContractCommand;
 import org.itstep.projectdeadlinemanagement.command.DivisionTypeCommand;
+import org.itstep.projectdeadlinemanagement.command.TechnologyPartCommand;
 import org.itstep.projectdeadlinemanagement.model.*;
 import org.itstep.projectdeadlinemanagement.repository.ContractRepository;
 import org.itstep.projectdeadlinemanagement.repository.ContractTypeRepository;
@@ -58,6 +59,42 @@ public class ProjectContractController {
         Optional<Contract> optionalContract = contractRepository.findById(contractId);
         optionalContract.ifPresent(contract -> contractRepository.deleteById(contractId));
         return "redirect:/contracts/project_contracts/{id}";
+    }
+
+    @GetMapping("/{id}/edit/{contractId}")
+    public String findById(@PathVariable Integer id, @PathVariable Integer contractId, Model model) {
+        Optional<Project> optionalProject = projectRepository.findById(id);
+        Optional<Contract> optionalContract = contractRepository.findById(contractId);
+        if (optionalProject.isPresent() && optionalContract.isPresent()){
+            Project project = optionalProject.get();
+            model.addAttribute("project", project);
+            Contract contract = optionalContract.get();
+            model.addAttribute("contract", contract);
+        }
+        List<ContractType> contractTypes = contractTypeRepository.findAll();
+        model.addAttribute("contractTypes", contractTypes);
+        return "contract_edit";
+    }
+
+    @PostMapping("/{id}/edit/{contractId}")
+    public String edit(@PathVariable Integer id, @PathVariable Integer contractId,  ContractCommand command) {
+
+        Optional<Contract> optionalContract = contractRepository.findById(contractId);
+        Optional<ContractType> optionalContractType = contractTypeRepository.findById(command.contractTypeId());
+        if (optionalContract.isPresent() &&
+                optionalContractType.isPresent() ){
+
+            Contract contract = optionalContract.get();
+            ContractType contractType = optionalContractType.get();
+
+            contract.setNumber(command.number());
+            contract.setName(command.name());
+            contract.setStart(command.start());
+            contract.setDeadline(command.deadline());
+            contract.setContractType(contractType);
+            contractRepository.save(contract);
+        }
+        return "redirect:/contracts/project_contracts/{id}/edit/{contractId}";
     }
 }
 

@@ -67,6 +67,40 @@ public class EquipmentController {
         optionalEquipment.ifPresent(equipment -> equipmentRepository.deleteById(id));
         return "redirect:/equipments";
     }
+
+    @GetMapping("edit/{id}")
+    public String findById(@PathVariable Integer id, Model model) {
+        Optional<Equipment> optionalEquipment = equipmentRepository.findById(id);
+        List<Division> divisions = divisionRepository.findAll();
+        model.addAttribute("divisions", divisions);
+
+        if (optionalEquipment.isPresent()){
+            Equipment equipment = optionalEquipment.get();
+            model.addAttribute("equipment", equipment);
+            model.addAttribute("divisionId", equipment.getDivision().getId());
+        }
+        return "equipment_edit";
+    }
+
+    @PostMapping("edit/{id}")
+    public String edit(@PathVariable Integer id, EquipmentCommand command) {
+        Optional<Equipment> optionalEquipment = equipmentRepository.findById(id);
+        Optional<Division> optionalDivision = divisionRepository.findById(command.divisionId());
+
+        if (optionalEquipment.isPresent() && optionalDivision.isPresent()){
+
+            Equipment equipment = optionalEquipment.get();
+
+            equipment.setNumber(command.number());
+            equipment.setName(command.name());
+
+            Division division = optionalDivision.get();
+            equipment.setDivision(division);
+
+            equipmentRepository.save(equipment);
+        }
+        return "redirect:/equipments/edit/{id}";
+    }
 }
 
 

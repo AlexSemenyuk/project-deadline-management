@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Controller
@@ -45,22 +46,42 @@ public class DivisionController {
         return "redirect:/divisions";
     }
 
-
-
-//    DivisionCommand designOrArchiveDivisionCommand = new DivisionCommand(1, "Design / Archive", 1);
-//    Optional<DivisionType> optionalDivisionType = divisionTypeRepository.findById(designOrArchiveDivisionCommand.divisionTypeId());
-//        optionalDivisionType.ifPresent(divisionType -> {
-//        Division designOrArchiveDivision = Division.fromCommand(designOrArchiveDivisionCommand);
-//        designOrArchiveDivision.setDivisionType(divisionType);
-//        divisionRepository.save(designOrArchiveDivision);
-//    });
-
-
     @GetMapping("delete/{id}")
     public String delete(@PathVariable Integer id) {
         Optional<Division> optionalDivision = divisionRepository.findById(id);
         optionalDivision.ifPresent(division -> divisionRepository.deleteById(id));
         return "redirect:/divisions";
+    }
+
+    @GetMapping("edit/{id}")
+    public String findById(@PathVariable Integer id, Model model) {
+        Optional<Division> optionalDivision = divisionRepository.findById(id);
+        List<DivisionType> divisionTypes = divisionTypeRepository.findAll();
+        model.addAttribute("types", divisionTypes);
+        if (optionalDivision.isPresent()){
+            Division division = optionalDivision.get();
+            model.addAttribute("division", division);
+            model.addAttribute("divisionTypeId", division.getDivisionType().getId());
+        }
+        return "division_edit";
+    }
+
+    @PostMapping("edit/{id}")
+    public String edit(@PathVariable Integer id, DivisionCommand command) {
+        Optional<Division> optionalDivision = divisionRepository.findById(id);
+        Optional<DivisionType> optionalDivisionType = divisionTypeRepository.findById(command.divisionTypeId());
+        if (optionalDivision.isPresent() && optionalDivisionType.isPresent()){
+
+            Division division = optionalDivision.get();
+
+            division.setName(command.name());
+
+            DivisionType divisionType = optionalDivisionType.get();
+            division.setDivisionType(divisionType);
+
+            divisionRepository.save(division);
+        }
+        return "redirect:/divisions/edit/{id}";
     }
 
 }

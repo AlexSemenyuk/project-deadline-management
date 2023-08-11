@@ -22,7 +22,7 @@ public class TechnologyPartController {
     private final ProjectConditionRepository projectConditionRepository;
     private final PartRepository partRepository;
     private final EquipmentRepository equipmentRepository;
-    private final TechnologyPartRepository termPartRepository;
+    private final TechnologyPartRepository technologyPartRepository;
 
     @GetMapping("/{id}")
     public String findAll(@PathVariable Integer id, Model model) {
@@ -53,15 +53,15 @@ public class TechnologyPartController {
             TechnologyPart termPart = TechnologyPart.fromCommand(command);
             termPart.setPart(part);
             termPart.setEquipment(equipment);
-            termPartRepository.save(termPart);
+            technologyPartRepository.save(termPart);
         }
         return "redirect:/technologies/technology_parts/{id}";
     }
 
     @GetMapping(("{id}/delete/{termPartId}"))
     String delete(@PathVariable Integer id, @PathVariable Integer termPartId) {
-        Optional<TechnologyPart> optionalTermPart = termPartRepository.findById(termPartId);
-        optionalTermPart.ifPresent(term -> termPartRepository.deleteById(termPartId));
+        Optional<TechnologyPart> optionalTermPart = technologyPartRepository.findById(termPartId);
+        optionalTermPart.ifPresent(term -> technologyPartRepository.deleteById(termPartId));
         return "redirect:/technologies/technology_parts/{id}";
     }
 
@@ -96,6 +96,44 @@ public class TechnologyPartController {
             projectRepository.save(project);
         }
         return "redirect:/technologies/technology_parts/{id}/technology_terms";
+    }
+
+    @GetMapping("/{id}/edit/{termId}")
+    public String findById(@PathVariable Integer id, @PathVariable Integer termId, Model model) {
+        Optional<Project> optionalProject = projectRepository.findById(id);
+        Optional<TechnologyPart> optionalTechnologyPart = technologyPartRepository.findById(termId);
+        if (optionalProject.isPresent() && optionalTechnologyPart.isPresent()){
+            Project project = optionalProject.get();
+            model.addAttribute("project", project);
+            TechnologyPart technologyPart = optionalTechnologyPart.get();
+            model.addAttribute("technologyPart", technologyPart);
+        }
+        List<Equipment> equipments = equipmentRepository.findAll();
+        model.addAttribute("equipments", equipments);
+        return "technology_part_edit";
+    }
+
+    @PostMapping("/{id}/edit/{termId}")
+    public String edit(@PathVariable Integer id, @PathVariable Integer termId,  TechnologyPartCommand command) {
+
+        Optional<TechnologyPart> optionalTechnologyPart = technologyPartRepository.findById(termId);
+        Optional<Part> optionalPart = partRepository.findById(command.partId());
+        Optional<Equipment> optionalEquipment = equipmentRepository.findById(command.equipmentId());
+        if (optionalTechnologyPart.isPresent() &&
+                optionalPart.isPresent() &&
+                optionalEquipment.isPresent()){
+
+            TechnologyPart technologyPart = optionalTechnologyPart.get();
+            Part part = optionalPart.get();
+            Equipment equipment = optionalEquipment.get();
+
+            technologyPart.setPart(part);
+            technologyPart.setNumber(command.number());
+            technologyPart.setEquipment(equipment);
+            technologyPart.setOperationTime(command.operationTime());
+            technologyPartRepository.save(technologyPart);
+        }
+        return "redirect:/technologies/technology_parts/{id}/edit/{termId}";
     }
 }
 

@@ -56,7 +56,7 @@
                         <a class="link_menu" th:href="@{/technologies}">Технолог</a>
                         <ul class="list_menu_sub">
                             <li  class="item_menu_sub">
-                                <a class="link_menu_sub_active" href="">Щодо проекту</a>
+                                <a class="link_menu_sub_active" th:href="@{/technologies/technology_parts/{id}(id=${technologyProject.id})}">Щодо проекту</a>
                             </li>
                             <li  class="item_menu_sub">
                                 <a class="link_menu_sub" th:href="@{/technologies/technology_parts/{id}/technology_terms(id=${technologyProject.id})}">Термін розробки</a>
@@ -81,6 +81,59 @@
             <div class="free col-xl-10" >
                 <div class="row">
                     <div class="col-xl-9">
+                        <h2 class="text_h">Додаткова інформація</h2>
+                        <ol class="text_h1">
+                            <li class="text_p1">
+                                <details>
+                                    <summary class="sum-item">Ваш проект</summary>
+                                    <table  class="table_sm table table-striped table-hover table-bordered border-secondary-subtle">
+                                        <thead>
+                                            <tr class="row">
+                                                <td class="text_n1 col-xl-1 px-1 text-center">Id</td>
+                                                <td class="text_n1 col-xl-2 text-center">Номер</td>
+                                                <td class="text_n1 col-xl-3 text-center">Замовник</td>
+                                                <td class="text_n1 col-xl-3 text-center">Початок</td>
+                                                <td class="text_n1 col-xl-3 text-center">Закінчення</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="row">
+                                                <td  class="text_n col-xl-1 text-center" th:text="${technologyProject.id}" ></td>
+                                                <td class="text_n col-xl-2" th:text="${technologyProject.number}"></td>
+                                                <td class="text_n col-xl-3 text-center" th:text="${technologyProject.customer.name}"></td>
+                                                <td class="text_n col-xl-3 text-center" th:text="${technologyProject.start}"></td>
+                                                <td class="text_n col-xl-3 text-center" th:text="${technologyProject.deadline}"></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </details>
+                            </li>
+                            <li class="text_p1">
+                                <div class="col-xl-8">
+                                    <details>
+                                        <summary class="sum-item">Список деталей щодо проекту</summary>
+                                        <table id="example1" class="table_sm table table-striped table-hover table-bordered border-secondary-subtle" style="width:100%;">
+                                            <thead>
+                                            <tr>
+                                                <th class="text_n1 col-xl-2 px-1 text-center">Id</th>
+                                                <th class="text_n1 col-xl-4 text-center">Номер</th>
+                                                <th class="text_n1 col-xl-3 text-center">Назва</th>
+                                                <th class="text_n1 col-xl-3 text-center">Кількість (штук)</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr th:each="p: ${technologyProject.projectLists}">
+                                                <td class="text_n col-xl-2 text-center" th:text="${p.part.id}"></td>
+                                                <td class="text_n col-xl-4 px-1"  th:text="${p.part.number}"></td>
+                                                <td class="text_n col-xl-3 px-1"  th:text="${p.part.name}"></td>
+                                                <td class="text_n col-xl-3 text-center"  th:text="${p.amount}"></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </details>
+                                </div>
+                            </li>
+                        </ol>
                         <h2 class="text_h">Технологічні операції щодо проекту</h2>
                         <table id="example" class="table_sm table table-striped table-hover table-bordered border-secondary-subtle " style="width:100%;">
                             <thead>
@@ -117,7 +170,6 @@
                             </tr>
                             </tbody>
                         </table>
-
                     </div>
 
                     <div class="col-xl-3">
@@ -150,55 +202,6 @@
                             <input th:name="${_csrf.parameterName}" type="hidden" th:value="${_csrf.token}">
                             <input class="btn btn-primary border-3 rounded-0 w-100 text-center" type="submit"  value="Створити">
                         </form>
-
-                        <h2 class="text_h">Ваш проект</h2>
-                        <div class=" px-3">
-                            <table  class="table_sm table table-striped table-hover table-bordered border-secondary-subtle">
-                                <thead>
-                                <tr class="row">
-                                    <th class="text_n1 col-xl-6 text-center">Параметр</th>
-                                    <th class="text_n1 col-xl-6 text-center bg-">Значення</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr class="row">
-                                    <td class="text_n1 col-xl-6">Id</td>
-                                    <td  class="text_n col-xl-6" th:text="${technologyProject.id}" ></td>
-                                </tr>
-                                <tr class="row">
-                                    <td class="text_n1 col-xl-6">Номер</td>
-                                    <td class="text_n col-xl-6" th:text="${technologyProject.number}"></td>
-                                </tr>
-                                <tr class="row">
-                                    <td class="text_n1 col-xl-6">Замовник</td>
-                                    <td class="text_n col-xl-6" th:text="${technologyProject.customer.name}"></td>
-                                </tr>
-                                <tr class="row">
-                                    <td class="text_n1 col-xl-6">Список деталей</td>
-                                    <td class="text_n col-xl-6">
-                                        <details>
-                                            <summary class="sum-item">Список</summary>
-                                            <p th:each="p: ${technologyProject.projectLists}">
-                                                <span th:text="${p.part.number + ' 1 ' + p.part.name + ' x ' + p.amount}"></span>
-                                            </p>
-                                        </details>
-                                    </td>
-                                </tr>
-                                <tr class="row">
-                                    <td class="text_n1 col-xl-6">Термін розробки</td>
-                                    <td class="text_n col-xl-6" th:text="${technologyProject.technologyTerm}"></td>
-                                </tr>
-                                <tr class="row">
-                                    <td class="text_n1 col-xl-6">Початок</td>
-                                    <td class="text_n col-xl-6" th:text="${technologyProject.start}"></td>
-                                </tr>
-                                <tr class="row">
-                                    <td class="text_n1 col-xl-6">Закінчення</td>
-                                    <td class="text_n col-xl-6" th:text="${technologyProject.deadline}"></td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -222,6 +225,7 @@
 <script src="https://cdn.datatables.net/1.13.5/js/dataTables.bootstrap5.min.js"></script>
 <script>
     new DataTable('#example');
+    new DataTable('#example1');
 </script>
 </body>
 </html>
