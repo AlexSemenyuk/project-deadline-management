@@ -83,6 +83,11 @@ body {
     list-style: none;
     padding: 0;
 }
+li.item_menu,
+li.item_menu_sub{
+    margin: 10px 0;
+}
+
 
 .link_menu {
     font-size: 22px;
