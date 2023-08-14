@@ -1,6 +1,6 @@
 package org.itstep.projectdeadlinemanagement.command;
 
-public record AssemblyTermCommand (
+public record TechnologyAssemblyCommand(
         Integer assemblyId,
         Integer number,
         Integer equipmentId,

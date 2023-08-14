@@ -12,7 +12,7 @@ import java.util.List;
 @Entity
 @Table(name = "assemblies")
 @NoArgsConstructor
-public class Assembly {
+public class  Assembly {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -23,23 +23,21 @@ public class Assembly {
     @Column(nullable = false, unique = true)
     private String name;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    private List<Part> parts = new ArrayList<>();
+    @OneToMany(mappedBy = "assembly")
+    private List<AssemblyList> assemblyLists = new ArrayList<>();
+
+    @ManyToMany(mappedBy = "assemblies")
+    private List<AssemblyList> assemblyListsEntry = new ArrayList<>();
+
+    @ManyToMany(mappedBy = "assemblies")
+    private List<PartList> partLists = new ArrayList<>();
 
     @OneToMany(mappedBy = "assembly")
-    private List<AssemblyTerm> assemblyTerms = new ArrayList<>();
-
-//    @OneToMany(mappedBy = "assembly")
-//    private List<ProjectList> projectLists = new ArrayList<>();
+    private List<TechnologyAssembly> TechnologyAssemblies = new ArrayList<>();
 
     public Assembly(Integer number, String name) {
         this.number = number;
         this.name = name;
-    }
-
-    public void addPart(Part part) {
-        part.getAssemblies().add(this);
-        parts.add(part);
     }
 
     public static Assembly fromCommand(AssemblyCommand command) {

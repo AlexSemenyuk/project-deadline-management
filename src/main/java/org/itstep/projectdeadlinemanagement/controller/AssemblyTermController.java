@@ -2,7 +2,7 @@ package org.itstep.projectdeadlinemanagement.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.itstep.projectdeadlinemanagement.command.AssemblyTermCommand;
+import org.itstep.projectdeadlinemanagement.command.TechnologyAssemblyCommand;
 import org.itstep.projectdeadlinemanagement.model.*;
 import org.itstep.projectdeadlinemanagement.repository.AssemblyTermRepository;
 import org.itstep.projectdeadlinemanagement.repository.AssemblyRepository;
@@ -34,14 +34,14 @@ public class AssemblyTermController {
     }
 
     @PostMapping
-    public String create(AssemblyTermCommand command) {
+    public String create(TechnologyAssemblyCommand command) {
         log.info("AssemblyTermRepository {}", command);
         Optional<Assembly> optionalAssembly = assemblyRepository.findById(command.assemblyId());
         Optional<Equipment> optionalEquipment = equipmentRepository.findById(command.equipmentId());
         if (optionalAssembly.isPresent() && optionalEquipment.isPresent()){
             Assembly assembly = optionalAssembly.get();
             Equipment equipment = optionalEquipment.get();
-            AssemblyTerm assemblyTerm = AssemblyTerm.fromCommand(command);
+            TechnologyAssembly assemblyTerm = TechnologyAssembly.fromCommand(command);
             assemblyTerm.setAssembly(assembly);
             assemblyTerm.setEquipment(equipment);
             assemblyTermRepository.save(assemblyTerm);
@@ -51,7 +51,7 @@ public class AssemblyTermController {
 
     @GetMapping(("delete/{id}"))
     String delete(@PathVariable Integer id) {
-        Optional<AssemblyTerm> optionalAssemblyTerm = assemblyTermRepository.findById(id);
+        Optional<TechnologyAssembly> optionalAssemblyTerm = assemblyTermRepository.findById(id);
         optionalAssemblyTerm.ifPresent(part -> assemblyTermRepository.deleteById(id));
         return "redirect:/assembly_terms";
     }

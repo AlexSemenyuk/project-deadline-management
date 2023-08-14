@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.itstep.projectdeadlinemanagement.command.AssemblyCommand;
 import org.itstep.projectdeadlinemanagement.model.Assembly;
-import org.itstep.projectdeadlinemanagement.model.Part;
 import org.itstep.projectdeadlinemanagement.repository.AssemblyRepository;
 import org.itstep.projectdeadlinemanagement.repository.PartRepository;
 import org.springframework.stereotype.Controller;
@@ -13,7 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import java.util.List;
+
 import java.util.Optional;
 
 @Controller
@@ -36,8 +35,8 @@ public class AssemblyController {
         log.info("AssemblyCommand {}", command);
         if (command != null) {
             Assembly assembly = Assembly.fromCommand(command);
-            List<Part> parts = partRepository.findAllById(command.partsIds());
-            parts.forEach(assembly::addPart);
+//            List<Part> parts = partRepository.findAllById(command.partsIds());
+//            parts.forEach(assembly::addPart);
             assemblyRepository.save(assembly);
         }
         return "redirect:/assemblies";
@@ -49,6 +48,7 @@ public class AssemblyController {
         optionalAssembly.ifPresent(assembly -> assemblyRepository.deleteById(id));
         return "redirect:/assemblies";
     }
+
 }
 
 

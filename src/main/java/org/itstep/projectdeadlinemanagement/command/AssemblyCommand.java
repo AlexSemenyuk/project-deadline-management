@@ -4,7 +4,8 @@ import java.util.List;
 
 public record AssemblyCommand(
         Integer number,
-        String name,
-        List<Integer> partsIds
+        String name
+
+//        List<Integer> partsIds
 ) {
 }

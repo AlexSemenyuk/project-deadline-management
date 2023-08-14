@@ -38,12 +38,12 @@ public class TechnologyPart {
     }
 
     public void setPart (Part part) {
-        part.getTermParts().add(this);
+        part.getTechnologyParts().add(this);
         this.part = part;
     }
 
     public void setEquipment (Equipment equipment) {
-        equipment.getPartTerms().add(this);
+        equipment.getTechnologyParts().add(this);
         this.equipment = equipment;
     }
 

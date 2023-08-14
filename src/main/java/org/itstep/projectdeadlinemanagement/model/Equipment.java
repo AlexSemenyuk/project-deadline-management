@@ -31,10 +31,10 @@ public class Equipment {
     private Division division;
 
     @OneToMany(mappedBy = "equipment")
-    private List<TechnologyPart> partTerms = new ArrayList<>();
+    private List<TechnologyPart> TechnologyParts = new ArrayList<>();
 
     @OneToMany(mappedBy = "equipment")
-    private List<AssemblyTerm> assemblyTerms = new ArrayList<>();
+    private List<TechnologyAssembly> TechnologyAssemblies = new ArrayList<>();
 
     @OneToMany(mappedBy = "equipment")
     private List<Task> tasks = new ArrayList<>();

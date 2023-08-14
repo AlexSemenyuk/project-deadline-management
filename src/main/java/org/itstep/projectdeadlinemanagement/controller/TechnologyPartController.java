@@ -5,103 +5,92 @@ import lombok.extern.slf4j.Slf4j;
 import org.itstep.projectdeadlinemanagement.command.TechnologyPartCommand;
 import org.itstep.projectdeadlinemanagement.model.*;
 import org.itstep.projectdeadlinemanagement.repository.*;
+import org.itstep.projectdeadlinemanagement.service.ProjectListService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 @Controller
-@RequestMapping("technologies/technology_parts")
+@RequestMapping("technologies/technology_terms/technology_parts")
 @RequiredArgsConstructor
 @Slf4j
 public class TechnologyPartController {
     private final ProjectRepository projectRepository;
-    private final ProjectConditionRepository projectConditionRepository;
-    private final PartRepository partRepository;
     private final EquipmentRepository equipmentRepository;
+    private final PartRepository partRepository;
     private final TechnologyPartRepository technologyPartRepository;
+    private final ProjectListService projectListService;
 
     @GetMapping("/{id}")
-    public String findAll(@PathVariable Integer id, Model model) {
+    public String findAllTechnologyPart(@PathVariable Integer id, Model model) {
         Optional<Project> optionalProject = projectRepository.findById(id);
-        List<TechnologyPart> termPartLists = new CopyOnWriteArrayList<>();
+//        List<TechnologyPart> termPartLists = new CopyOnWriteArrayList<>();
         optionalProject.ifPresent(project -> {
             model.addAttribute("technologyProject", project);
-//            model.addAttribute("projectLists", project.getProjectLists());
+//            model.addAttribute("parts", partRepository.findAll());
 
-            project.getProjectLists().forEach(projectList -> {
-                termPartLists.addAll(projectList.getPart().getTermParts());
+            List<PartList> allPartLists = projectListService.getAllPartLists(project.getProjectList());
+            List<PartList> partLists = new CopyOnWriteArrayList<>();
+            model.addAttribute("allPartLists", allPartLists);
+            // Уникальные детали
+            int count;
+            for (PartList partList: allPartLists){
+                count = 0;
+                if (partLists.isEmpty()){
+                    partLists.add(partList);
+                } else {
+                    for (PartList pl: partLists){
+                        if (Objects.equals(partList.getPart().getNumber(), pl.getPart().getNumber())){
+                            count++;
+                            break;
+                        }
+                    }
+                    if (count == 0){
+                        partLists.add(partList);
+                    }
+                }
+            }
+            model.addAttribute("partLists", partLists);
 
-            });
-            model.addAttribute("term_parts", termPartLists);
         });
         model.addAttribute("equipments", equipmentRepository.findAll());
         return "technology_parts";
     }
 
     @PostMapping("/{id}")
-    public String create(TechnologyPartCommand command) {
-        log.info("TermCommand {}", command);
+    public String createTechnologyPart(@PathVariable Integer id, TechnologyPartCommand command) {
+        log.info("TechnologyPartCommand {}", command);
         Optional<Part> optionalPart = partRepository.findById(command.partId());
         Optional<Equipment> optionalEquipment = equipmentRepository.findById(command.equipmentId());
         if (optionalPart.isPresent() && optionalEquipment.isPresent()) {
             Part part = optionalPart.get();
             Equipment equipment = optionalEquipment.get();
-            TechnologyPart termPart = TechnologyPart.fromCommand(command);
-            termPart.setPart(part);
-            termPart.setEquipment(equipment);
-            technologyPartRepository.save(termPart);
+            TechnologyPart technologyPart = TechnologyPart.fromCommand(command);
+            technologyPart.setPart(part);
+            technologyPart.setEquipment(equipment);
+            technologyPartRepository.save(technologyPart);
         }
-        return "redirect:/technologies/technology_parts/{id}";
+        return "redirect:/technologies/technology_terms/technology_parts/{id}";
     }
 
-    @GetMapping(("{id}/delete/{termPartId}"))
-    String delete(@PathVariable Integer id, @PathVariable Integer termPartId) {
-        Optional<TechnologyPart> optionalTermPart = technologyPartRepository.findById(termPartId);
-        optionalTermPart.ifPresent(term -> technologyPartRepository.deleteById(termPartId));
-        return "redirect:/technologies/technology_parts/{id}";
+    @GetMapping(("/{id}/delete/{technologyPartId}"))
+    String delete(@PathVariable Integer id, @PathVariable Integer technologyPartId) {
+        Optional<TechnologyPart> optionalTermPart = technologyPartRepository.findById(technologyPartId);
+        optionalTermPart.ifPresent(term -> technologyPartRepository.deleteById(technologyPartId));
+        return "redirect:/technologies/technology_terms/technology_parts/{id}";
     }
 
-    @GetMapping(("finish/{id}"))
-    String finish(@PathVariable Integer id) {
+
+    @GetMapping("/{id}/edit/{technologyPartId}")
+    public String findById(@PathVariable Integer id, @PathVariable Integer technologyPartId, Model model) {
         Optional<Project> optionalProject = projectRepository.findById(id);
-        optionalProject.ifPresent(project -> {
-            Optional<ProjectCondition> optionalProjectCondition = projectConditionRepository.findById(3);
-            optionalProjectCondition.ifPresent(condition -> {
-                project.setProjectCondition(condition);
-                projectRepository.save(project);
-            });
-        });
-        return "redirect:/";
-    }
-
-    @GetMapping("/{id}/technology_terms")
-    public String term(@PathVariable Integer id, Model model) {
-        Optional<Project> optionalProject = projectRepository.findById(id);
-        optionalProject.ifPresent(project -> {
-            model.addAttribute("techProject", project);
-        });
-        return "technology_terms";
-    }
-
-    @PostMapping("/{id}/technology_terms")
-    public String addTerm(@PathVariable Integer id, Integer technologyTerm,  Model model) {
-        Optional<Project> optionalProject = projectRepository.findById(id);
-        if (optionalProject.isPresent() && technologyTerm != null){
-            Project project = optionalProject.get();
-            project.setTechnologyTerm(technologyTerm);
-            projectRepository.save(project);
-        }
-        return "redirect:/technologies/technology_parts/{id}/technology_terms";
-    }
-
-    @GetMapping("/{id}/edit/{termId}")
-    public String findById(@PathVariable Integer id, @PathVariable Integer termId, Model model) {
-        Optional<Project> optionalProject = projectRepository.findById(id);
-        Optional<TechnologyPart> optionalTechnologyPart = technologyPartRepository.findById(termId);
+        Optional<TechnologyPart> optionalTechnologyPart = technologyPartRepository.findById(technologyPartId);
         if (optionalProject.isPresent() && optionalTechnologyPart.isPresent()){
             Project project = optionalProject.get();
             model.addAttribute("project", project);
@@ -113,10 +102,9 @@ public class TechnologyPartController {
         return "technology_part_edit";
     }
 
-    @PostMapping("/{id}/edit/{termId}")
-    public String edit(@PathVariable Integer id, @PathVariable Integer termId,  TechnologyPartCommand command) {
-
-        Optional<TechnologyPart> optionalTechnologyPart = technologyPartRepository.findById(termId);
+    @PostMapping("/{id}/edit/{technologyPartId}")
+    public String edit(@PathVariable Integer id, @PathVariable Integer technologyPartId, TechnologyPartCommand command) {
+        Optional<TechnologyPart> optionalTechnologyPart = technologyPartRepository.findById(technologyPartId);
         Optional<Part> optionalPart = partRepository.findById(command.partId());
         Optional<Equipment> optionalEquipment = equipmentRepository.findById(command.equipmentId());
         if (optionalTechnologyPart.isPresent() &&
@@ -133,7 +121,45 @@ public class TechnologyPartController {
             technologyPart.setOperationTime(command.operationTime());
             technologyPartRepository.save(technologyPart);
         }
-        return "redirect:/technologies/technology_parts/{id}/edit/{termId}";
+        return "redirect:/technologies/technology_terms/technology_parts/{id}/edit/{technologyPartId}";
     }
+
+    public  int getAllAssemblyLists(Project project) {
+        int count = 0;
+        count = extractAssemblyLists(project.getProjectList().getAssemblyLists(), count);
+        return count;
+    }
+
+    private int extractAssemblyLists(List<AssemblyList> assemblies, int count) {
+        for (AssemblyList assemblyList : assemblies) {
+            Assembly assembly = assemblyList.getAssembly();
+            count++;
+            System.out.println("count = " + count);
+            if (!assembly.getAssemblyLists().isEmpty()){
+                extractAssemblyLists(assembly.getAssemblyLists(), count);
+            }
+        }
+        return count;
+    }
+
+    public  List<PartList> getAllPartLists(Project project) {
+        List<PartList> allPartLists = new ArrayList<>();
+        allPartLists = extractPartLists(project.getProjectList().getAssemblyLists(), allPartLists);
+        return allPartLists;
+    }
+
+
+    private List<PartList> extractPartLists(List<AssemblyList> assemblies, List<PartList> allPartLists) {
+        for (AssemblyList assemblyList : assemblies) {
+            Assembly assembly = assemblyList.getAssembly();
+            if (!assembly.getAssemblyLists().isEmpty()){
+                extractPartLists(assembly.getAssemblyLists(), allPartLists);
+            }
+            allPartLists.addAll(assembly.getPartLists());
+            System.out.println("allPartLists.size() = " + allPartLists.size());
+        }
+        return allPartLists;
+    }
+
 }
 

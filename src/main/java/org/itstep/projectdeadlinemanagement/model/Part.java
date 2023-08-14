@@ -23,14 +23,12 @@ public class Part {
     @Column(nullable = false)
     private String name;
 
-    @ManyToMany(mappedBy = "parts")
-    private List<Assembly> assemblies = new ArrayList<>();
+    @OneToMany(mappedBy = "part")
+    private List<PartList> partLists = new ArrayList<>();
 
     @OneToMany(mappedBy = "part")
-    private List<TechnologyPart> termParts = new ArrayList<>();
+    private List<TechnologyPart> technologyParts = new ArrayList<>();
 
-    @OneToMany(mappedBy = "part")
-    private List<ProjectList> projectLists = new ArrayList<>();
 
     public Part(Integer number, String name) {
         this.number = number;

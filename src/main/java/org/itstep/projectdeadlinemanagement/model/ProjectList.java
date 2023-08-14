@@ -11,38 +11,30 @@ import java.util.List;
 @Data
 @Entity
 @Table(name = "project_lists")
-@NoArgsConstructor
 public class ProjectList {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-//    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-//    private Assembly assembly;
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    private Part part;
-
-    @Column(nullable = false)
-    Integer amount;
-
-    @ManyToMany(mappedBy = "projectLists")
+    @OneToMany(mappedBy = "projectList")
     private List<Project> projects = new ArrayList<>();
 
-    public ProjectList(Integer amount) {
-        this.amount = amount;
+    @ManyToMany(mappedBy = "projectLists")
+    private List<AssemblyList> assemblyLists = new ArrayList<>();
+
+    @ManyToMany(mappedBy = "projectLists")
+    private List<PartList> partLists = new ArrayList<>();
+
+    public ProjectList() {
     }
 
-    public void setPart (Part part) {
-        part.getProjectLists().add(this);
-        this.part = part;
+    public void addAssemblyList(AssemblyList assemblyList) {
+        assemblyList.getProjectLists().add(this);
+        assemblyLists.add(assemblyList);
+    }
+    public void addPartList(PartList partList) {
+        partList.getProjectLists().add(this);
+        partLists.add(partList);
     }
 
-//    public void setAssembly (Assembly assembly) {
-//        assembly.getProjectLists().add(this);
-//        this.assembly = assembly;
-//    }
-
-    public static ProjectList fromCommand(ProjectListCommand command) {
-        return new ProjectList(command.amount());
-    }
 }

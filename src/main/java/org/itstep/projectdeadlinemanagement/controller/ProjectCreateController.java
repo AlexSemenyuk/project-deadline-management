@@ -6,6 +6,7 @@ import org.itstep.projectdeadlinemanagement.command.ProjectCommand;
 import org.itstep.projectdeadlinemanagement.model.Customer;
 import org.itstep.projectdeadlinemanagement.model.Project;
 import org.itstep.projectdeadlinemanagement.model.ProjectCondition;
+import org.itstep.projectdeadlinemanagement.model.ProjectList;
 import org.itstep.projectdeadlinemanagement.repository.CustomerRepository;
 import org.itstep.projectdeadlinemanagement.repository.ProjectConditionRepository;
 import org.itstep.projectdeadlinemanagement.repository.ProjectListRepository;
@@ -52,6 +53,9 @@ public class ProjectCreateController {
             Project project = Project.fromCommand(command);
             project.setCustomer(customer);
             project.setProjectCondition(projectCondition);
+
+            ProjectList projectList = new ProjectList();
+            project.setProjectList(projectList);
             projectRepository.save(project);
         }
         return "redirect:/projects";

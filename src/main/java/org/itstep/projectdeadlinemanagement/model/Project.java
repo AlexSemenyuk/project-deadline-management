@@ -14,8 +14,6 @@ import java.util.List;
 @Entity
 @Data
 @Table(name = "projects")
-//@EqualsAndHashCode(exclude = "tasks")
-//@ToString(exclude = "tasks")
 @NoArgsConstructor
 public class Project {
     @Id
@@ -25,8 +23,8 @@ public class Project {
     @Column(nullable = false, unique = true)
     private Integer number;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    private List<ProjectList> projectLists = new ArrayList<>();
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private ProjectList projectList;
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Customer customer;
@@ -61,15 +59,16 @@ public class Project {
         this.customer = customer;
     }
 
+    public void setProjectList(ProjectList projectList) {
+        projectList.getProjects().add(this);
+        this.projectList = projectList;
+    }
+
     public void setProjectCondition(ProjectCondition projectCondition) {
         projectCondition.getProjects().add(this);
         this.projectCondition = projectCondition;
     }
 
-    public void addProjectList(ProjectList projectList) {
-        projectList.getProjects().add(this);
-        projectLists.add(projectList);
-    }
 
     public static Project fromCommand(ProjectCommand command) {
         return new Project(command.number(),

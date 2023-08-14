@@ -48,34 +48,34 @@ public class TaskService {
         optionalProject.ifPresent(project -> {
             projectNumber[0] = project.getNumber();
             productionStart[0] = formProductionStart(project);
-            project.getProjectLists().forEach(projectList -> {
-                part[0] = projectList.getPart();
-                amount[0] = projectList.getAmount();
-                for (int i = 0; i < amount[0]; i++) {
-                    lotNumber[0] = i + 1;
+//            project.getProjectLists().forEach(projectList -> {
+//                part[0] = projectList.getPart();
+//                amount[0] = projectList.getAmount();
+//                for (int i = 0; i < amount[0]; i++) {
+//                    lotNumber[0] = i + 1;
 //                    part[0].getTermParts().forEach(termPart -> {
-                    start[0] = productionStart[0];
-                    for (TechnologyPart termPart: part[0].getTermParts()) {
-                        task[0] = Task.formTask(projectNumber[0],
-                                part[0].getNumber(),
-                                part[0].getName(),
-                                termPart.getNumber(),
-                                termPart.getOperationTime(),
-                                lotNumber[0],
-                                start[0]);
-                        Optional<Equipment> optionalEquipment = equipmentRepository.findById(termPart.getEquipment().getId());
-                        optionalEquipment.ifPresent(task[0]::setEquipment);
-                        Optional<TaskCondition> optionalTaskCondition = taskConditionRepository.findById(1);
-                        optionalTaskCondition.ifPresent(task[0]::setTaskCondition);
-                        task[0].setProject(project);
-                        tasks.add(task[0]);
-                        start[0] = TimeService.localDateTimeAddHours(start[0], termPart.getOperationTime());
-//                        start[0] = start[0].plusHours(termPart.getOperationTime());
-
-                    }
-//                    });
-                }
-            });
+//                    start[0] = productionStart[0];
+//                    for (TechnologyPart termPart: part[0].getTermParts()) {
+//                        task[0] = Task.formTask(projectNumber[0],
+//                                part[0].getNumber(),
+//                                part[0].getName(),
+//                                termPart.getNumber(),
+//                                termPart.getOperationTime(),
+//                                lotNumber[0],
+//                                start[0]);
+//                        Optional<Equipment> optionalEquipment = equipmentRepository.findById(termPart.getEquipment().getId());
+//                        optionalEquipment.ifPresent(task[0]::setEquipment);
+//                        Optional<TaskCondition> optionalTaskCondition = taskConditionRepository.findById(1);
+//                        optionalTaskCondition.ifPresent(task[0]::setTaskCondition);
+//                        task[0].setProject(project);
+//                        tasks.add(task[0]);
+//                        start[0] = TimeService.localDateTimeAddHours(start[0], termPart.getOperationTime());
+////                        start[0] = start[0].plusHours(termPart.getOperationTime());
+//
+//                    }
+////                    });
+//                }
+//            });
         });
         taskRepository.saveAll(tasks);
         return tasks;

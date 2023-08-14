@@ -5,15 +5,15 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.itstep.projectdeadlinemanagement.command.AssemblyTermCommand;
+import org.itstep.projectdeadlinemanagement.command.TechnologyAssemblyCommand;
 
 @Entity
 @Data
-@Table(name = "assembly_terms")
+@Table(name = "technology_assemblies")
 @NoArgsConstructor
 @ToString(exclude = {"assembly", "equipment"})
 @EqualsAndHashCode(exclude = {"assembly", "equipment"})
-public class AssemblyTerm {
+public class TechnologyAssembly {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -31,26 +31,24 @@ public class AssemblyTerm {
     private Equipment equipment;
 
 
-    public AssemblyTerm (Integer number, Integer operationTime) {
+    public TechnologyAssembly(Integer number, Integer operationTime) {
         this.number = number;
         this.operationTime = operationTime;
     }
 
     public void setAssembly (Assembly assembly) {
-        assembly.getAssemblyTerms().add(this);
+        assembly.getTechnologyAssemblies().add(this);
         this.assembly = assembly;
     }
 
 
     public void setEquipment (Equipment equipment) {
-        equipment.getAssemblyTerms().add(this);
+        equipment.getTechnologyAssemblies().add(this);
         this.equipment = equipment;
     }
 
-
-
-    public static AssemblyTerm fromCommand(AssemblyTermCommand command) {
-        return new AssemblyTerm(command.number(), command.operationTime());
+    public static TechnologyAssembly fromCommand(TechnologyAssemblyCommand command) {
+        return new TechnologyAssembly(command.number(), command.operationTime());
     }
 }
 

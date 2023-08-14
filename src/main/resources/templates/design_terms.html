@@ -53,10 +53,13 @@
                         <a class="link_menu" th:href="@{/designs}" >Конструктор</a>
                         <ul class="list_menu_sub">
                             <li  class="item_menu_sub">
-                                <a class="link_menu_sub_active" href="#">Термін розробки</a>
+                                <a class="link_menu_sub_active" href="">Термін розробки</a>
                             </li>
                             <li  class="item_menu_sub">
-                                <a class="link_menu_sub" th:href="@{/parts}">Деталь</a>
+                                <a class="link_menu_sub" th:href="@{/assemblies}">Архів вузлів</a>
+                            </li>
+                            <li  class="item_menu_sub">
+                                <a class="link_menu_sub" th:href="@{/parts}">Архів деталей</a>
                             </li>
                             <li  class="item_menu_sub">
                                 <a class="link_menu_sub_finish" th:href="@{/designs/design_terms/finish/{id}(id=${designProject.id})}">Закінчити розробку</a>
@@ -109,30 +112,72 @@
                         <ol class="text_h1">
                             Примітка
                             <li class="text_p1">
-                                <div class="col-xl-6">
+                                <div class="col-xl-10">
                                     <details>
-                                        <summary class="sum-item">Список деталей щодо проекту</summary>
-                                        <table id="example" class="table_sm table table-striped table-hover table-bordered border-secondary-subtle" style="width:100%;">
+                                        <summary class="sum-item">Список обладнання, що поставляється по проекту</summary>
+                                        <table
+                                                class="table_sm table table-striped table-hover table-bordered border-secondary-subtle my-2">
                                             <thead>
                                             <tr>
-                                                <th class="text_p1 col-xl-2 px-1 text-center">Id</th>
-                                                <th class="text_p1 col-xl-4 text-center">Номер</th>
-                                                <th class="text_p1 col-xl-3 text-center">Назва</th>
-                                                <th class="text_p1 col-xl-3 text-center">Кількість (штук)</th>
+                                                <th class="text_n1 ty col-xl-2 px-1 text-center">Id</th>
+                                                <th class="text_n1 ty col-xl-3 text-center">Номер</th>
+                                                <th class="text_n1 ty col-xl-3 text-center">Назва</th>
+                                                <th class="text_n1 ty col-xl-2 text-center">Кількість (шт.)</th>
+                                                <th class="text_n1 ty col-xl-2 text-center">Примітка</th>
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            <tr th:each="p: ${designProject.projectLists}">
-                                                <td class="text_p1 col-xl-2 text-center" th:text="${p.part.id}"></td>
-                                                <td class="text_p col-xl-4 px-1"  th:text="${p.part.number}"></td>
-                                                <td class="text_p col-xl-3 px-1"  th:text="${p.part.name}"></td>
-                                                <td class="text_p col-xl-3 text-center"  th:text="${p.amount}"></td>
+                                            <tr>
+                                                <td class="text_a ty col-xl-2 px-1 text-center"></td>
+                                                <td class="text_a ty col-xl-3 text-center"></td>
+                                                <td class="text_n1 ty col-xl-3 text-center">Вузли</td>
+                                                <th class="text_a ty col-xl-2 text-center"></th>
+                                                <th class="text_b tx col-xl-2 text-center p-1">
+                                                    <a class="text_b tx" th:href="@{/projects/project_details/assembly_lists/{id}(id=${designProject.id})}">
+                                                        <i class="bi bi-plus-slash-minus" style="font-size: 1.2rem;"></i>
+                                                    </a>
+                                                </th>
+                                            </tr>
+                                            <tr th:each="assemblyList: ${designProject.projectList.assemblyLists}">
+                                                <td class="text_a ty col-xl-2 text-center"  th:text="${assemblyList.id}"></td>
+                                                <td class="text_b tx col-xl-4 "  >
+                                                    <a  class="text_b tx"
+                                                        th:href="@{/assemblies/structure/{id}(id=${assemblyList.assembly.id})}"
+                                                        th:text="${assemblyList.assembly.number}">
+                                                    </a>
+                                                </td>
+                                                <td class="text_b tx col-xl-4 ">
+                                                    <a class="text_b tx"
+                                                       th:href="@{/assemblies/structure/{id}(id=${assemblyList.assembly.id})}"
+                                                       th:text="${assemblyList.assembly.name}">
+                                                    </a>
+                                                </td>
+                                                <td class="text_a ty col-xl-4 px-1 text-center" th:text="${assemblyList.amount}"></td>
+                                                <td class="text_a ty col-xl-2 text-center" ></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text_a ty col-xl-2 px-1 text-center"></td>
+                                                <td class="text_a ty col-xl-3 text-center"></td>
+                                                <td class="text_n1 ty col-xl-3 text-center">Деталі</td>
+                                                <th class="text_a ty col-xl-2 text-center"></th>
+                                                <th class="text_b tx col-xl-2 text-center p-1">
+                                                    <a class="text_b tx" th:href="@{/projects/project_details/part_lists/{id}(id=${designProject.id})}">
+                                                        <i class="bi bi-plus-slash-minus" style="font-size: 1.2rem;"></i>
+                                                    </a>
+                                                </th>
+                                            </tr>
+                                            <tr th:each="partList: ${designProject.projectList.partLists}">
+                                                <td class="text_a ty col-xl-2 text-center"  th:text="${partList.id}"></td>
+                                                <td class="text_a ty col-xl-3 px-1"  th:text="${partList.part.number}"></td>
+                                                <td class="text_a ty col-xl-3 px-1" th:text="${partList.part.name}"></td>
+                                                <td class="text_a ty col-xl-2 px-1 text-center" th:text="${partList.amount}"></td>
+                                                <td class="text_a ty col-xl-2 text-center" ></td>
                                             </tr>
                                             </tbody>
                                         </table>
                                     </details>
                                 </div>
-                                <div class="col-xl-6"></div>
+                                <div class="col-xl-2"></div>
                             </li>
                         </ol>
                     </div>
