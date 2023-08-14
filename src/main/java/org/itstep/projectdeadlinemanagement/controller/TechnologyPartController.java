@@ -33,12 +33,12 @@ public class TechnologyPartController {
 //        List<TechnologyPart> termPartLists = new CopyOnWriteArrayList<>();
         optionalProject.ifPresent(project -> {
             model.addAttribute("technologyProject", project);
-//            model.addAttribute("parts", partRepository.findAll());
 
             List<PartList> allPartLists = projectListService.getAllPartLists(project.getProjectList());
-            List<PartList> partLists = new CopyOnWriteArrayList<>();
             model.addAttribute("allPartLists", allPartLists);
+
             // Уникальные детали
+            List<PartList> partLists = new CopyOnWriteArrayList<>();
             int count;
             for (PartList partList: allPartLists){
                 count = 0;
@@ -57,7 +57,12 @@ public class TechnologyPartController {
                 }
             }
             model.addAttribute("partLists", partLists);
-
+            List<TechnologyPart> technologyParts = new CopyOnWriteArrayList<>();
+            for (PartList partList: partLists){
+//                System.out.println("partList.getPart() = " + partList.getPart().getNumber() + "-" + partList.getPart().getName());
+                technologyParts.addAll(partList.getPart().getTechnologyParts());
+            }
+            model.addAttribute("technologyParts", technologyParts);
         });
         model.addAttribute("equipments", equipmentRepository.findAll());
         return "technology_parts";

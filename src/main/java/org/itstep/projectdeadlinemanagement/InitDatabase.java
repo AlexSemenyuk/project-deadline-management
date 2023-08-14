@@ -142,9 +142,12 @@ public class InitDatabase implements CommandLineRunner {
         createTechnologyPart(new TechnologyPartCommand(1, 1, 1, 5));
         createTechnologyPart(new TechnologyPartCommand(1, 2, 3, 3));
 
+        createTechnologyPart(new TechnologyPartCommand(2, 1, 1, 7));
+        createTechnologyPart(new TechnologyPartCommand(2, 2, 3, 8));
+
         createTechnologyAssembly(new TechnologyAssemblyCommand(4, 1, 4, 3));
         createTechnologyPart(new TechnologyPartCommand(3, 1, 2, 2));
-        createTechnologyPart(new TechnologyPartCommand(5, 1, 1, 3));
+        createTechnologyPart(new TechnologyPartCommand(3, 1, 1, 3));
 
         createTechnologyPart(new TechnologyPartCommand(5, 1, 1, 3));
         createTechnologyPart(new TechnologyPartCommand(5, 2, 2, 2));

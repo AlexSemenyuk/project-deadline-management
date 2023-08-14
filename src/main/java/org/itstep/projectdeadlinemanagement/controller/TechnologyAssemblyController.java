@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 @Controller
 @RequestMapping("technologies/technology_terms/technology_assemblies")
@@ -38,6 +40,32 @@ public class TechnologyAssemblyController {
 
             List<AssemblyList> allAssemblyLists = projectListService.getAllAssemblyLists(project.getProjectList());
             model.addAttribute("allAssemblyLists", allAssemblyLists);
+
+            // Уникальные детали
+            List<AssemblyList> assemblyLists = new CopyOnWriteArrayList<>();
+            int count;
+            for (AssemblyList assemblyList: allAssemblyLists){
+                count = 0;
+                if (assemblyLists.isEmpty()){
+                    assemblyLists.add(assemblyList);
+                } else {
+                    for (AssemblyList al: assemblyLists){
+                        if (Objects.equals(assemblyList.getAssembly().getNumber(), al.getAssembly().getNumber())){
+                            count++;
+                            break;
+                        }
+                    }
+                    if (count == 0){
+                        assemblyLists.add(assemblyList);
+                    }
+                }
+            }
+            model.addAttribute("assemblyLists", assemblyLists);
+            List<TechnologyAssembly> technologyAssemblies = new CopyOnWriteArrayList<>();
+            for (AssemblyList assemblyList: assemblyLists){
+                technologyAssemblies.addAll(assemblyList.getAssembly().getTechnologyAssemblies());
+            }
+            model.addAttribute("technologyAssemblies", technologyAssemblies);
         });
 
         model.addAttribute("equipments", equipmentRepository.findAll());
