@@ -34,34 +34,18 @@ public class TechnologyPartController {
         optionalProject.ifPresent(project -> {
             model.addAttribute("technologyProject", project);
 
-            List<PartList> allPartLists = projectListService.getAllPartLists(project.getProjectList());
+            List<PartList> allPartLists = projectListService.getAllPartListsWithAmountOnProject(project.getProjectList());
             model.addAttribute("allPartLists", allPartLists);
 
-            // Уникальные детали
-            List<PartList> partLists = new CopyOnWriteArrayList<>();
-            int count;
-            for (PartList partList: allPartLists){
-                count = 0;
-                if (partLists.isEmpty()){
-                    partLists.add(partList);
-                } else {
-                    for (PartList pl: partLists){
-                        if (Objects.equals(partList.getPart().getNumber(), pl.getPart().getNumber())){
-                            count++;
-                            break;
-                        }
-                    }
-                    if (count == 0){
-                        partLists.add(partList);
-                    }
-                }
-            }
+            // Уникальные детали c количеством на проект
+            List<PartList> partLists = projectListService.getUniquePartListWithAmountOnProject(allPartLists);
             model.addAttribute("partLists", partLists);
+
             List<TechnologyPart> technologyParts = new CopyOnWriteArrayList<>();
             for (PartList partList: partLists){
-//                System.out.println("partList.getPart() = " + partList.getPart().getNumber() + "-" + partList.getPart().getName());
                 technologyParts.addAll(partList.getPart().getTechnologyParts());
             }
+
             model.addAttribute("technologyParts", technologyParts);
         });
         model.addAttribute("equipments", equipmentRepository.findAll());

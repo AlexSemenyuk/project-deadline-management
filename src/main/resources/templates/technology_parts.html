@@ -114,7 +114,7 @@
                             <li class="text_p1">
                                 <div class="col-xl-8">
                                     <details>
-                                        <summary class="sum-item">Список деталей щодо проекту</summary>
+                                        <summary class="sum-item">Список унікальних деталей з урахуванням кількості на проект</summary>
                                         <table id="example1" class="table_sm table table-striped table-hover table-bordered border-secondary-subtle" style="width:100%;">
                                             <thead>
                                             <tr>
@@ -125,7 +125,7 @@
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            <tr th:each="allPartList: ${allPartLists}">
+                                            <tr th:each="allPartList: ${partLists}">
                                                 <td class="text_n col-xl-2 text-center" th:text="${allPartList.part.id}"></td>
                                                 <td class="text_n col-xl-4 px-1"  th:text="${allPartList.part.number}"></td>
                                                 <td class="text_n col-xl-3 px-1"  th:text="${allPartList.part.name}"></td>

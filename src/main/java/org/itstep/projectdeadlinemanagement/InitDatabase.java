@@ -92,6 +92,8 @@ public class InitDatabase implements CommandLineRunner {
         addPartList(2, new PartListCommand(5, 1));
 
         addAssemblyList(1, new AssemblyListCommand(2, 2));
+        addAssemblyList(1, new AssemblyListCommand(2, 3));
+        addAssemblyList(2, new AssemblyListCommand(3, 8));
 //        addAssemblyList(2, new AssemblyListCommand(3, 3));
 
         addPartList(3, new PartListCommand(4, 1));
@@ -138,16 +140,17 @@ public class InitDatabase implements CommandLineRunner {
         addPartListToProject(1, new PartListCommand(6, 2));
 
         // TermPart
-        createTechnologyAssembly(new TechnologyAssemblyCommand(1, 1, 4, 2));
         createTechnologyPart(new TechnologyPartCommand(1, 1, 1, 5));
         createTechnologyPart(new TechnologyPartCommand(1, 2, 3, 3));
 
         createTechnologyPart(new TechnologyPartCommand(2, 1, 1, 7));
         createTechnologyPart(new TechnologyPartCommand(2, 2, 3, 8));
 
-        createTechnologyAssembly(new TechnologyAssemblyCommand(4, 1, 4, 3));
-        createTechnologyPart(new TechnologyPartCommand(3, 1, 2, 2));
         createTechnologyPart(new TechnologyPartCommand(3, 1, 1, 3));
+        createTechnologyPart(new TechnologyPartCommand(3, 2, 2, 2));
+
+        createTechnologyPart(new TechnologyPartCommand(4, 1, 2, 4));
+        createTechnologyPart(new TechnologyPartCommand(4, 2, 3, 1));
 
         createTechnologyPart(new TechnologyPartCommand(5, 1, 1, 3));
         createTechnologyPart(new TechnologyPartCommand(5, 2, 2, 2));
@@ -155,6 +158,12 @@ public class InitDatabase implements CommandLineRunner {
 
         createTechnologyPart(new TechnologyPartCommand(6, 1, 1, 4));
         createTechnologyPart(new TechnologyPartCommand(6, 2, 3, 2));
+
+        createTechnologyAssembly(new TechnologyAssemblyCommand(1, 1, 4, 2));
+        createTechnologyAssembly(new TechnologyAssemblyCommand(2, 1, 4, 1));
+        createTechnologyAssembly(new TechnologyAssemblyCommand(3, 1, 4, 4));
+        createTechnologyAssembly(new TechnologyAssemblyCommand(4, 1, 4, 3));
+
         addTechnologyTerm(1, 7);                               // TechnologyTerm
 
         addContract(1, new ContractCommand(                                   // Contracts

@@ -8,9 +8,9 @@ import org.itstep.projectdeadlinemanagement.repository.TaskConditionRepository;
 import org.itstep.projectdeadlinemanagement.repository.TaskRepository;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+import java.util.Objects;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 @Service
@@ -21,65 +21,125 @@ public class ProjectListService {
     private final TaskConditionRepository taskConditionRepository;
     private final EquipmentRepository equipmentRepository;
 
-
-    public List<AssemblyList> getAllAssemblyLists(ProjectList projectList) {
+    public List<AssemblyList> getAllAssemblyListsWithAmountOnProject(ProjectList projectList) {
+        int count;
         List<AssemblyList> assemblyLists = projectList.getAssemblyLists();
         List<AssemblyList> rezultAssemblyLists = new CopyOnWriteArrayList<>();
-        int count = 0;
+
         if (!assemblyLists.isEmpty()) {
             for (AssemblyList assemblyList : assemblyLists) {
+                count = assemblyList.getAmount();
+//                System.out.println("assemblyList1 = " + assemblyList.getAssembly().getNumber() + " - " +
+//                        assemblyList.getAssembly().getName() + " x " +
+//                        assemblyList.getAmount());
                 List<AssemblyList> assemblies = assemblyList.getAssembly().getAssemblyListsEntry();
-                rezultAssemblyLists = extractAssemblyLists(assemblies, rezultAssemblyLists);
+                rezultAssemblyLists = extractAssemblyLists(assemblies, rezultAssemblyLists, count);
+
+                AssemblyList newAssemblyList = new AssemblyList();
+                newAssemblyList.setId(assemblyList.getId());
+                newAssemblyList.setAssembly(assemblyList.getAssembly());
+                newAssemblyList.setAmount(assemblyList.getAmount());
+//                System.out.println("newAssemblyList1 = " + newAssemblyList.getAssembly().getNumber() + " - " +
+//                                                            newAssemblyList.getAssembly().getName() + " x " +
+//                                                            newAssemblyList.getAmount());
                 rezultAssemblyLists.add(assemblyList);
-//                System.out.println("assemblyList.getAssembly().getName() = " + assemblyList.getAssembly().getName());
-//                if (!assemblyList.getAssembly().getPartLists().isEmpty()){
-//                    assemblyList.getAssembly().getPartLists().forEach(partList -> {
-//                        System.out.println(partList.getPart().getNumber() + "-" + partList.getPart().getName());
-//                    });
-//                }
             }
         }
         return rezultAssemblyLists;
     }
 
-    private List<AssemblyList> extractAssemblyLists(List<AssemblyList> assemblyLists, List<AssemblyList> rezultAssemblyLists) {
+    private List<AssemblyList> extractAssemblyLists(List<AssemblyList> assemblyLists,
+                                                    List<AssemblyList> rezultAssemblyLists,
+                                                    int count) {
         if (!assemblyLists.isEmpty()) {
             for (AssemblyList assemblyList : assemblyLists) {
+                int countLocal = count * assemblyList.getAmount();
+//                System.out.println("countLocal = " + countLocal);
+//                System.out.println("assemblyList2 = " + assemblyList.getAssembly().getNumber() + " - " +
+//                        assemblyList.getAssembly().getName() + " x " + assemblyList.getAmount());
                 List<AssemblyList> assemblies = assemblyList.getAssembly().getAssemblyListsEntry();
                 if (!assemblies.isEmpty()) {
-                    extractAssemblyLists(assemblies, rezultAssemblyLists);
+                    extractAssemblyLists(assemblies, rezultAssemblyLists, countLocal);
                 }
-                rezultAssemblyLists.add(assemblyList);
 
-//                System.out.println("assemblyList.getAssembly().getName() = " + assemblyList.getAssembly().getName());
-//                if (!assemblyList.getAssembly().getPartLists().isEmpty()){
-//                    assemblyList.getAssembly().getPartLists().forEach(partList -> {
-//                        System.out.println(partList.getPart().getNumber() + "-" + partList.getPart().getName());
-//                    });
-//                }
+                int amountTmp = assemblyList.getAmount();
+
+                AssemblyList newAssemblyList = new AssemblyList();
+                newAssemblyList.setId(assemblyList.getId());
+                newAssemblyList.setAssembly(assemblyList.getAssembly());
+                newAssemblyList.setAmount(amountTmp * count);
+
+//                System.out.println("newAssemblyList2 = " + newAssemblyList.getAssembly().getNumber() + " - " +
+//                        newAssemblyList.getAssembly().getName() + " x " +
+//                        newAssemblyList.getAmount());
+                rezultAssemblyLists.add(newAssemblyList);
             }
         }
         return rezultAssemblyLists;
     }
 
-    public List<PartList> getAllPartLists(ProjectList projectList) {
+    public List<AssemblyList> getUniqueAssemblyListWithAmountOnProject(List<AssemblyList> allAssemblyLists) {
+        List<Integer> uniqueAssemblyNumbers = new ArrayList<>();
+        List<AssemblyList> resultAssemblyLists = new ArrayList<>();
+
+        for (AssemblyList assemblyList : allAssemblyLists) {
+            Integer number = assemblyList.getAssembly().getNumber();
+            int amount = assemblyList.getAmount();
+//            System.out.println("amount = " + amount);
+//            System.out.println("assemblyList1 = " + assemblyList.getAssembly().getNumber() + " - " +
+//                    assemblyList.getAssembly().getName() + " x " + assemblyList.getAmount());
+
+            if (!uniqueAssemblyNumbers.contains(number)) {      // Если есть в List<Integer> указанный элемент
+                uniqueAssemblyNumbers.add(number);
+                resultAssemblyLists.add(assemblyList);
+//                System.out.println("assemblyList2 = " + assemblyList.getAssembly().getNumber() + " - " +
+//                        assemblyList.getAssembly().getName() + " x " +
+//                        assemblyList.getAmount());
+            } else {
+                for (AssemblyList resultAssemblyList : resultAssemblyLists) {
+                    if (resultAssemblyList.getAssembly().getNumber().equals(number)) {
+//                        System.out.println("resultAssemblyList1 = " + resultAssemblyList.getAssembly().getNumber() + " - " +
+//                                resultAssemblyList.getAssembly().getName() + " x " + resultAssemblyList.getAmount());
+                        int amountTmp = resultAssemblyList.getAmount();
+                        resultAssemblyList.setAmount(amountTmp + amount);
+//                        System.out.println("resultAssemblyList2 = " + resultAssemblyList.getAssembly().getNumber() + " - " +
+//                                resultAssemblyList.getAssembly().getName() + " x " + resultAssemblyList.getAmount());
+                        break;
+                    }
+                }
+            }
+        }
+        return resultAssemblyLists;
+    }
+
+
+    public List<PartList> getAllPartListsWithAmountOnProject(ProjectList projectList) {
+        int count;
         List<AssemblyList> assemblyLists = projectList.getAssemblyLists();
         List<PartList> rezultPartLists = new CopyOnWriteArrayList<>();
         if (!projectList.getPartLists().isEmpty()){
             for (PartList partList: projectList.getPartLists()){
+//                System.out.println("partList1 = " + partList.getPart().getNumber() + " - " +
+//                        partList.getPart().getName() + " x " +partList.getAmount());
                 rezultPartLists.add(partList);
             }
         }
-
         if (!assemblyLists.isEmpty()) {
             for (AssemblyList assemblyList : assemblyLists) {
                 Assembly assembly = assemblyList.getAssembly();
-
-                rezultPartLists = extractPartLists(assembly.getAssemblyListsEntry(), rezultPartLists);
+                count = assemblyList.getAmount();
+                rezultPartLists = extractPartLists(assembly.getAssemblyListsEntry(), rezultPartLists, count);
 
                 if (!assembly.getPartLists().isEmpty()){
                     for (PartList partList: assembly.getPartLists()){
-                        rezultPartLists.add(partList);
+                        int amountTmp = partList.getAmount();
+                        PartList newPartList = new PartList();
+                        newPartList.setId(partList.getId());
+                        newPartList.setPart(partList.getPart());
+                        newPartList.setAmount(amountTmp * count);
+//                        System.out.println("partList2 = " + newPartList.getPart().getNumber() + " - " +
+//                                newPartList.getPart().getName() + " x " + newPartList.getAmount());
+                        rezultPartLists.add(newPartList);
                     }
                 }
             }
@@ -87,23 +147,59 @@ public class ProjectListService {
         return rezultPartLists;
     }
 
-    private List<PartList> extractPartLists(List<AssemblyList> assemblyLists, List<PartList> rezultPartLists) {
+    private List<PartList> extractPartLists(List<AssemblyList> assemblyLists, List<PartList> rezultPartLists, int count) {
+        int countLocal;
         if (!assemblyLists.isEmpty()) {
             for (AssemblyList assemblyList : assemblyLists) {
+                countLocal = count * assemblyList.getAmount();
                 Assembly assembly = assemblyList.getAssembly();
                 List<AssemblyList> assemblies = assemblyList.getAssembly().getAssemblyListsEntry();
                 if (!assembly.getAssemblyListsEntry().isEmpty()) {
-                    extractPartLists(assemblies, rezultPartLists);
+                    extractPartLists(assemblies, rezultPartLists, countLocal);
                 }
 
                 if (!assembly.getPartLists().isEmpty()){
                     for (PartList partList: assembly.getPartLists()){
-                        rezultPartLists.add(partList);
+                        int amountTmp = partList.getAmount();
+
+                        PartList newPartList = new PartList();
+                        newPartList.setId(partList.getId());
+                        newPartList.setPart(partList.getPart());
+                        newPartList.setAmount(amountTmp * countLocal);
+
+//                        System.out.println("partList3 = " + newPartList.getPart().getNumber() + " - " +
+//                                newPartList.getPart().getName() + " x " +newPartList.getAmount());
+                        rezultPartLists.add(newPartList);
                     }
                 }
             }
         }
+//        System.out.println("count3 = " + count);
         return rezultPartLists;
+    }
+
+    public List<PartList> getUniquePartListWithAmountOnProject(List<PartList> allPartLists) {
+        List<Integer> uniquePartNumbers = new ArrayList<>();
+        List<PartList> resultPartLists = new ArrayList<>();
+
+        for (PartList partList : allPartLists) {
+            Integer number = partList.getPart().getNumber();
+            int amount = partList.getAmount();
+
+            if (!uniquePartNumbers.contains(number)) {      // Если есть в List<Integer> указанный элемент
+                uniquePartNumbers.add(number);
+                resultPartLists.add(partList);
+            } else {
+                for (PartList resultPartList : resultPartLists) {
+                    if (resultPartList.getPart().getNumber().equals(number)) {
+                        int amountTmp = resultPartList.getAmount();
+                        resultPartList.setAmount(amountTmp + amount);
+                        break;
+                    }
+                }
+            }
+        }
+        return resultPartLists;
     }
 }
 

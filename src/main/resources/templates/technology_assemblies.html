@@ -114,7 +114,7 @@
                             <li class="text_p1">
                                 <div class="col-xl-8">
                                     <details>
-                                        <summary class="sum-item">Список вузлів щодо проекту</summary>
+                                        <summary class="sum-item">Список унікальних вузлів з урахуванням кількості на проект</summary>
                                         <table id="example1" class="table_sm table table-striped table-hover table-bordered border-secondary-subtle" style="width:100%;">
                                             <thead>
                                             <tr>
@@ -125,7 +125,7 @@
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            <tr th:each="assemblyList: ${allAssemblyLists}">
+                                            <tr th:each="assemblyList: ${assemblyLists}">
                                                 <td class="text_n col-xl-2 text-center" th:text="${assemblyList.assembly.id}"></td>
                                                 <td class="text_n col-xl-4 px-1"  th:text="${assemblyList.assembly.number}"></td>
                                                 <td class="text_n col-xl-3 px-1"  th:text="${assemblyList.assembly.name}"></td>

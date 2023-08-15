@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -38,31 +37,16 @@ public class TechnologyAssemblyController {
             model.addAttribute("technologyProject", project);
             model.addAttribute("assemblies", assemblyRepository.findAll());
 
-            List<AssemblyList> allAssemblyLists = projectListService.getAllAssemblyLists(project.getProjectList());
+            List<AssemblyList> allAssemblyLists = projectListService.getAllAssemblyListsWithAmountOnProject(project.getProjectList());
             model.addAttribute("allAssemblyLists", allAssemblyLists);
 
             // Уникальные детали
-            List<AssemblyList> assemblyLists = new CopyOnWriteArrayList<>();
-            int count;
-            for (AssemblyList assemblyList: allAssemblyLists){
-                count = 0;
-                if (assemblyLists.isEmpty()){
-                    assemblyLists.add(assemblyList);
-                } else {
-                    for (AssemblyList al: assemblyLists){
-                        if (Objects.equals(assemblyList.getAssembly().getNumber(), al.getAssembly().getNumber())){
-                            count++;
-                            break;
-                        }
-                    }
-                    if (count == 0){
-                        assemblyLists.add(assemblyList);
-                    }
-                }
-            }
+            List<AssemblyList> assemblyLists = projectListService.getUniqueAssemblyListWithAmountOnProject(allAssemblyLists);
+            System.out.println("assemblyLists.size() = " + assemblyLists.size());
             model.addAttribute("assemblyLists", assemblyLists);
+
             List<TechnologyAssembly> technologyAssemblies = new CopyOnWriteArrayList<>();
-            for (AssemblyList assemblyList: assemblyLists){
+            for (AssemblyList assemblyList : assemblyLists) {
                 technologyAssemblies.addAll(assemblyList.getAssembly().getTechnologyAssemblies());
             }
             model.addAttribute("technologyAssemblies", technologyAssemblies);
