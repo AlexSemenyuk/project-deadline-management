@@ -37,12 +37,8 @@ public class TechnologyAssemblyController {
             model.addAttribute("technologyProject", project);
             model.addAttribute("assemblies", assemblyRepository.findAll());
 
-            List<AssemblyList> allAssemblyLists = projectListService.getAllAssemblyListsWithAmountOnProject(project.getProjectList());
-            model.addAttribute("allAssemblyLists", allAssemblyLists);
-
-            // Уникальные детали
-            List<AssemblyList> assemblyLists = projectListService.getUniqueAssemblyListWithAmountOnProject(allAssemblyLists);
-            System.out.println("assemblyLists.size() = " + assemblyLists.size());
+            // Уникальные сборки проекта c количеством на проект
+            List<AssemblyList> assemblyLists = projectListService.getAllAssemblyListsWithAmountOnProject(project.getProjectList());
             model.addAttribute("assemblyLists", assemblyLists);
 
             List<TechnologyAssembly> technologyAssemblies = new CopyOnWriteArrayList<>();

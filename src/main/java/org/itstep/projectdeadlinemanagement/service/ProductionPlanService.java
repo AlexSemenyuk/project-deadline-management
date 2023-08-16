@@ -24,8 +24,6 @@ public class ProductionPlanService {
 
     private final ProductionPlanRepository productionPlanRepository;
     private final EquipmentRepository equipmentRepository;
-//    public final int HOURS_PER_DAY = 8;
-
 
     public void formProductionPlans(List<Task> tasks) {
 

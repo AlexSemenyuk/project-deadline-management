@@ -30,8 +30,7 @@ public class ProjectListService {
             for (AssemblyList assemblyList : assemblyLists) {
                 count = assemblyList.getAmount();
 //                System.out.println("assemblyList1 = " + assemblyList.getAssembly().getNumber() + " - " +
-//                        assemblyList.getAssembly().getName() + " x " +
-//                        assemblyList.getAmount());
+//                        assemblyList.getAssembly().getName() + " x " + assemblyList.getAmount());
                 List<AssemblyList> assemblies = assemblyList.getAssembly().getAssemblyListsEntry();
                 rezultAssemblyLists = extractAssemblyLists(assemblies, rezultAssemblyLists, count);
 
@@ -40,11 +39,11 @@ public class ProjectListService {
                 newAssemblyList.setAssembly(assemblyList.getAssembly());
                 newAssemblyList.setAmount(assemblyList.getAmount());
 //                System.out.println("newAssemblyList1 = " + newAssemblyList.getAssembly().getNumber() + " - " +
-//                                                            newAssemblyList.getAssembly().getName() + " x " +
-//                                                            newAssemblyList.getAmount());
+//                                    newAssemblyList.getAssembly().getName() + " x " + newAssemblyList.getAmount());
                 rezultAssemblyLists.add(assemblyList);
             }
         }
+        rezultAssemblyLists = getUniqueAssemblyListWithAmountOnProject(rezultAssemblyLists);
         return rezultAssemblyLists;
     }
 
@@ -70,8 +69,7 @@ public class ProjectListService {
                 newAssemblyList.setAmount(amountTmp * count);
 
 //                System.out.println("newAssemblyList2 = " + newAssemblyList.getAssembly().getNumber() + " - " +
-//                        newAssemblyList.getAssembly().getName() + " x " +
-//                        newAssemblyList.getAmount());
+//                        newAssemblyList.getAssembly().getName() + " x " + newAssemblyList.getAmount());
                 rezultAssemblyLists.add(newAssemblyList);
             }
         }
@@ -81,6 +79,7 @@ public class ProjectListService {
     public List<AssemblyList> getUniqueAssemblyListWithAmountOnProject(List<AssemblyList> allAssemblyLists) {
         List<Integer> uniqueAssemblyNumbers = new ArrayList<>();
         List<AssemblyList> resultAssemblyLists = new ArrayList<>();
+//        System.out.println("Unique");
 
         for (AssemblyList assemblyList : allAssemblyLists) {
             Integer number = assemblyList.getAssembly().getNumber();
@@ -121,7 +120,11 @@ public class ProjectListService {
             for (PartList partList: projectList.getPartLists()){
 //                System.out.println("partList1 = " + partList.getPart().getNumber() + " - " +
 //                        partList.getPart().getName() + " x " +partList.getAmount());
-                rezultPartLists.add(partList);
+                PartList newPartList = new PartList();
+                newPartList.setId(partList.getId());
+                newPartList.setPart(partList.getPart());
+                newPartList.setAmount(partList.getAmount());
+                rezultPartLists.add(newPartList);
             }
         }
         if (!assemblyLists.isEmpty()) {
@@ -133,17 +136,20 @@ public class ProjectListService {
                 if (!assembly.getPartLists().isEmpty()){
                     for (PartList partList: assembly.getPartLists()){
                         int amountTmp = partList.getAmount();
+//                        System.out.println("partList2-1 = " + partList.getPart().getNumber() + " - " +
+//                                partList.getPart().getName() + " x " + partList.getAmount());
                         PartList newPartList = new PartList();
                         newPartList.setId(partList.getId());
                         newPartList.setPart(partList.getPart());
                         newPartList.setAmount(amountTmp * count);
-//                        System.out.println("partList2 = " + newPartList.getPart().getNumber() + " - " +
+//                        System.out.println("partList2-2 = " + newPartList.getPart().getNumber() + " - " +
 //                                newPartList.getPart().getName() + " x " + newPartList.getAmount());
                         rezultPartLists.add(newPartList);
                     }
                 }
             }
         }
+        rezultPartLists = getUniquePartListWithAmountOnProject(rezultPartLists);
         return rezultPartLists;
     }
 
@@ -161,39 +167,46 @@ public class ProjectListService {
                 if (!assembly.getPartLists().isEmpty()){
                     for (PartList partList: assembly.getPartLists()){
                         int amountTmp = partList.getAmount();
-
+//                        System.out.println("partList3-1 = " + partList.getPart().getNumber() + " - " +
+//                                partList.getPart().getName() + " x " +partList.getAmount());
                         PartList newPartList = new PartList();
                         newPartList.setId(partList.getId());
                         newPartList.setPart(partList.getPart());
                         newPartList.setAmount(amountTmp * countLocal);
 
-//                        System.out.println("partList3 = " + newPartList.getPart().getNumber() + " - " +
+//                        System.out.println("partList3-2 = " + newPartList.getPart().getNumber() + " - " +
 //                                newPartList.getPart().getName() + " x " +newPartList.getAmount());
                         rezultPartLists.add(newPartList);
                     }
                 }
             }
         }
-//        System.out.println("count3 = " + count);
         return rezultPartLists;
     }
 
     public List<PartList> getUniquePartListWithAmountOnProject(List<PartList> allPartLists) {
+//        System.out.println("Unique");
         List<Integer> uniquePartNumbers = new ArrayList<>();
         List<PartList> resultPartLists = new ArrayList<>();
 
         for (PartList partList : allPartLists) {
             Integer number = partList.getPart().getNumber();
             int amount = partList.getAmount();
+//            System.out.println("partList5-1 = " + partList.getPart().getNumber() + " - " +
+//                    partList.getPart().getName() + " x " +partList.getAmount());
 
             if (!uniquePartNumbers.contains(number)) {      // Если есть в List<Integer> указанный элемент
                 uniquePartNumbers.add(number);
                 resultPartLists.add(partList);
+//                System.out.println("partList5-2 = " + partList.getPart().getNumber() + " - " +
+//                        partList.getPart().getName() + " x " +partList.getAmount());
             } else {
                 for (PartList resultPartList : resultPartLists) {
                     if (resultPartList.getPart().getNumber().equals(number)) {
                         int amountTmp = resultPartList.getAmount();
                         resultPartList.setAmount(amountTmp + amount);
+//                        System.out.println("partList5-3 = " + partList.getPart().getNumber() + " - " +
+//                                partList.getPart().getName() + " x " +partList.getAmount());
                         break;
                     }
                 }

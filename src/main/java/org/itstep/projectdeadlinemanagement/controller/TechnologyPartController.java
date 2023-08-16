@@ -34,15 +34,12 @@ public class TechnologyPartController {
         optionalProject.ifPresent(project -> {
             model.addAttribute("technologyProject", project);
 
-            List<PartList> allPartLists = projectListService.getAllPartListsWithAmountOnProject(project.getProjectList());
-            model.addAttribute("allPartLists", allPartLists);
-
-            // Уникальные детали c количеством на проект
-            List<PartList> partLists = projectListService.getUniquePartListWithAmountOnProject(allPartLists);
+            // Уникальные детали проекта c количеством на проект
+            List<PartList> partLists = projectListService.getAllPartListsWithAmountOnProject(project.getProjectList());
             model.addAttribute("partLists", partLists);
 
             List<TechnologyPart> technologyParts = new CopyOnWriteArrayList<>();
-            for (PartList partList: partLists){
+            for (PartList partList : partLists) {
                 technologyParts.addAll(partList.getPart().getTechnologyParts());
             }
 
@@ -80,7 +77,7 @@ public class TechnologyPartController {
     public String findById(@PathVariable Integer id, @PathVariable Integer technologyPartId, Model model) {
         Optional<Project> optionalProject = projectRepository.findById(id);
         Optional<TechnologyPart> optionalTechnologyPart = technologyPartRepository.findById(technologyPartId);
-        if (optionalProject.isPresent() && optionalTechnologyPart.isPresent()){
+        if (optionalProject.isPresent() && optionalTechnologyPart.isPresent()) {
             Project project = optionalProject.get();
             model.addAttribute("project", project);
             TechnologyPart technologyPart = optionalTechnologyPart.get();
@@ -98,7 +95,7 @@ public class TechnologyPartController {
         Optional<Equipment> optionalEquipment = equipmentRepository.findById(command.equipmentId());
         if (optionalTechnologyPart.isPresent() &&
                 optionalPart.isPresent() &&
-                optionalEquipment.isPresent()){
+                optionalEquipment.isPresent()) {
 
             TechnologyPart technologyPart = optionalTechnologyPart.get();
             Part part = optionalPart.get();
@@ -113,7 +110,7 @@ public class TechnologyPartController {
         return "redirect:/technologies/technology_terms/technology_parts/{id}/edit/{technologyPartId}";
     }
 
-    public  int getAllAssemblyLists(Project project) {
+    public int getAllAssemblyLists(Project project) {
         int count = 0;
         count = extractAssemblyLists(project.getProjectList().getAssemblyLists(), count);
         return count;
@@ -124,14 +121,14 @@ public class TechnologyPartController {
             Assembly assembly = assemblyList.getAssembly();
             count++;
             System.out.println("count = " + count);
-            if (!assembly.getAssemblyLists().isEmpty()){
+            if (!assembly.getAssemblyLists().isEmpty()) {
                 extractAssemblyLists(assembly.getAssemblyLists(), count);
             }
         }
         return count;
     }
 
-    public  List<PartList> getAllPartLists(Project project) {
+    public List<PartList> getAllPartLists(Project project) {
         List<PartList> allPartLists = new ArrayList<>();
         allPartLists = extractPartLists(project.getProjectList().getAssemblyLists(), allPartLists);
         return allPartLists;
@@ -141,7 +138,7 @@ public class TechnologyPartController {
     private List<PartList> extractPartLists(List<AssemblyList> assemblies, List<PartList> allPartLists) {
         for (AssemblyList assemblyList : assemblies) {
             Assembly assembly = assemblyList.getAssembly();
-            if (!assembly.getAssemblyLists().isEmpty()){
+            if (!assembly.getAssemblyLists().isEmpty()) {
                 extractPartLists(assembly.getAssemblyLists(), allPartLists);
             }
             allPartLists.addAll(assembly.getPartLists());

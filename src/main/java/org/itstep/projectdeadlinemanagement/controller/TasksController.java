@@ -8,6 +8,7 @@ import org.itstep.projectdeadlinemanagement.repository.ProjectRepository;
 import org.itstep.projectdeadlinemanagement.repository.TaskConditionRepository;
 import org.itstep.projectdeadlinemanagement.repository.TaskRepository;
 import org.itstep.projectdeadlinemanagement.service.ProductionPlanService;
+import org.itstep.projectdeadlinemanagement.service.ProjectListService;
 import org.itstep.projectdeadlinemanagement.service.TaskService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,6 +31,7 @@ public class TasksController {
     private final ProductionPlanService productionPlanService;
     private final TaskConditionRepository taskConditionRepository;
     private final EquipmentRepository equipmentRepository;
+    private final ProjectListService projectListService;
 
     @GetMapping
     public String find(Model model) {
@@ -44,31 +46,12 @@ public class TasksController {
         return "tasks";
     }
 
-//    @GetMapping("/{id}")
-//    public String home(@PathVariable int id, Model model) {
-//
-//        List<Project> tmpProjects = projectRepository.findAll();
-//        List<Project> projects = new CopyOnWriteArrayList<>();
-//        for (Project p:tmpProjects){
-//            if (p.getProjectCondition().getName().equals("Production")){
-//                projects.add(p);
-//            }
-//        }
-//        model.addAttribute("projects", projects);
-//
-//        Optional<Project> optionalProject = projectRepository.findById(id);
-//        optionalProject.ifPresent(currentProject ->{
-//            model.addAttribute("currentProject", currentProject);
-//        });
-//        return "tasks";
-//    }
-//
     @PostMapping
     public String create(Integer id, String form, Model model) {
         if (form != null){
             if ( form.equals("ON")){
                 List<Task> tasks = taskService.formTasks(id);
-                productionPlanService.formProductionPlans(tasks);
+//                productionPlanService.formProductionPlans(tasks);
             }
         }
         return "redirect:/tasks/project_tasks/" + id;
@@ -79,6 +62,20 @@ public class TasksController {
         Optional<Project> optionalProject = projectRepository.findById(id);
         optionalProject.ifPresent(project -> {
             model.addAttribute("projectWithTasks", project);
+
+
+            List<PartList> partLists = projectListService.getAllPartListsWithAmountOnProject(project.getProjectList());
+            model.addAttribute("partLists", partLists);
+//            if (!partLists.isEmpty()){
+//                for (PartList partList: partLists){
+//                    System.out.println(partList.getPart().getNumber() + " - " + partList.getPart().getName() + " x " + partList.getAmount());
+//                }
+//            }
+
+            List<AssemblyList> assemblyLists = projectListService.getAllAssemblyListsWithAmountOnProject(project.getProjectList());
+            model.addAttribute("assemblyLists", assemblyLists);
+
+
             model.addAttribute("projectTasks", project.getTasks());
         });
         return "project_tasks";

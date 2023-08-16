@@ -125,11 +125,11 @@
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            <tr th:each="allPartList: ${partLists}">
-                                                <td class="text_n col-xl-2 text-center" th:text="${allPartList.part.id}"></td>
-                                                <td class="text_n col-xl-4 px-1"  th:text="${allPartList.part.number}"></td>
-                                                <td class="text_n col-xl-3 px-1"  th:text="${allPartList.part.name}"></td>
-                                                <td class="text_n col-xl-3 text-center"  th:text="${allPartList.amount}"></td>
+                                            <tr th:each="partList: ${partLists}">
+                                                <td class="text_n col-xl-2 text-center" th:text="${partList.part.id}"></td>
+                                                <td class="text_n col-xl-4 px-1"  th:text="${partList.part.number}"></td>
+                                                <td class="text_n col-xl-3 px-1"  th:text="${partList.part.name}"></td>
+                                                <td class="text_n col-xl-3 text-center"  th:text="${partList.amount}"></td>
                                             </tr>
                                             </tbody>
                                         </table>
