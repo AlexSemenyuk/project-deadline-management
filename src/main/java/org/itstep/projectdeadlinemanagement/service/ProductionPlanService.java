@@ -28,38 +28,40 @@ public class ProductionPlanService {
     public void formProductionPlans(List<Task> tasks) {
 
         List<Equipment> equipmentList = equipmentRepository.findAll();
-
-        // Номер по списку ProductionPlans для данного оборудования
-        int[] count = new int[1];
-
         List<ProductionPlan> productionPlans = productionPlanRepository.findAll();
 
         // формирование ProductionPlans
-        equipmentList.forEach(equipment -> {
-            count[0] = 0;
+        if (!equipmentList.isEmpty()){
+            for (Equipment equipment: equipmentList){
+                // Номер по списку ProductionPlans для данного оборудования
+                int count = 0;
 
-            // - Определение существующего списка ProductionPlans для данного оборудования
-            // - Получение данных с последнего экземпляра
-            productionPlans.forEach(productionPlan -> {
-                if (Objects.equals(productionPlan.getEquipment().getNumber(), equipment.getNumber())) {
-                    count[0]++;
+                // - Получение номера с последнего экземпляра существующего списка ProductionPlans для данного оборудования
+                if (!productionPlans.isEmpty()){
+                    for (ProductionPlan productionPlan: productionPlans){
+                        if (Objects.equals(productionPlan.getEquipment().getNumber(), equipment.getNumber())) {
+                            count++;
+                        }
+                    }
                 }
-            });
 
-            tasks.forEach(task -> {
-                if (Objects.equals(equipment.getNumber(), task.getEquipment().getNumber())) {
-                    ProductionPlan productionPlan = new ProductionPlan(count[0] + 1);
-                    productionPlan.setTask(task);
-
-                    Optional<Equipment> optionalEquipment = equipmentRepository.findById(productionPlan.getTask().getEquipment().getId());
-                    optionalEquipment.ifPresent(productionPlan::setEquipment);
-
-                    productionPlan.setCurrentStart(task.getStartProduction());
-                    productionPlanRepository.save(productionPlan);
-                    count[0]++;
+                if (!tasks.isEmpty()){
+                    for (Task task: tasks){
+                        if (Objects.equals(equipment.getNumber(), task.getEquipment().getNumber())) {
+                            ProductionPlan productionPlan = new ProductionPlan(count + 1);
+                            productionPlan.setTask(task);
+                            productionPlan.setEquipment(equipment);
+//                            Optional<Equipment> optionalEquipment = equipmentRepository.findById(productionPlan.getTask().getEquipment().getId());
+//                            optionalEquipment.ifPresent(productionPlan::setEquipment);
+                            productionPlan.setCurrentStart(task.getStartProduction());
+                            productionPlanRepository.save(productionPlan);
+                            count++;
+                        }
+                    }
                 }
-            });
-        });
+            }
+        }
+
         formCurrentStart();
     }
 
@@ -68,50 +70,55 @@ public class ProductionPlanService {
         LocalDateTime[] currentDeadlineTmp = new LocalDateTime[2];
         List<Equipment> equipmentList = equipmentRepository.findAll();
 
-        List<ProductionPlan> productionPlans = productionPlanRepository.findAll()
-                .stream()
-                .sorted(Comparator.comparing(ProductionPlan::getNumber))
-                .collect(Collectors.toList());
+        List<ProductionPlan> productionPlans = productionPlanRepository.findAll();
+        if (!productionPlans.isEmpty()){
+            productionPlans = productionPlans.stream()
+                    .sorted(Comparator.comparing(ProductionPlan::getNumber))
+                    .collect(Collectors.toList());
+        }
 
-        equipmentList.forEach(equipment -> {
-//            if (equipment != null) {
-//                System.out.println(equipment.getNumber() + "-" + equipment.getName());
-//            }
+        if (!equipmentList.isEmpty()){
+            for (Equipment equipment: equipmentList){
+                // DateTime является CurrentStart для текущего (является Deadline, с учетом OperationTime от предыдущего ProductionPlan с состоянием не "New")
+                currentDeadlineTmp[0] = null;
+                // DateTime является CurrentStart для текущего с учетом termNumber
+                currentDeadlineTmp[1] = null;
 
-            // DateTime является CurrentStart для текущего (является Deadline, с учетом OperationTime от предыдущего ProductionPlan с состоянием не "New")
-            currentDeadlineTmp[0] = null;
-            // DateTime является CurrentStart для текущего с учетом termNumber
-            currentDeadlineTmp[1] = null;
+                productionPlans.forEach(plan -> {
+                    if (Objects.equals(plan.getEquipment().getNumber(), equipment.getNumber())) {
 
-            productionPlans.forEach(plan -> {
-                if (Objects.equals(plan.getEquipment().getNumber(), equipment.getNumber())) {
-
-                    if (!plan.getTask().getTaskCondition().getName().equals("New")) {
-                        // Определение start для текущего (окончание предыдущего ProductionPlan)
-                        currentDeadlineTmp[0] = TimeService
-                                .localDateTimeAddHours(plan.getCurrentStart(), plan.getTask().getOperationTime());
-                    } else {                                                // Работаем только с состоянием "New"
-                        // Проверка currentDeadline с предыдущего по TermNumber значения (partNumber = const, lotNumber=const)
-                        if (currentDeadlineTmp[0] != null) {                // Есть очередь (есть предыдущий) - в конец
-                            // Коррекция по termNumber
-                            if (plan.getTask().getTermNumber() > 1) {
-                                currentDeadlineTmp[1] = getCurrentDeadlineFromPreviousTermNumber(plan);
-                                if (currentDeadlineTmp[1].isAfter(currentDeadlineTmp[0])) {
-                                    currentDeadlineTmp[0] = currentDeadlineTmp[1];
+                        if (!plan.getTask().getTaskCondition().getName().equals("New")) {
+                            // Определение start для текущего (окончание предыдущего ProductionPlan)
+                            currentDeadlineTmp[0] = TimeService
+                                    .localDateTimeAddHours(plan.getCurrentStart(),
+                                                            plan.getTask().getOperationTime()
+                                    );
+                        } else {                                                // Работаем только с состоянием "New"
+                            // Проверка currentDeadline с предыдущего по TermNumber значения (partNumber = const, lotNumber=const)
+                            if (currentDeadlineTmp[0] != null) {                // Есть очередь (есть предыдущий) - в конец
+                                // Коррекция по termNumber
+                                if (plan.getTask().getTermNumber() > 1) {
+                                    currentDeadlineTmp[1] = getCurrentDeadlineFromPreviousTermNumber(plan);
+                                    if (currentDeadlineTmp[1].isAfter(currentDeadlineTmp[0])) {
+                                        currentDeadlineTmp[0] = currentDeadlineTmp[1];
+                                    }
                                 }
+                            } else {                                    // Если нет очереди - дата task
+                                currentDeadlineTmp[0] = plan.getTask().getStartProduction();
+                                currentDeadlineTmp[0] = TimeService.excludeWeekend(currentDeadlineTmp[0]);
                             }
-                        } else {                                    // Если нет очереди - дата task
-                            currentDeadlineTmp[0] = plan.getTask().getStartProduction();
-                            currentDeadlineTmp[0] = TimeService.excludeWeekend(currentDeadlineTmp[0]);
+                            plan.setCurrentStart(currentDeadlineTmp[0]);
+                            productionPlanRepository.save(plan);
+                            currentDeadlineTmp[0] =  TimeService
+                                    .localDateTimeAddHours(plan.getCurrentStart(),
+                                                            plan.getTask().getOperationTime()
+                                    );
                         }
-                        plan.setCurrentStart(currentDeadlineTmp[0]);
-                        productionPlanRepository.save(plan);
-                        currentDeadlineTmp[0] =  TimeService
-                                .localDateTimeAddHours(plan.getCurrentStart(), plan.getTask().getOperationTime());
                     }
-                }
-            });
-        });
+                });
+            }
+        }
+
     }
 
     // Сохранение цепочки termNumber - Получение currentDeadline с предыдущего по TermNumber значения (partNumber = const, lotNumber=const)
@@ -122,7 +129,7 @@ public class ProductionPlanService {
         productionPlanList.forEach(plan -> {
             int termNumberCurrent = productionPlan.getTask().getTermNumber();
             int termNumberPrevious = plan.getTask().getTermNumber();
-            if (Objects.equals(plan.getTask().getPartNumber(), productionPlan.getTask().getPartNumber()) &&
+            if (Objects.equals(plan.getTask().getPartOrAssemblyNumber(), productionPlan.getTask().getPartOrAssemblyNumber()) &&
                     Objects.equals(plan.getTask().getLotNumber(), productionPlan.getTask().getLotNumber()) &&
                     termNumberCurrent == termNumberPrevious + 1) {
                 previousCurrentDeadline[0] = TimeService

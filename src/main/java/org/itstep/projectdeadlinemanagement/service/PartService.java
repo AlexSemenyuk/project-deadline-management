@@ -33,7 +33,7 @@ public class PartService {
     public List<Task> findTasks (List<Task> taskList, int partNumber){
         List<Task> tasks = new CopyOnWriteArrayList<>();
         for (Task t: taskList){
-            if (t.getPartNumber() == partNumber && t.getLotNumber() == 1){
+            if (t.getPartOrAssemblyNumber() == partNumber && t.getLotNumber() == 1){
                 tasks.add(t);
             }
         }

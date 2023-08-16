@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode(exclude = "productionPlan")
 @ToString(exclude = "productionPlan")
 public class Task {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -27,10 +28,10 @@ public class Task {
     private Equipment equipment;
 
     @Column(nullable = false)
-    private Integer partNumber;
+    private Integer partOrAssemblyNumber;
 
     @Column(nullable = false)
-    private String partName;
+    private String partOrAssemblyName;
 
     @Column(nullable = false)
     private Integer termNumber;
@@ -56,8 +57,8 @@ public class Task {
     public Task(Integer projectNumber, Integer partNumber, String partName, Integer termNumber,
                 Integer operationTime, Integer lotNumber, LocalDateTime startProduction) {
         this.projectNumber = projectNumber;
-        this.partNumber = partNumber;
-        this.partName = partName;
+        this.partOrAssemblyNumber = partNumber;
+        this.partOrAssemblyName = partName;
         this.termNumber = termNumber;
         this.operationTime = operationTime;
         this.lotNumber = lotNumber;

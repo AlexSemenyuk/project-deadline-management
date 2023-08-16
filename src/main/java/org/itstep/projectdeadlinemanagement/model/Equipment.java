@@ -47,8 +47,6 @@ public class Equipment {
         this.name = name;
     }
 
-
-
     public void setDivision (Division division) {
         division.getEquipments().add(this);
         this.division = division;

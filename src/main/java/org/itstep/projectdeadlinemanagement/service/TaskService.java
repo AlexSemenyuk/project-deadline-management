@@ -36,7 +36,10 @@ public class TaskService {
 
             assemblyTasks = formAssemblyTasks(project);
             taskRepository.saveAll(assemblyTasks);
-            getAllListsWithAmountOnProject(project.getProjectList());
+//            getAllListsWithAmountOnProject(project.getProjectList());
+
+            partTasks.addAll(assemblyTasks);
+
         }
 
         return partTasks;

@@ -163,7 +163,7 @@
                                                     <th class="text_n1 col-xl-1 px-1 text-center ">Id</th>
                                                     <th class="text_n1 col-xl-1 text-center ">Номер проекту</th>
                                                     <th class="text_n1 col-xl-1 text-center ">Обладнання</th>
-                                                    <th class="text_n1 col-xl-1 text-center ">Деталь</th>
+                                                    <th class="text_n1 col-xl-1 text-center ">Деталь / Вузол</th>
                                                     <th class="text_n1 col-xl-1 text-center ">Черга на обладнання</th>
                                                     <th class="text_n1 col-xl-1 text-center ">Номер операції</th>
                                                     <th class="text_n1 col-xl-1 text-center ">Час операції</th>
@@ -189,8 +189,8 @@
 <!--                                                    <td class="text_a col-xl-1 px-1 "-->
 <!--                                                        th:text="${planCommand.task.partNumber + '-' + planCommand.task.partName}"></td>-->
                                                     <td class="text_b tx col-xl-1">
-                                                        <a class="text_b tx " th:text="${planCommand.task.partNumber + '-' + planCommand.task.partName}"
-                                                           th:href="@{/parts/part_details/{id}(id=${planCommand.task.projectNumber + ':' + planCommand.task.partNumber})}"/>
+                                                        <a class="text_b tx " th:text="${planCommand.task.partOrAssemblyNumber + '-' + planCommand.task.partOrAssemblyName}"
+                                                           th:href="@{/parts/part_details/{id}(id=${planCommand.task.projectNumber + ':' + planCommand.task.partOrAssemblyNumber})}"/>
                                                     </td>
                                                     <td class="text_a ty col-xl-1 text-center "
                                                         th:text="${planCommand.number}"></td>
@@ -235,7 +235,7 @@
                                                     <th class="text_n1 col-xl-1 px-1 text-center ">Id</th>
                                                     <th class="text_n1 col-xl-1 text-center ">Номер проекту</th>
                                                     <th class="text_n1 col-xl-1 text-center ">Обладнання</th>
-                                                    <th class="text_n1 col-xl-1 text-center ">Деталь</th>
+                                                    <th class="text_n1 col-xl-1 text-center ">Деталь / Вузол</th>
                                                     <th class="text_n1 col-xl-1 text-center ">Черга на обладнання</th>
                                                     <th class="text_n1 col-xl-1 text-center ">Номер операції</th>
                                                     <th class="text_n1 col-xl-1 text-center ">Час операції</th>
@@ -259,8 +259,8 @@
 <!--                                                    <td class="text_a col-xl-1 px-1"-->
 <!--                                                        th:text="${p.task.partNumber + '-' + p.task.partName}"></td>-->
                                                     <td class="text_b tx col-xl-1">
-                                                        <a class="text_b tx " th:text="${p.task.partNumber + '-' + p.task.partName}"
-                                                           th:href="@{/parts/part_details/{id}(id=${p.task.projectNumber + ':' + p.task.partNumber})}"/>
+                                                        <a class="text_b tx " th:text="${p.task.partOrAssemblyNumber + '-' + p.task.partOrAssemblyName}"
+                                                           th:href="@{/parts/part_details/{id}(id=${p.task.projectNumber + ':' + p.task.partOrAssemblyNumber})}"/>
                                                     </td>
                                                     <td class="text_a ty col-xl-1 text-center "
                                                         th:text="${p.number}"></td>

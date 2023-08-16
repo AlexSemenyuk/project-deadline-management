@@ -119,7 +119,7 @@
                                     <tbody>
                                         <tr th:each="task: ${tasks}">
                                             <td class="text_a ty col-xl-2-1 text-center" th:text="${task.projectNumber}"></td>
-                                            <td class="text_a ty col-xl-3 px-1" th:text="${task.partNumber + '-' + task.partName}"></td>
+                                            <td class="text_a ty col-xl-3 px-1" th:text="${task.getPartOrAssemblyNumber + '-' + task.getPartOrAssemblyName}"></td>
                                             <td class="text_a ty col-xl-2 text-center" th:text="${task.termNumber}"></td>
                                             <td class="text_a ty col-xl-3 px-1" th:text="${task.equipment.number + '-' + task.equipment.name}"></td>
                                             <td class="text_a ty col-xl-2 text-center" th:text="${task.operationTime}"></td>

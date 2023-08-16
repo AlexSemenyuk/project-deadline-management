@@ -86,15 +86,14 @@ public class InitDatabase implements CommandLineRunner {
         assemblyRepository.save(new Assembly(103, "Вал у зборі"));
         assemblyRepository.save(new Assembly(104, "Кришка у зборі"));
 
+        addAssemblyList(1, new AssemblyListCommand(2, 2));
+        addAssemblyList(1, new AssemblyListCommand(3, 1));
+
         addPartList(1, new PartListCommand(1, 2));
         addPartList(1, new PartListCommand(6, 4));
+
         addPartList(2, new PartListCommand(3, 1));
         addPartList(2, new PartListCommand(5, 1));
-
-        addAssemblyList(1, new AssemblyListCommand(2, 2));
-        addAssemblyList(1, new AssemblyListCommand(2, 3));
-        addAssemblyList(2, new AssemblyListCommand(3, 8));
-//        addAssemblyList(2, new AssemblyListCommand(3, 3));
 
         addPartList(3, new PartListCommand(4, 1));
         addPartList(3, new PartListCommand(6, 2));
@@ -123,8 +122,8 @@ public class InitDatabase implements CommandLineRunner {
         taskConditionRepository.save(new TaskCondition("Archive"));
 
         // 9. ContractTypes
-        contractTypeRepository.save(new ContractType("Metal"));
-        contractTypeRepository.save(new ContractType("Component"));
+        contractTypeRepository.save(new ContractType("Матеріали"));
+        contractTypeRepository.save(new ContractType("Комплектуючі вироби"));
 
 
         // 10. Создание Project

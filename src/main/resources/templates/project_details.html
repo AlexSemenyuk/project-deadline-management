@@ -283,7 +283,7 @@
                                             <td class="text_n col-xl-1 text-center" th:text="${task.id}"></td>
                                             <td class="text_n col-xl-1 text-center"  th:text="${task.projectNumber}"></td>
                                             <td class="text_n col-xl-2 px-1"  th:text="${task.equipment.number + '-' + task.equipment.name}"></td>
-                                            <td class="text_n col-xl-2 px-1"  th:text="${task.partNumber + ' - ' + task.partName}"></td>
+                                            <td class="text_n col-xl-2 px-1"  th:text="${task.getPartOrAssemblyNumber + ' - ' + task.getPartOrAssemblyName}"></td>
                                             <td class="text_n col-xl-1 text-center"  th:text="${task.termNumber}"></td>
                                             <td class="text_n col-xl-1 text-center"  th:text="${task.operationTime}"></td>
                                             <td class="text_n col-xl-1 text-center"  th:text="${task.lotNumber}"></td>

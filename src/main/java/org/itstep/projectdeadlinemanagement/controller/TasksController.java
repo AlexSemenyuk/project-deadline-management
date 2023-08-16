@@ -51,7 +51,7 @@ public class TasksController {
         if (form != null){
             if ( form.equals("ON")){
                 List<Task> tasks = taskService.formTasks(id);
-//                productionPlanService.formProductionPlans(tasks);
+                productionPlanService.formProductionPlans(tasks);
             }
         }
         return "redirect:/tasks/project_tasks/" + id;
@@ -66,15 +66,9 @@ public class TasksController {
 
             List<PartList> partLists = projectListService.getAllPartListsWithAmountOnProject(project.getProjectList());
             model.addAttribute("partLists", partLists);
-//            if (!partLists.isEmpty()){
-//                for (PartList partList: partLists){
-//                    System.out.println(partList.getPart().getNumber() + " - " + partList.getPart().getName() + " x " + partList.getAmount());
-//                }
-//            }
 
             List<AssemblyList> assemblyLists = projectListService.getAllAssemblyListsWithAmountOnProject(project.getProjectList());
             model.addAttribute("assemblyLists", assemblyLists);
-
 
             model.addAttribute("projectTasks", project.getTasks());
         });

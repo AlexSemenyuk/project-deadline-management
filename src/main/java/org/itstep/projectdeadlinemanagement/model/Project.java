@@ -2,9 +2,7 @@ package org.itstep.projectdeadlinemanagement.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 import org.itstep.projectdeadlinemanagement.command.ProjectCommand;
 
 import java.time.LocalDateTime;

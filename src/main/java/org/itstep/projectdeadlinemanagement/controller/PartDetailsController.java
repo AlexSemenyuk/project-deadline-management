@@ -2,7 +2,6 @@ package org.itstep.projectdeadlinemanagement.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.itstep.projectdeadlinemanagement.command.ProjectCommand;
 import org.itstep.projectdeadlinemanagement.model.*;
 import org.itstep.projectdeadlinemanagement.repository.CustomerRepository;
 import org.itstep.projectdeadlinemanagement.repository.ProjectConditionRepository;
@@ -12,14 +11,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("parts/part_details")
@@ -46,7 +40,7 @@ public class PartDetailsController {
         List<Task> tasks = partService.findTasks(project.getTasks(), partNumber);
         model.addAttribute("tasks", tasks);
 
-        String part = tasks.get(0).getPartNumber() + "-" + tasks.get(0).getPartName();
+        String part = tasks.get(0).getPartOrAssemblyNumber() + "-" + tasks.get(0).getPartOrAssemblyName();
         model.addAttribute("part", part);
 
         return "part_details";

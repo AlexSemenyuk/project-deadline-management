@@ -32,8 +32,8 @@ public class PartApiService {
         String partNameTMP = "";
         if (!tasks.isEmpty()){
             projectNumberTMP = tasks.get(0).getProjectNumber();
-            partNumberTMP = tasks.get(0).getPartNumber();
-            partNameTMP = tasks.get(0).getPartName();
+            partNumberTMP = tasks.get(0).getPartOrAssemblyNumber();
+            partNameTMP = tasks.get(0).getPartOrAssemblyName();
             int deadlineTmp = 0;
             int start;
             int deadline;
