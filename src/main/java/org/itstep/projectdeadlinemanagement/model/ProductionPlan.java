@@ -2,7 +2,9 @@ package org.itstep.projectdeadlinemanagement.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 
@@ -43,6 +45,7 @@ public class ProductionPlan {
         equipment.getProductionPlans().add(this);
         this.equipment = equipment;
     }
+
 
 }
 

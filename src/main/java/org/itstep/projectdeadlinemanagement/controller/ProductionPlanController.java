@@ -3,11 +3,14 @@ package org.itstep.projectdeadlinemanagement.controller;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.itstep.projectdeadlinemanagement.command.ChartEquipmentCommand;
+import org.itstep.projectdeadlinemanagement.command.ChartDaysCommand;
+import org.itstep.projectdeadlinemanagement.command.ChartMonthCommand;
+import org.itstep.projectdeadlinemanagement.command.ChartYearCommand;
 import org.itstep.projectdeadlinemanagement.command.ProductionPlanTermCommand;
 import org.itstep.projectdeadlinemanagement.model.ProductionPlan;
 import org.itstep.projectdeadlinemanagement.model.TaskCondition;
 import org.itstep.projectdeadlinemanagement.repository.*;
+import org.itstep.projectdeadlinemanagement.service.ChartService;
 import org.itstep.projectdeadlinemanagement.service.ProductionPlanService;
 import org.itstep.projectdeadlinemanagement.service.TimeService;
 import org.springframework.stereotype.Controller;
@@ -17,7 +20,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.Month;
 import java.util.*;
 
 @Controller
@@ -28,19 +30,19 @@ public class ProductionPlanController {
     private final ProductionPlanRepository productionPlanRepository;
     private final EquipmentRepository equipmentRepository;
     private final ProductionPlanService productionPlanService;
+    private final ChartService chartService;
     private final TaskConditionRepository taskConditionRepository;
 
-
-    private final LocalDate DATE = LocalDate.now();
 
     @GetMapping
     public String home(Model model, HttpSession session) {
 
-        if (session.getAttribute("tmp") == null && session.getAttribute("tmpDate") == null){
-            String currentDate = TimeService.formDate(DATE);
+        if (session.getAttribute("tmp") == null && session.getAttribute("tmpDate") == null) {
+            String currentDate = TimeService.formDate(TimeService.DATE);
 //            System.out.println("currentDate = " + currentDate);
             session.setAttribute("tmp", currentDate);
-            session.setAttribute("tmpDate", DATE);
+
+            session.setAttribute("tmpDate", TimeService.DATE);
         }
 
         formParameter(model, session, 1, 1);
@@ -60,32 +62,36 @@ public class ProductionPlanController {
         return "production_plans";
     }
 
-    private void formParameter(Model model, HttpSession session,  int dayNumber, int equipmentId) {
+    private void formParameter(Model model, HttpSession session, int dayNumber, int equipmentId) {
         model.addAttribute("currentDate", session.getAttribute("tmp"));
 
-        LocalDate dateForMonth = (LocalDate) session.getAttribute("tmpDate");
-        model.addAttribute("month", dateForMonth.getMonth());
+        LocalDate tmpDate = (LocalDate) session.getAttribute("tmpDate");
+        model.addAttribute("month", tmpDate.getMonth());
 
-        List<ProductionPlan> productionPlansPerCurrentMonth = productionPlanService.formPlansOfCurrentMonth(dateForMonth);
+        int monthValue = tmpDate.getMonthValue() - 1;
+        model.addAttribute("monthValue", monthValue);
+
+        // 1. productionPlans за год
+        List<ProductionPlan> productionPlansPerCurrentYear = productionPlanService.formPlansOfCurrentYear(tmpDate);
+
+        // 2. Выборка productionPlans за месяц
+        List<ProductionPlan> productionPlansPerCurrentMonth = productionPlanService.formPlansOfCurrentMonth(productionPlansPerCurrentYear, tmpDate);
         model.addAttribute("productionPlans", productionPlansPerCurrentMonth);
 
-        // Данные в общую таблицу
-        List<ChartEquipmentCommand> chartEquipmentCommands = productionPlanService.formChart(productionPlansPerCurrentMonth, dateForMonth);
-        model.addAttribute("chartEquipmentCommands", chartEquipmentCommands);
-        // Данные за день
-        List<ProductionPlan> productionPlansPerDay = chartEquipmentCommands.get(equipmentId - 1)
-                .getChartDaysCommands().get(dayNumber - 1).getProductionPlans();
-
+        // 3. Выборка productionPlans за день
+        List<ProductionPlan> productionPlansPerDay = productionPlanService.formPlansOfCurrentDate(productionPlansPerCurrentMonth, dayNumber, equipmentId);
+//        List<ProductionPlan> productionPlansPerDay = chartMonthCommands.get(equipmentId - 1)
+//                .getChartDaysCommands().get(dayNumber - 1).getProductionPlans();
         model.addAttribute("productionPlansPerDay", productionPlansPerDay);
 
-        String equipmentAndDayParameter = chartEquipmentCommands.get(equipmentId - 1)
-                .getEquipment() + ";" + dateForMonth.getMonth() + " , " + chartEquipmentCommands.get(equipmentId - 1)
-                .getChartDaysCommands().get(dayNumber - 1).getDayNumber();
+        // 4. Данные для таблиц-графиков за год
+        List<ChartYearCommand> chartYearCommands = chartService.formChart(productionPlansPerCurrentYear, tmpDate);
+        model.addAttribute("chartYearCommands", chartYearCommands);
 
+        // 5. Надпись для данных за день
+        String equipmentAndDayParameter = chartYearCommands.get(equipmentId - 1).getEquipment() +
+                "; " + tmpDate.getMonth() + " , " + dayNumber;
         model.addAttribute("parameter", equipmentAndDayParameter);
-
-        int planHoursPerMonth = TimeService.planHoursPerMonth(dateForMonth);
-        model.addAttribute("planHoursPerMonth", planHoursPerMonth);
 
     }
 
@@ -127,7 +133,7 @@ public class ProductionPlanController {
         Optional<TaskCondition> optionalTaskCondition =
                 taskConditionRepository.findById(productionPlanTermCommand.taskConditionId());
         if (optionalProductionPlan.isPresent() &&
-        optionalTaskCondition.isPresent()){
+                optionalTaskCondition.isPresent()) {
             ProductionPlan productionPlan = optionalProductionPlan.get();
 
             LocalDateTime currentStart = productionPlanTermCommand.currentStart();
@@ -141,7 +147,7 @@ public class ProductionPlanController {
     }
 
     private void formDateParameter(String month, HttpSession session) {
-        String [] dateTmp = month.split("-");
+        String[] dateTmp = month.split("-");
         LocalDate date = LocalDate.of(Integer.parseInt(dateTmp[0]), Integer.parseInt(dateTmp[1]), 1);
 //        System.out.println("month = " + month);
 //        System.out.println("date = " + date);

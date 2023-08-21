@@ -5,7 +5,9 @@ import java.time.LocalDateTime;
 
 public class TimeService {
 
+    public static final LocalDate DATE = LocalDate.now();
     public static final int HOURS_PER_DAY = 8;
+    public static final int AMOUNT_OF_MONTHS_IN_A_YEAR = 12;
 
     public static LocalDateTime localDateTimeAddDays(LocalDateTime start, int days){
         for (int i = 0; i < days - 1 ; i++) {

@@ -273,13 +273,6 @@ li.item_menu_sub{
     color: var(--text-primary);
 }
 
-/*.text_a:active{*/
-/*    text-decoration: none;*/
-/*    background-color: var(--color-text-secondary);*/
-/*    color: var(--color-text-secondary);*/
-
-/*}*/
-
 .instruction_item {
     font-size: 18px;
     font-weight: 400;
@@ -298,16 +291,6 @@ li.item_menu_sub{
     cursor: pointer;
 }
 
-/*.line {*/
-/*    width: 100%;*/
-/*}*/
-
-/*.main {*/
-/*    !*height: 85vh;*!*/
-/*    flex: 1 1 auto;*/
-/*}*/
-
-
 .btn {
     cursor: pointer;
     transition: transform 500ms ease;
@@ -317,5 +300,40 @@ li.item_menu_sub{
     transform: scale(1.03);
 }
 
+/*#numbered-list {*/
+/*    counter-reset: section; !* Сброс счетчика перед каждым списком ol *!*/
+/*    list-style-type: none; !* Убираем стандартную нумерацию *!*/
+/*    padding-left: 0; !* Убрать внутренний отступ у списка *!*/
 
+/*    !*list-style: none;*!*/
+/*    !*counter-reset: section; !* Сброс счетчика *!*!*/
+/*    !*padding-left: 0; !* *!*/
+/*}*/
+
+/*#numbered-list {*/
+/*    counter-increment: section; !* Увеличиваем счетчик для каждого пункта li *!*/
+/*}*/
+
+/*#numbered-list > li::before {*/
+/*    content: counters(section, ".") " "; !* Использование счетчика с разделителем *!*/
+/*}*/
+
+#sublist {
+    list-style-type: lower-alpha;
+    /*list-style: none;*/
+    margin-left: 20px; /* Отступ для подпунктов */
+    padding-left: 0; /* Убрать внутренний отступ у подсписка */
+}
+
+/*#sublist > li {*/
+/*    counter-reset: subsection; !* Сброс счетчика для подпунктов *!*/
+/*}*/
+
+/*#sublist > li::before {*/
+/*    !*content: counters(section, ".") " "; !* Вставляем значение счетчика перед каждым пунктом *!*!*/
+/*    !*font-weight: bold; !* Делаем нумерацию жирной *!*!*/
+/*    counter-increment: subsection;*/
+/*    content: counters(section, ".") "." counters(subsection, ".") " ";*/
+/*    !* Увеличение счетчика подпунктов *!*/
+/*}*/
 

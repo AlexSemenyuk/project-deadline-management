@@ -63,12 +63,9 @@
                     </li>
                     <li class="item_menu">
                         <a class="link_menu" th:href="@{/production_plans}">План виробництва</a>
-                        <ul class="list_menu_sub">
-                            <li  class="item_menu_sub">
-                                <a class="link_menu_sub_active" href="">Щодо обладнання</a>
-                            </li>
-
-                        </ul>
+                    </li>
+                    <li class="item_menu">
+                        <a class="link_menu_active" th:href="@{/equipment_plans}">Показники</a>
                     </li>
                 </ul>
             </div>
@@ -76,186 +73,81 @@
             <div class="free col-xl-10" >
                 <div class="row">
                     <div class="col-xl-10">
-                        <h2 class="text_h m-0" th:text="'Завантаження обладнання протягом звітного періоду (' + ${month} + ')'"></h2>
+                        <h2 class="text_h m-0" th:text="'Фактичне завантаження обладнання на протягом звітного періоду (' + ${year} + 'р.)'"></h2>
                     </div>
                     <div class="col-xl-2">
                         <form method="post" class="px-2">
                             <label class="form-label d-block me-1">
                                 <input class="form-control bg-white border-3 rounded-0"
                                        id="dateInput"
-                                       type="month" th:name="${equipmentId}" th:value="${currentDate}">
+                                       type="month" th:value="${currentDate}">
                             </label>
                             <input id="csrfToken" th:name="${_csrf.parameterName}" type="hidden" th:value="${_csrf.token}">
                         </form>
                     </div>
                     <div class="col-xl-12">
+                        <table class="table_sm table table-striped  table-bordered border-secondary-subtle">
+                            <thead>
+                                <tr>
+                                    <th class="text_n1 text-center p-0" rowspan="2">Обладнання</th>
+                                    <th class="text_n1 text-center p-0" colspan="12">Місяці</th>
+                                    <th class="text_n1 text-center p-0" colspan="5">Рік</th>
+                                </tr>
+
+                                <tr>
+                                    <th class="text_n1 text-center p-0"
+                                        th:each="chartMonth: ${chartYearCommands[0].chartMonthCommands}"
+                                        th:text="${chartMonth.monthNumber}">
+                                    </th>
+                                    <th class="text_n1 text-center m-0 p-0 px-1"  style="background-color: yellow" >П(г)</th>
+                                    <th class="text_n1 text-center m-0 p-0 px-1"  style="background-color: yellow" >Ф(г)</th>
+                                    <th class="text_n1 text-center m-0 p-0 px-1"  style="background-color: limegreen" >Ф(%)</th>
+                                    <th class="text_n1 text-center m-0 p-0 px-1" style="background-color: yellow" >ПВЗ(%)</th>
+                                    <th class="text_n1 text-center m-0 p-0 px-1" style="background-color: limegreen">ФВЗ(%)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="chartE: ${chartYearCommands}">
+                                    <td class="text_n ty p-0" th:text="${chartE.equipment}"></td>
+                                    <th class="text_b tx text-center p-0"
+                                        th:each="chartMonth: ${chartE.chartMonthCommands}" >
+                                        <a class="text_b tx p-0" th:text="${chartMonth.factPercentsPerMonth}"
+                                           th:href="@{/equipment_plans/{id}(id=${chartE.equipmentId + ':' + chartMonth.monthNumber})}"/>
+                                    </th>
+                                    <th class="text_n tx text-center p-0" style="background-color: yellow" th:text="${chartE.planHoursPerYear}"></th>
+                                    <th class="text_n tx text-center p-0" style="background-color: yellow" th:text="${chartE.factHoursPerYear}"></th>
+                                    <th class="text_n tx text-center p-0" style="background-color: limegreen" th:text="${chartE.factPercentsPerYear}"></th>
+                                    <th class="text_n tx text-center p-0" style="background-color: yellow"  th:text="${chartE.planForPlanDoneOnTheCurrentDatePerYear}"></th>
+                                    <th class="text_n tx text-center p-0" style="background-color: limegreen"  th:text="${chartE.factForPlanDonePerYear}"></th>
+                                </tr>
+                            </tbody>
+                        </table>
                         <ol class="text_h1">
                             Примітка
-                            <li class="text_p1">
-                                <div class="col-xl-12">
-                                    <details open>
-                                        <summary class="sum-item" th:text="'План виробництва на місяць (' + ${month} + ')'"></summary>
-<!--                                        <div th:if="${productionPlansPerDay != null}">-->
-                                            <table class="table_sm table table-striped  table-bordered border-secondary-subtle">
-                                                <thead>
-                                                <tr>
-                                                    <th class="text_n1 text-center p-0" >Equipment</th>
-<!--                                                    <th class="text_n1 px-1 text-center py-0"-->
-<!--                                                        th:each="d: ${chartEquipmentCommand.chartDaysCommands}"-->
-<!--                                                        th:text="${d.dayNumber.getDayOfMonth()}" >-->
-<!--                                                    </th>-->
-                                                    <th class="text_n1 text-center p-0" th:each="d: ${chartEquipmentCommand.chartDaysCommands}"
-                                                        th:switch="${d.dayNumber.dayOfWeek.toString()}">
-                                                        <p class="text_n1 th text-center m-0" th:case="SUNDAY" th:text="${d.dayNumber.dayOfMonth}"></p>
-                                                        <p class="text_n1 th text-center m-0" th:case="SATURDAY" th:text="${d.dayNumber.dayOfMonth}"></p>
-                                                        <p class="text_n1 text-center m-0"  th:case="*" th:text="${d.dayNumber.dayOfMonth}"></p>
-                                                    </th>
-                                                    <th class="text_n1 text-center m-0 p-0 px-1"  style="background-color: sandybrown" >Ф</th>
-                                                    <th class="text_n1 text-center m-0 p-0 px-1"  style="background-color: yellow" >О</th>
-                                                    <th class="text_n1 text-center m-0 p-0 px-1" style="background-color: limegreen" >В</th>
-                                                    <th class="text_n1 text-center m-0 p-0 px-1" style="background-color: turquoise">П</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                <tr>
-                                                    <td class="text_b tx">
-                                                        <a class="text_b tx" th:text="${chartEquipmentCommand.equipment}"
-                                                           th:href="@{/production_plans/equipment_plans/{id}(id=${chartEquipmentCommand.equipmentId})}"/>
-                                                    </td>
-                                                    <td class="text_a tx text-center p-0" th:each="day: ${chartEquipmentCommand.chartDaysCommands}"
-                                                        th:switch="${day.dayNumber.dayOfWeek.toString()}">
-                                                        <a class="text_n tm"
-                                                           th:text="${'-'}"
-                                                           th:case="SUNDAY"
-                                                           th:href="@{/production_plans/equipment_plans/{id}/day/{dayNumber}(id=${equipmentId}, dayNumber=${day.dayNumber.getDayOfMonth()})}"/>
-                                                        <a class="text_n tm"
-                                                           th:text="${'-'}"
-                                                           th:case="SATURDAY"
-                                                           th:href="@{/production_plans/equipment_plans/{id}/day/{dayNumber}(id=${equipmentId}, dayNumber=${day.dayNumber.getDayOfMonth()})}"/>
-                                                        <a class="text_a tx"
-                                                           th:text="${day.planPerDay}"
-                                                           th:case="*"
-                                                           th:style="${'color: ' + day.dayColor + ';'}"
-                                                           th:href="@{/production_plans/equipment_plans/{id}/day/{dayNumber}(id=${equipmentId}, dayNumber=${day.dayNumber.getDayOfMonth()})}"/>
-                                                    </td>
-                                                    <th class="text_n tx text-center p-0" style="background-color: sandybrown" th:text="${chartEquipmentCommand.factHoursPerMonth}"></th>
-                                                    <th class="text_n tx text-center p-0" style="background-color: yellow" th:text="${chartEquipmentCommand.planFromTheTotal}"></th>
-                                                    <th class="text_n tx text-center p-0" style="background-color: limegreen"  th:text="${chartEquipmentCommand.doneFromPlan}"></th>
-                                                    <th class="text_n tx text-center p-0" style="background-color: turquoise"  th:text="${chartEquipmentCommand.planForTheCurrentDate}"></th>
-
-                                                </tr>
-                                                </tbody>
-                                            </table>
-                                        <ol class="text_h1">
-                                            Примітка
-                                            <li class="text_p m-0">
-                                                <p class="m-0" th:text="${'Планове завантаження обладнання на місяць (П = ' + planHoursPerMonth + 'години / годин)'}"></p>
-                                            </li>
-                                            <li class="text_p m-0">
-                                                <p class="m-0">Ф - Фактичне завантаження обладнання на місяць (годин)</p>
-                                            </li>
-                                            <li class="text_p m-0">
-                                                <p class="m-0">О - Відсоток завантаження обладнання на місяць</p>
-                                            </li>
-                                            <li class="text_p m-0">
-                                                <p class="text_p m-0">В - Відсоток виконаних завдань щодо їх планової кількості</p>
-                                            </li>
-                                            <li class="text_p m-0">
-                                                <p class="text_p m-0">П - Плановий відсоток виконаних завдань на поточну дату</p>
-                                            </li>
-                                        </ol>
-                                            <table id="example1" class="table_sm table table-striped table-hover table-bordered border-secondary-subtle">
-                                                <thead>
-                                                <tr>
-                                                    <th class="text_n1 col-xl-1 px-1 text-center ">Id</th>
-                                                    <th class="text_n1 col-xl-1 text-center ">Номер проекту</th>
-                                                    <th class="text_n1 col-xl-1 text-center ">Обладнання</th>
-                                                    <th class="text_n1 col-xl-1 text-center ">Деталь</th>
-                                                    <th class="text_n1 col-xl-1 text-center ">Черга на обладнання</th>
-                                                    <th class="text_n1 col-xl-1 text-center ">Номер операції</th>
-                                                    <th class="text_n1 col-xl-1 text-center ">Час операції</th>
-                                                    <th class="text_n1 col-xl-1 text-center ">Номер партії</th>
-                                                    <th class="text_n1 col-xl-1 text-center ">Поточний час</th>
-                                                    <th class="text_n1 col-xl-1 text-center ">Початок виробництва</th>
-                                                    <th class="text_n1 col-xl-1 text-center ">Стан</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                <tr th:each="p: ${productionPlans}">
-                                                    <td class="text_a ty col-xl-1 text-center " th:text="${p.id}"></td>
-                                                    <!--                                                    <td class="text_n col-xl-1 text-center " th:text="${p.task.projectNumber}"></td>-->
-                                                    <td class="text_b tx col-xl-1 text-center">
-                                                        <a class="text_b tx" th:text="${p.task.projectNumber}"
-                                                           th:href="@{/projects/details/{id}(id=${p.task.projectNumber})}"/>
-                                                    </td>
-                                                    <td class="text_a ty col-xl-1 px-1 " th:text="${p.equipment.number + '-' + p.equipment.name}"></td>
-                                                    <!--                                                    <td class="text_n col-xl-1 px-1" th:text="${p.task.partNumber + '-' + p.task.partName}"></td>-->
-                                                    <td class="text_b tx col-xl-1 px-1">
-                                                        <a class="text_b tx " th:text="${p.task.partNumber + '-' + p.task.partName}"
-                                                           th:href="@{/parts/part_details/{id}(id=${p.task.projectNumber + ':' + p.task.partNumber})}"/>
-                                                    </td>
-                                                    <td class="text_a ty col-xl-1 text-center " th:text="${p.number}"></td>
-                                                    <td class="text_a ty col-xl-1 text-center " th:text="${p.task.termNumber}"></td>
-                                                    <td class="text_a ty col-xl-1 text-center " th:text="${p.task.operationTime}"></td>
-                                                    <td class="text_a ty col-xl-1 text-center " th:text="${p.task.lotNumber}"></td>
-                                                    <td class="text_a ty col-xl-1 text-center " th:text="${p.currentStart}"></td>
-                                                    <td class="text_a ty col-xl-1 text-center " th:text="${p.task.startProduction}"></td>
-                                                    <td class="text_a ty col-xl-1 text-center " th:text="${p.task.taskCondition.name}"></td>
-                                                </tr>
-                                                </tbody>
-                                            </table>
-<!--                                        </div>-->
-                                    </details>
-                                </div>
+                            <li class="text_p m-0">
+                                <p class="m-0">П(г) - Планове завантаження обладнання на місяць (годин(и))</p>
                             </li>
-                            <li class="text_p1">
-                                <div class="col-xl-12">
-                                    <details>
-                                        <summary class="sum-item" th:text="'План виробництва на день (' + ${parameter} + ')'"></summary>
-                                        <div th:if="${productionPlansPerDay != null}">
-                                            <table id="example" class="table_sm table table-striped table-hover table-bordered border-secondary-subtle">
-                                                <thead>
-                                                <tr>
-                                                    <th class="text_n1 col-xl-1 px-1 text-center ">Id</th>
-                                                    <th class="text_n1 col-xl-1 text-center ">Номер проекту</th>
-                                                    <th class="text_n1 col-xl-1 text-center ">Обладнання</th>
-                                                    <th class="text_n1 col-xl-1 text-center ">Деталь</th>
-                                                    <th class="text_n1 col-xl-1 text-center ">Черга на обладнання</th>
-                                                    <th class="text_n1 col-xl-1 text-center ">Номер операції</th>
-                                                    <th class="text_n1 col-xl-1 text-center ">Час операції</th>
-                                                    <th class="text_n1 col-xl-1 text-center ">Номер партії</th>
-                                                    <th class="text_n1 col-xl-1 text-center ">Поточний час</th>
-                                                    <th class="text_n1 col-xl-1 text-center ">Початок виробництва</th>
-                                                    <th class="text_n1 col-xl-1 text-center ">Стан</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                <tr th:each="planCommand: ${productionPlansPerDay}">
-                                                    <td class="text_a ty col-xl-1 text-center " th:text="${planCommand.id}"></td>
-<!--                                                    <td class="text_n col-xl-1 text-center " th:text="${planCommand.task.projectNumber}"></td>-->
-                                                    <td class="text_b tx col-xl-1 text-center">
-                                                        <a class="text_b tx" th:text="${planCommand.task.projectNumber}"
-                                                           th:href="@{/projects/details/{id}(id=${planCommand.task.projectNumber})}"/>
-                                                    </td>
-                                                    <td class="text_a ty col-xl-1 px-1 " th:text="${planCommand.equipment.number + '-' + planCommand.equipment.name}"></td>
-<!--                                                    <td class="text_n col-xl-1 px-1" th:text="${planCommand.task.partNumber + '-' + planCommand.task.partName}"></td>-->
-                                                    <td class="text_b tx col-xl-1 px-1">
-                                                        <a class="text_b tx " th:text="${planCommand.task.partNumber + '-' + planCommand.task.partName}"
-                                                           th:href="@{/parts/part_details/{id}(id=${planCommand.task.projectNumber + ':' + planCommand.task.partNumber})}"/>
-                                                    </td>
-                                                    <td class="text_a ty col-xl-1 text-center " th:text="${planCommand.number}"></td>
-                                                    <td class="text_a ty col-xl-1 text-center " th:text="${planCommand.task.termNumber}"></td>
-                                                    <td class="text_a ty col-xl-1 text-center " th:text="${planCommand.task.operationTime}"></td>
-                                                    <td class="text_a ty col-xl-1 text-center " th:text="${planCommand.task.lotNumber}"></td>
-                                                    <td class="text_a ty col-xl-1 text-center " th:text="${planCommand.currentStart}"></td>
-                                                    <td class="text_a ty col-xl-1 text-center " th:text="${planCommand.task.startProduction}"></td>
-                                                    <td class="text_a ty col-xl-1 text-center " th:text="${planCommand.task.taskCondition.name}"></td>
-                                                </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </details>
-                                </div>
+                            <li class="text_p m-0">
+                                <p class="m-0">Ф(г) - Фактичне завантаження обладнання на місяць (годин(и))</p>
+                            </li>
+                            <li class="text_p m-0">
+                                <p class="m-0">Ф(%) - Фактичне завантаження обладнання на місяць (відсоток)</p>
+                            </li>
+                            <li class="text_p m-0">
+                                <p class="text_p m-0">ПВЗ(%) - План  виконаних завдань на поточну дату (відсоток)</p>
+                            </li>
+                            <li class="text_p m-0">
+                                <p class="text_p m-0">ФВЗ(%) - Факт виконаних завдань щодо їх планової кількості (відсоток)</p>
+                            </li>
+                            <li class="text_p m-0">
+                                <details>
+                                    <summary class="sum-item" th:text="${'Показники обладнання за місяць (' + equipmentValue + ', ' + month + ')'}"></summary>
+                                    <p class=" m-0" th:text="${'П(г) = ' + planHoursPerMonth + ' годин(и)'}"></p>
+                                    <p class=" m-0" th:text="${'Ф(г) = ' + factHoursPerMonth + ' годин(и)'}"></p>
+                                    <p class=" m-0" th:text="${'Ф(%) = ' + factPercentsPerMonth + ' %'}"></p>
+                                    <p class=" m-0" th:text="${'ПВЗ(%) = ' + planForPlanDoneOnTheCurrentDatePerMonth + ' %'}"></p>
+                                    <p class=" m-0" th:text="${'ФВЗ(%) = ' + factForPlanDonePerMonth + ' %'}"></p>
+                                </details>
                             </li>
                         </ol>
                     </div>
@@ -293,12 +185,12 @@
     function sendDataToServer() {
         const selectedDate = dateInput.value;
         const csrfToken = csrfTokenInput.value;
-        const id = dateInput.getAttribute("name");
-        console.log("id = " + id);
+        // const id = dateInput.getAttribute("name");
+        // console.log("id = " + id);
         console.log("selectedDate = " + selectedDate);
-        const url = "/production_plans/equipment_plans/" + id + "/date/" + selectedDate;
+        const url = "/equipment_plans/date/" + selectedDate;
         console.log("selectedDate = " + selectedDate);
-        fetch(`/production_plans/equipment_plans/${id}/date/${selectedDate}`, {
+        fetch(`/equipment_plans/date/${selectedDate}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',

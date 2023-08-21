@@ -130,7 +130,7 @@ public class InitDatabase implements CommandLineRunner {
         // Project 1001
         addProject(new ProjectCommand(
                 1001, null, 1,
-                LocalDateTime.parse("2023-07-25T00:00"), LocalDateTime.parse("2023-08-20T00:00"),
+                LocalDateTime.parse("2023-07-25T00:00"), LocalDateTime.parse("2023-09-12T00:00"),
                 1));
         addDesignTerm(1, 7);                                      // DesignTerm
         addAssemblyListToProject(1, new AssemblyListCommand(1, 2));     // ProjectLists
@@ -181,7 +181,7 @@ public class InitDatabase implements CommandLineRunner {
                 LocalDateTime.parse("2023-08-15T00:00"),
                 1));
 //
-//        productionPlanService.formProductionPlans(taskService.formTasks(1));
+        productionPlanService.formProductionPlans(taskService.formTasks(1));
 
 
         // Project 1002
