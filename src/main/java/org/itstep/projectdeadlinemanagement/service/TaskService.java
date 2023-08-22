@@ -22,11 +22,11 @@ public class TaskService {
     private final EquipmentRepository equipmentRepository;
     private final ProjectListService projectListService;
 
-    public List<Task> formTasks(Integer id) {
+    public List<Task> formTasks(Integer projectId) {
 
         List<Task> partTasks = new CopyOnWriteArrayList<>();
         List<Task> assemblyTasks = new CopyOnWriteArrayList<>();
-        Optional<Project> optionalProject = projectRepository.findById(id);
+        Optional<Project> optionalProject = projectRepository.findById(projectId);
 
         if (optionalProject.isPresent()) {
             Project project = optionalProject.get();
@@ -77,7 +77,7 @@ public class TaskService {
                     task.setProject(project);
                     tasks.add(task);
                     start = TimeService.localDateTimeAddHours(start, technologyPart.getOperationTime());
-                    start = start.plusHours(technologyPart.getOperationTime());
+//                    start = start.plusHours(technologyPart.getOperationTime());
                 }
             }
         }
@@ -114,7 +114,7 @@ public class TaskService {
                     task.setProject(project);
                     tasks.add(task);
                     start = TimeService.localDateTimeAddHours(start, technologyAssembly.getOperationTime());
-                    start = start.plusHours(technologyAssembly.getOperationTime());
+//                    start = start.plusHours(technologyAssembly.getOperationTime());
                 }
             }
         }
@@ -153,98 +153,6 @@ public class TaskService {
     }
 
 
-    public void getAllListsWithAmountOnProject(ProjectList projectList) {
-        System.out.println(" Проект");
-        int count;
-        List<AssemblyList> assemblyLists = projectList.getAssemblyLists();
-        List<AssemblyList> rezultAssemblyLists = new CopyOnWriteArrayList<>();
-        List<PartList> rezultPartLists = new CopyOnWriteArrayList<>();
-
-        if (!assemblyLists.isEmpty()) {
-            for (AssemblyList assemblyList : assemblyLists) {
-                Assembly assembly = assemblyList.getAssembly();
-                count = assemblyList.getAmount();
-                extractAllLists(assembly.getAssemblyListsEntry(), rezultAssemblyLists, rezultPartLists, count);
-
-                AssemblyList newAssemblyList = new AssemblyList();
-                newAssemblyList.setId(assemblyList.getId());
-                newAssemblyList.setAssembly(assemblyList.getAssembly());
-                newAssemblyList.setAmount(assemblyList.getAmount());
-                System.out.println("Сборки projectList = " + newAssemblyList.getAssembly().getNumber() + " - " +
-                                    newAssemblyList.getAssembly().getName() + " x " + newAssemblyList.getAmount());
-                rezultAssemblyLists.add(assemblyList);
-
-                if (!assembly.getPartLists().isEmpty()){
-                    for (PartList partList: assembly.getPartLists()){
-                        int amountTmp = partList.getAmount();
-//                        System.out.println("partList2-1 = " + partList.getPart().getNumber() + " - " +
-//                                partList.getPart().getName() + " x " + partList.getAmount());
-                        PartList newPartList = new PartList();
-                        newPartList.setId(partList.getId());
-                        newPartList.setPart(partList.getPart());
-                        newPartList.setAmount(amountTmp * count);
-                        System.out.println("Детали сборок projectList = " + newPartList.getPart().getNumber() + " - " +
-                                newPartList.getPart().getName() + " x " + newPartList.getAmount());
-                        rezultPartLists.add(newPartList);
-                    }
-                }
-            }
-        }
-        System.out.println("Детали projectList");
-        if (!projectList.getPartLists().isEmpty()){
-            for (PartList partList: projectList.getPartLists()){
-
-                PartList newPartList = new PartList();
-                newPartList.setId(partList.getId());
-                newPartList.setPart(partList.getPart());
-                newPartList.setAmount(partList.getAmount());
-                System.out.println("Детали projectList = " + partList.getPart().getNumber() + " - " +
-                        partList.getPart().getName() + " x " +partList.getAmount());
-                rezultPartLists.add(newPartList);
-            }
-        }
-    }
-
-    private void extractAllLists(List<AssemblyList> assemblyLists, List<AssemblyList> rezultAssemblyLists, List<PartList> rezultPartLists, int count) {
-        int countLocal;
-        if (!assemblyLists.isEmpty()) {
-            for (AssemblyList assemblyList : assemblyLists) {
-                countLocal = count * assemblyList.getAmount();
-                Assembly assembly = assemblyList.getAssembly();
-                List<AssemblyList> assemblies = assemblyList.getAssembly().getAssemblyListsEntry();
-                if (!assembly.getAssemblyListsEntry().isEmpty()) {
-                    extractAllLists(assemblies, rezultAssemblyLists, rezultPartLists,  countLocal);
-                }
-
-                int amountAssemblyTmp = assemblyList.getAmount();
-
-                AssemblyList newAssemblyList = new AssemblyList();
-                newAssemblyList.setId(assemblyList.getId());
-                newAssemblyList.setAssembly(assemblyList.getAssembly());
-                newAssemblyList.setAmount(amountAssemblyTmp * count);
-
-                System.out.println("Входящая сборка = " + newAssemblyList.getAssembly().getNumber() + " - " +
-                        newAssemblyList.getAssembly().getName() + " x " + newAssemblyList.getAmount());
-                rezultAssemblyLists.add(newAssemblyList);
-
-                if (!assembly.getPartLists().isEmpty()){
-                    for (PartList partList: assembly.getPartLists()){
-                        int amountPartTmp = partList.getAmount();
-//                        System.out.println("partList3-1 = " + partList.getPart().getNumber() + " - " +
-//                                partList.getPart().getName() + " x " +partList.getAmount());
-                        PartList newPartList = new PartList();
-                        newPartList.setId(partList.getId());
-                        newPartList.setPart(partList.getPart());
-                        newPartList.setAmount(amountPartTmp * countLocal);
-
-                        System.out.println("Входящая деталь = " + newPartList.getPart().getNumber() + " - " +
-                                newPartList.getPart().getName() + " x " +newPartList.getAmount());
-                        rezultPartLists.add(newPartList);
-                    }
-                }
-            }
-        }
-    }
 
 }
 

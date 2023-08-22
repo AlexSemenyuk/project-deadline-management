@@ -130,21 +130,17 @@ public class InitDatabase implements CommandLineRunner {
         // Project 1001
         addProject(new ProjectCommand(
                 1001, null, 1,
-                LocalDateTime.parse("2023-07-25T00:00"), LocalDateTime.parse("2023-09-12T00:00"),
-                1));
-        addDesignTerm(1, 7);                                      // DesignTerm
-        addAssemblyListToProject(1, new AssemblyListCommand(1, 2));     // ProjectLists
-        addAssemblyListToProject(1, new AssemblyListCommand(4, 2));
-        addPartListToProject(1, new PartListCommand(5, 1));
-        addPartListToProject(1, new PartListCommand(6, 2));
+                LocalDateTime.parse("2023-06-05T00:00"), LocalDateTime.parse("2023-06-29T00:00"),
+                4));
+        addDesignTerm(1, 5);                                                   // DesignTerm
+        addAssemblyListToProject(1, new AssemblyListCommand(2, 2));     // ProjectLists
+        addAssemblyListToProject(1, new AssemblyListCommand(3, 2));
+
+
+        addPartListToProject(1, new PartListCommand(7, 1));
+        addPartListToProject(1, new PartListCommand(8, 2));
 
         // TermPart
-        createTechnologyPart(new TechnologyPartCommand(1, 1, 1, 5));
-        createTechnologyPart(new TechnologyPartCommand(1, 2, 3, 3));
-
-        createTechnologyPart(new TechnologyPartCommand(2, 1, 1, 7));
-        createTechnologyPart(new TechnologyPartCommand(2, 2, 3, 8));
-
         createTechnologyPart(new TechnologyPartCommand(3, 1, 1, 3));
         createTechnologyPart(new TechnologyPartCommand(3, 2, 2, 2));
 
@@ -158,30 +154,83 @@ public class InitDatabase implements CommandLineRunner {
         createTechnologyPart(new TechnologyPartCommand(6, 1, 1, 4));
         createTechnologyPart(new TechnologyPartCommand(6, 2, 3, 2));
 
+        createTechnologyPart(new TechnologyPartCommand(7, 1, 1, 4));
+        createTechnologyPart(new TechnologyPartCommand(7, 2, 2, 3));
+        createTechnologyPart(new TechnologyPartCommand(7, 3, 3, 5));
+
+        createTechnologyPart(new TechnologyPartCommand(8, 1, 1, 4));
+        createTechnologyPart(new TechnologyPartCommand(8, 2, 3, 3));
+
+        createTechnologyAssembly(new TechnologyAssemblyCommand(2, 1, 4, 1));
+        createTechnologyAssembly(new TechnologyAssemblyCommand(3, 1, 4, 4));
+
+        addTechnologyTerm(1, 5);                               // TechnologyTerm
+
+        addContract(1, new ContractCommand(                                   // Contracts
+                "№10000-1", "Закупка металла",
+                LocalDateTime.parse("2023-06-08T00:00"),
+                LocalDateTime.parse("2023-06-14T00:00"),
+                1));
+        addContract(1, new ContractCommand(
+                "№10000-2", "Закупка металла",
+                LocalDateTime.parse("2023-06-09T00:00"),
+                LocalDateTime.parse("2023-06-15T00:00"),
+                1));
+        addContract(1, new ContractCommand(
+                "№10000-3", "Закупка металла",
+                LocalDateTime.parse("2023-06-09T00:00"),
+                LocalDateTime.parse("2023-06-18T00:00"),
+                1));
+
+        productionPlanService.formProductionPlans(taskService.formTasks(1));
+        changeProjectCondition(1,4);
+        changeTaskCondition(1);
+
+
+        // Project 1002
+        addProject(new ProjectCommand(
+                1002, null, 1,
+                LocalDateTime.parse("2023-07-25T00:00"), LocalDateTime.parse("2023-09-12T00:00"),
+                1));
+        addDesignTerm(2, 7);                                      // DesignTerm
+        addAssemblyListToProject(2, new AssemblyListCommand(1, 2));     // ProjectLists
+        addAssemblyListToProject(2, new AssemblyListCommand(4, 2));
+        addPartListToProject(2, new PartListCommand(5, 1));
+        addPartListToProject(2, new PartListCommand(6, 2));
+
+        // TermPart
+        createTechnologyPart(new TechnologyPartCommand(1, 1, 1, 5));
+        createTechnologyPart(new TechnologyPartCommand(1, 2, 3, 3));
+
+        createTechnologyPart(new TechnologyPartCommand(2, 1, 1, 7));
+        createTechnologyPart(new TechnologyPartCommand(2, 2, 3, 8));
+
         createTechnologyAssembly(new TechnologyAssemblyCommand(1, 1, 4, 2));
         createTechnologyAssembly(new TechnologyAssemblyCommand(2, 1, 4, 1));
         createTechnologyAssembly(new TechnologyAssemblyCommand(3, 1, 4, 4));
         createTechnologyAssembly(new TechnologyAssemblyCommand(4, 1, 4, 3));
 
-        addTechnologyTerm(1, 7);                               // TechnologyTerm
+        addTechnologyTerm(2, 7);                               // TechnologyTerm
 
-        addContract(1, new ContractCommand(                                   // Contracts
-                "№10000-1", "Закупка металла",
+        addContract(2, new ContractCommand(                                   // Contracts
+                "№10000-4", "Закупка металла",
                 LocalDateTime.parse("2023-08-04T00:00"),
                 LocalDateTime.parse("2023-08-14T00:00"),
                 1));
-        addContract(1, new ContractCommand(
-                "№10000-2", "Закупка металла",
+        addContract(2, new ContractCommand(
+                "№10000-5", "Закупка металла",
                 LocalDateTime.parse("2023-08-05T00:00"),
                 LocalDateTime.parse("2023-08-11T00:00"),
                 1));
-        addContract(1, new ContractCommand(
-                "№10000-3", "Закупка металла",
+        addContract(2, new ContractCommand(
+                "№10000-6", "Закупка металла",
                 LocalDateTime.parse("2023-08-09T00:00"),
                 LocalDateTime.parse("2023-08-15T00:00"),
                 1));
 //
-        productionPlanService.formProductionPlans(taskService.formTasks(1));
+        productionPlanService.formProductionPlans(taskService.formTasks(2));
+
+
 
 
         // Project 1002
@@ -256,6 +305,8 @@ public class InitDatabase implements CommandLineRunner {
     }
 
 
+
+
     private void addDivision(DivisionCommand command) {
         Optional<DivisionType> optionalDivisionType = divisionTypeRepository.findById(command.divisionTypeId());
         optionalDivisionType.ifPresent(divisionType -> {
@@ -321,8 +372,8 @@ public class InitDatabase implements CommandLineRunner {
         }
     }
 
-    private void addAssemblyListToProject(Integer projectTd, AssemblyListCommand command) {
-        Optional<Project> optionalProject = projectRepository.findById(projectTd);
+    private void addAssemblyListToProject(Integer projectId, AssemblyListCommand command) {
+        Optional<Project> optionalProject = projectRepository.findById(projectId);
         Optional<Assembly> optionalAssembly = assemblyRepository.findById(command.assemblyId());
         if (optionalProject.isPresent() && optionalAssembly.isPresent()) {
             ProjectList projectList = optionalProject.get().getProjectList();
@@ -335,8 +386,8 @@ public class InitDatabase implements CommandLineRunner {
         }
     }
 
-    private void addPartListToProject(Integer projectTd, PartListCommand command) {
-        Optional<Project> optionalProject = projectRepository.findById(projectTd);
+    private void addPartListToProject(Integer projectId, PartListCommand command) {
+        Optional<Project> optionalProject = projectRepository.findById(projectId);
         Optional<Part> optionalPart = partRepository.findById(command.partId());
         if (optionalProject.isPresent() && optionalPart.isPresent()){
             ProjectList projectList = optionalProject.get().getProjectList();
@@ -404,6 +455,36 @@ public class InitDatabase implements CommandLineRunner {
             contract.setProject(project);
             contractRepository.save(contract);
         }
+    }
+
+    private void changeProjectCondition(int projectId, int projectConditionId) {
+        Optional<Project> optionalProject = projectRepository.findById(projectId);
+        Optional<ProjectCondition> optionalProjectCondition = projectConditionRepository.findById(projectConditionId);
+
+        if (optionalProject.isPresent() && optionalProjectCondition.isPresent()){
+            Project project = optionalProject.get();
+            ProjectCondition projectCondition = optionalProjectCondition.get();
+            project.setProjectCondition(projectCondition);
+            projectRepository.save(project);
+        }
+
+    }
+    private void changeTaskCondition(int projectId) {
+        Optional<Project> optionalProject = projectRepository.findById(projectId);
+        Optional<TaskCondition> optionalTaskCondition = taskConditionRepository.findById(6);
+
+        if (optionalProject.isPresent() && optionalTaskCondition.isPresent()){
+            Project project = optionalProject.get();
+            TaskCondition taskCondition = optionalTaskCondition.get();
+            if (project.getProjectCondition().getName().equals("Archive")){
+                if (!project.getTasks().isEmpty()){
+                    for (Task task: project.getTasks()){
+                        task.setTaskCondition(taskCondition);
+                    }
+                }
+            }
+        }
+
     }
 }
 

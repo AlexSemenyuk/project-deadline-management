@@ -102,6 +102,10 @@ public class ProductionPlanService {
                                         currentDeadlineTmp[0] = currentDeadlineTmp[1];
                                     }
                                 }
+                                // Коррекция по StartProduction, в зависимости от design, technology and contract
+                                if (plan.getTask().getStartProduction().isAfter(currentDeadlineTmp[0])) {
+                                    currentDeadlineTmp[0] = plan.getTask().getStartProduction();
+                                }
                             } else {                                    // Если нет очереди - дата task
                                 currentDeadlineTmp[0] = plan.getTask().getStartProduction();
                                 currentDeadlineTmp[0] = TimeService.excludeWeekend(currentDeadlineTmp[0]);
@@ -164,22 +168,22 @@ public class ProductionPlanService {
         int month = date.getMonthValue();
 
         List<ProductionPlan> plansOfCurrentMonth = new CopyOnWriteArrayList<>();
-       if (!productionPlansPerCurrentYear.isEmpty()){
-           productionPlansPerCurrentYear.forEach(plan -> {
-               if (plan.getCurrentStart().getMonthValue() == month ) {
-                   plansOfCurrentMonth.add(plan);
-               }
-           });
-       }
+        if (!productionPlansPerCurrentYear.isEmpty()) {
+            productionPlansPerCurrentYear.forEach(plan -> {
+                if (plan.getCurrentStart().getMonthValue() == month) {
+                    plansOfCurrentMonth.add(plan);
+                }
+            });
+        }
         return plansOfCurrentMonth;
     }
 
     public List<ProductionPlan> formPlansOfCurrentDate(List<ProductionPlan> productionPlansPerCurrentMonth, int dayNumber, int equipmentId) {
         List<ProductionPlan> plansOfCurrentDay = new CopyOnWriteArrayList<>();
-        if (!productionPlansPerCurrentMonth.isEmpty()){
+        if (!productionPlansPerCurrentMonth.isEmpty()) {
             productionPlansPerCurrentMonth.forEach(plan -> {
                 if (plan.getCurrentStart().getDayOfMonth() == dayNumber &&
-                plan.getEquipment().getId() == equipmentId) {
+                        plan.getEquipment().getId() == equipmentId) {
                     plansOfCurrentDay.add(plan);
                 }
             });

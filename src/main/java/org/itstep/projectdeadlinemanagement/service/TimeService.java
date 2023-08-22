@@ -59,7 +59,10 @@ public class TimeService {
             localDateTime = excludeWeekend(localDateTime.plusDays(1));
         }
         localDateTime = localDateTime.withHour(restOfHours);
-
+        if (localDateTime.getHour() == 8){
+            localDateTime = excludeWeekend(localDateTime.plusDays(1));
+            localDateTime = localDateTime.withHour(0);
+        }
         return localDateTime;
     }
 

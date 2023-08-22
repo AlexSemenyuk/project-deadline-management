@@ -31,6 +31,7 @@ public class ProjectDetailsController {
     private final PartRepository partRepository;
     private final AssemblyListRepository assemblyListRepository;
     private final PartListRepository partListRepository;
+    private final TaskConditionRepository taskConditionRepository;
 
     @GetMapping("/{id}")
     public String home(@PathVariable Integer id, Model model) {
@@ -68,6 +69,7 @@ public class ProjectDetailsController {
         Optional<Project> optionalProject = projectRepository.findById(id);
         Optional<Customer> optionalCustomer = customerRepository.findById(command.customerId());
         Optional<ProjectCondition> optionalProjectCondition = projectConditionRepository.findById(command.projectConditionId());
+        Optional<TaskCondition> optionalTaskCondition = taskConditionRepository.findById(6);
         if (optionalProject.isPresent() &&
                 optionalProjectCondition.isPresent() &&
                 optionalCustomer.isPresent()){
@@ -76,9 +78,17 @@ public class ProjectDetailsController {
             ProjectCondition projectCondition = optionalProjectCondition.get();
             Customer customer = optionalCustomer.get();
             project.setCustomer(customer);
-            project.setProjectCondition(projectCondition);
             project.setStart(command.start());
             project.setDeadline(command.deadline());
+            project.setProjectCondition(projectCondition);
+            if (projectCondition.getName().equals("Archive")){
+                TaskCondition taskCondition = optionalTaskCondition.get();
+                if (!project.getTasks().isEmpty()){
+                    for (Task task: project.getTasks()){
+                        task.setTaskCondition(taskCondition);
+                    }
+                }
+            }
             projectRepository.save(project);
         }
         return "redirect:/projects/project_details/edit/{id}";

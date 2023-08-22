@@ -139,7 +139,8 @@ public class ChartService {
 
                         if (!chartDaysCommand.getProductionPlans().isEmpty()) {
                             for (ProductionPlan p : chartDaysCommand.getProductionPlans()) {
-                                if (p.getTask().getTaskCondition().getName().equals("Ок")) {
+                                if (p.getTask().getTaskCondition().getName().equals("Ок") ||
+                                        p.getTask().getTaskCondition().getName().equals("Archive")) {
                                     sumDone += p.getTask().getOperationTime();
                                 }
                                 if ((p.getCurrentStart()).isBefore(LocalDateTime.now())) {
@@ -156,7 +157,8 @@ public class ChartService {
                         for (ProductionPlan p : chartDaysCommand.getProductionPlans()) {
                             if (chartDaysCommand.getDayNumber().isBefore(LocalDate.now())) {
                                 if (currentDayColorTmp.equals("black") || currentDayColorTmp.equals("green")) {
-                                    if (p.getTask().getTaskCondition().getName().equals("Ок")) {
+                                    if (p.getTask().getTaskCondition().getName().equals("Ок") ||
+                                            p.getTask().getTaskCondition().getName().equals("Archive")) {
                                         currentDayColorTmp = ChartDaysCommand.GREEN;
                                     } else {
                                         currentDayColorTmp = ChartDaysCommand.RED;
