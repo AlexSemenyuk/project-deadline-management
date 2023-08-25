@@ -26,9 +26,12 @@ public class Equipment {
 
     @Column(nullable = false)
     private String name;
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private EquipmentType equipmentType;
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Division division;
+
 
     @OneToMany(mappedBy = "equipment")
     private List<TechnologyPart> TechnologyParts = new ArrayList<>();
@@ -45,6 +48,11 @@ public class Equipment {
     public Equipment(Integer number, String name) {
         this.number = number;
         this.name = name;
+    }
+
+    public void setEquipmentType (EquipmentType equipmentType) {
+        equipmentType.getEquipments().add(this);
+        this.equipmentType = equipmentType;
     }
 
     public void setDivision (Division division) {

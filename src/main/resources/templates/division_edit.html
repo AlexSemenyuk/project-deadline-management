@@ -18,7 +18,7 @@
     <title>Edit division</title>
 </head>
 <body>
-<header class="container-fluid fixed-top">
+<header class="container-fluid fixed-top p-0">
     <div class="row bg-dark text-bg-secondary align-items-center " style="height: 80px">
         <div class="col-xl-2 text-center">
             <a class="text-white" th:href="@{/}">
@@ -32,8 +32,18 @@
         <div class="col-xl-2">
             <p class="align-items-center text-end mb-0">Welcome: <span class="user" th:text="${#authentication.name}"></span></p>
         </div>
-
+        <div class="col-xl-1">
+            <a class="dropdown-toggle text-white" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="bi bi-list" style="font-size: 1.2rem;"></i>
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButtonLight">
+                <li class="my-2">
+                    <a class="dropdown-item" th:href="@{/instruction}">Інструкція</a>
+                </li>
+            </ul>
+        </div>
     </div>
+    <hr class="hr-line m-0">
 </header>
 <main class="container-fluid " >
     <div class="row " style="position: relative; top: 80px">
@@ -43,13 +53,10 @@
             </div>
             <ul class="list_menu">
                 <li class="item_menu">
-                    <a class="link_menu_active" th:href="@{/divisions}">Дивізіони</a>
+                    <a class="link_menu" th:href="@{/divisions}">Дивізіони</a>
                     <ul class="list_menu_sub">
                         <li  class="item_menu_sub">
                             <a class="link_menu_sub_active" th:href="@{/divisions/edit/{id}(id=${division.id})}">Змінити дивізіон</a>
-                        </li>
-                        <li  class="item_menu_sub">
-                            <a class="link_menu_sub" th:href="@{/divisions/types}">Тип дивізіону</a>
                         </li>
                     </ul>
                 </li>
@@ -82,42 +89,30 @@
         <div class="free col-xl-2"></div>
         <div class="free col-xl-10">
             <div class="row">
-                <div class="col-xl-9">
-                    <h2 class="text_h">Ваші дивізіони</h2>
+                <div class="col-xl-5">
+                    <h2 class="text_h">Ваш дивізіон</h2>
                     <table class="table_sm table table-striped table-hover table-bordered border-secondary-subtle" style="width:100%;">
                         <thead>
                         <tr>
                             <th class="td_st col-xl-2 px-1 text-center">Id</th>
                             <th class="td_st col-xl-4 text-center">Назва</th>
-                            <th class="td_st col-xl-4 text-center">Тип</th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr>
                             <td class="td_st col-xl-2 text-center" th:text="${division.id}"></td>
                             <td class="col-xl-4 px-1" th:text="${division.name}"></td>
-                            <td class="col-xl-4 text-center" th:text="${division.divisionType.name}"></td>
                         </tr>
                         </tbody>
                     </table>
                 </div>
-
+                <div class="col-xl-4">
+                </div>
                 <div class="col-xl-3">
                     <h2 class="text_h">Змінити дивізіон</h2>
                     <form method="post" class="my-5 px-2">
                         <label class="form-label d-block me-1" >
                             <input class="form-control bg-white border-3 rounded-0" type="text" name="name"  th:value="${division.name}">
-                        </label>
-                        <br/>`
-                        <label class="form-label d-block me-1">
-                            Тип дивізіону
-                            <select class="form-select bg-white border-3 rounded-0"  aria-label="Default select example" name="divisionTypeId">
-                                <option th:each="type: ${types}"
-                                        th:value="${type.id}"
-                                        th:text="${type.name}"
-                                        th:selected="${divisionTypeId == type.id}">
-                                </option>
-                            </select>
                         </label>
                         <br/>
                         <input th:name="${_csrf.parameterName}" type="hidden" th:value="${_csrf.token}">

@@ -2,14 +2,10 @@ package org.itstep.projectdeadlinemanagement.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.dialect.lock.OptimisticEntityLockException;
 import org.itstep.projectdeadlinemanagement.command.ContractCommand;
-import org.itstep.projectdeadlinemanagement.command.DivisionTypeCommand;
-import org.itstep.projectdeadlinemanagement.command.TechnologyPartCommand;
 import org.itstep.projectdeadlinemanagement.model.*;
 import org.itstep.projectdeadlinemanagement.repository.ContractRepository;
 import org.itstep.projectdeadlinemanagement.repository.ContractTypeRepository;
-import org.itstep.projectdeadlinemanagement.repository.DivisionTypeRepository;
 import org.itstep.projectdeadlinemanagement.repository.ProjectRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

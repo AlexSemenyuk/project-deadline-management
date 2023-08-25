@@ -18,7 +18,7 @@ import java.util.Optional;
 @Component
 @RequiredArgsConstructor
 public class InitDatabase implements CommandLineRunner {
-    private final DivisionTypeRepository divisionTypeRepository;
+    private final EquipmentTypeRepository equipmentTypeRepository;
     private final DivisionRepository divisionRepository;
     private final PartRepository partRepository;
     private final AssemblyRepository assemblyRepository;
@@ -43,31 +43,38 @@ public class InitDatabase implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         // 1. Тип дивизиона (подготовка / производство)
-        divisionTypeRepository.save(new DivisionType("Підготовка"));
-        divisionTypeRepository.save(new DivisionType("Виробництво"));
+
+        equipmentTypeRepository.save(new EquipmentType("Виробництво"));
+        equipmentTypeRepository.save(new EquipmentType("Складання вузлів"));
 
         // 2. Создание дивизионов (конструкторский отдел, технологический отдел, мх-1 (механо-сборочный цех №1), мх-2, мх-3)
 //        addDivision(new DivisionCommand("Design", 1));
 //        addDivision(new DivisionCommand("Technology", 1));
-        addDivision(new DivisionCommand("Мх-1", 2));
-        addDivision(new DivisionCommand("Мх-2", 2));
-        addDivision(new DivisionCommand("Мх-3", 2));
+        divisionRepository.save(new Division("Мх-1"));
+        divisionRepository.save(new Division("Мх-2"));
+        divisionRepository.save(new Division("Мх-3"));
+//        addDivision(new DivisionCommand("Мх-2"));
+//        addDivision(new DivisionCommand("Мх-3"));
+//        private void addDivision(DivisionCommand command) {
+//            Division division = Division.fromCommand(command);
+//            divisionRepository.save(division);
+//        }
 
         // 3. Создание оборудования
-        addEquipment(new EquipmentCommand(11, "Токарний", 1));
-        addEquipment(new EquipmentCommand(12, "Фрезерний", 1));
-        addEquipment(new EquipmentCommand(13, "Шліфувальний", 1));
-        addEquipment(new EquipmentCommand(14, "Складання вузлів", 1));
+        addEquipment(new EquipmentCommand(11, "Токарний", 1, 1));
+        addEquipment(new EquipmentCommand(12, "Фрезерний", 1, 1));
+        addEquipment(new EquipmentCommand(13, "Шліфувальний", 1, 1));
+        addEquipment(new EquipmentCommand(14, "Складання вузлів", 1, 2));
 
-        addEquipment(new EquipmentCommand(21, "Расточной", 2));
-        addEquipment(new EquipmentCommand(22, "Фрезерний", 2));
-        addEquipment(new EquipmentCommand(23, "Долбіжний", 2));
-        addEquipment(new EquipmentCommand(24, "Складання вузлів", 2));
+        addEquipment(new EquipmentCommand(21, "Расточной", 2, 1));
+        addEquipment(new EquipmentCommand(22, "Фрезерний", 2, 1));
+        addEquipment(new EquipmentCommand(23, "Долбіжний", 2, 1));
+        addEquipment(new EquipmentCommand(24, "Складання вузлів", 2, 2));
 
-        addEquipment(new EquipmentCommand(31, "Поздовжньо-фрезерний", 3));
-        addEquipment(new EquipmentCommand(32, "Токарний", 3));
-        addEquipment(new EquipmentCommand(33, "Расточной", 3));
-        addEquipment(new EquipmentCommand(34, "Складання вузлів", 3));
+        addEquipment(new EquipmentCommand(31, "Поздовжньо-фрезерний", 3, 1));
+        addEquipment(new EquipmentCommand(32, "Токарний", 3, 1));
+        addEquipment(new EquipmentCommand(33, "Расточной", 3, 1));
+        addEquipment(new EquipmentCommand(34, "Складання вузлів", 3, 2));
 
 
         // 4. Создание Parts / деталей
@@ -307,24 +314,21 @@ public class InitDatabase implements CommandLineRunner {
 
 
 
-    private void addDivision(DivisionCommand command) {
-        Optional<DivisionType> optionalDivisionType = divisionTypeRepository.findById(command.divisionTypeId());
-        optionalDivisionType.ifPresent(divisionType -> {
-            Division division = Division.fromCommand(command);
-            divisionType.setDivisions(new ArrayList<>());
-            division.setDivisionType(divisionType);
-            divisionRepository.save(division);
-        });
-    }
-
-
     private void addEquipment(EquipmentCommand command) {
         Optional<Division> optionalDivision = divisionRepository.findById(command.divisionId());
-        optionalDivision.ifPresent(division -> {
+        Optional<EquipmentType> optionalEquipmentType = equipmentTypeRepository.findById(command.equipmentTypeId());
+        if (optionalDivision.isPresent() && optionalEquipmentType.isPresent()){
             Equipment equipment = Equipment.fromCommand(command);
+
+            Division division = optionalDivision.get();
             equipment.setDivision(division);
+
+            EquipmentType equipmentType = optionalEquipmentType.get();
+            equipment.setEquipmentType(equipmentType);
+
             equipmentRepository.save(equipment);
-        });
+
+        }
     }
 
     private void addPartList(int assemblyId, PartListCommand command) {

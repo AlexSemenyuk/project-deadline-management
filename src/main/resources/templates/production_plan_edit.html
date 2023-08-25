@@ -31,6 +31,16 @@
         <div class="col-xl-2">
             <p class="align-items-center text-end mb-0">Welcome: <span class="user" th:text="${#authentication.name}"></span></p>
         </div>
+        <div class="col-xl-1">
+            <a class="dropdown-toggle text-white" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="bi bi-list" style="font-size: 1.2rem;"></i>
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButtonLight">
+                <li class="my-2">
+                    <a class="dropdown-item" th:href="@{/instruction}">Інструкція</a>
+                </li>
+            </ul>
+        </div>
     </div>
     <hr class="hr-line m-0">
 </header>

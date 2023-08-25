@@ -6,7 +6,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.itstep.projectdeadlinemanagement.command.ContractTypeCommand;
-import org.itstep.projectdeadlinemanagement.command.DivisionTypeCommand;
+
 import java.util.ArrayList;
 import java.util.List;
 @Entity
