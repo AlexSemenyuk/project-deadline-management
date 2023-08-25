@@ -201,14 +201,20 @@
                                                     </td>
                                                     <td class="text_b tx col-xl-1">
                                                         <a class="text_b tx" th:text="${planCommand.equipment.number + '-' + planCommand.equipment.name}"
-                                                           th:href="@{/production_plans/equipment_plans/{id}(id=${planCommand.equipment.id})}"/>
+                                                           th:href="@{/equipment_plans}"/>
                                                     </td>
-<!--                                                    <td class="text_a col-xl-1 px-1 "-->
-<!--                                                        th:text="${planCommand.task.partNumber + '-' + planCommand.task.partName}"></td>-->
-                                                    <td class="text_b tx col-xl-1">
-                                                        <a class="text_b tx " th:text="${planCommand.task.partOrAssemblyNumber + '-' + planCommand.task.partOrAssemblyName}"
-                                                           th:href="@{/technologies/technology_terms/technology_parts/parts/{projectAndPartId}(projectAndPartId=${planCommand.task.projectNumber + ':' + planCommand.task.partOrAssemblyNumber})}"/>
+                                                    <td class="text_b tx col-xl-1" th:switch="${planCommand.equipment.equipmentType.name}">
+                                                        <a class="text_b tx " th:case="Виробництво"
+                                                           th:text="${planCommand.task.partOrAssemblyNumber + '-' + planCommand.task.partOrAssemblyName}"
+                                                           th:href="@{/technologies/technology_terms/technology_parts/part_details/{id}(id=${planCommand.task.projectNumber + ':' + planCommand.task.partOrAssemblyNumber})}"/>
+                                                        <a class="text_b tx " th:case="${'Складання вузлів'}"
+                                                           th:text="${planCommand.task.partOrAssemblyNumber + '-' + planCommand.task.partOrAssemblyName}"
+                                                           th:href="@{/technologies/technology_terms/technology_assemblies/assembly_details/{id}(id=${planCommand.task.projectNumber + ':' + planCommand.task.partOrAssemblyNumber})}"/>
                                                     </td>
+<!--                                                    <td class="text_b tx col-xl-1">-->
+<!--                                                        <a class="text_b tx " th:text="${planCommand.task.partOrAssemblyNumber + '-' + planCommand.task.partOrAssemblyName}"-->
+<!--                                                           th:href="@{/technologies/technology_terms/technology_parts/parts/{projectAndPartId}(projectAndPartId=${planCommand.task.projectNumber + ':' + planCommand.task.partOrAssemblyNumber})}"/>-->
+<!--                                                    </td>-->
                                                     <td class="text_a ty col-xl-1 text-center "
                                                         th:text="${planCommand.number}"></td>
                                                     <td class="text_a ty col-xl-1 text-center "
@@ -271,13 +277,17 @@
                                                     </td>
                                                     <td class="text_b tx col-xl-1">
                                                         <a class="text_b tx " th:text="${p.equipment.number + '-' + p.equipment.name}"
-                                                           th:href="@{/production_plans/equipment_plans/{id}(id=${p.equipment.id})}"/>
+                                                           th:href="@{/equipment_plans}"/>
                                                     </td>
 <!--                                                    <td class="text_a col-xl-1 px-1"-->
 <!--                                                        th:text="${p.task.partNumber + '-' + p.task.partName}"></td>-->
-                                                    <td class="text_b tx col-xl-1">
-                                                        <a class="text_b tx " th:text="${p.task.partOrAssemblyNumber + '-' + p.task.partOrAssemblyName}"
-                                                           th:href="@{/parts/part_details/{id}(id=${p.task.projectNumber + ':' + p.task.partOrAssemblyNumber})}"/>
+                                                    <td class="text_b tx col-xl-1" th:switch="${p.equipment.equipmentType.name}">
+                                                        <a class="text_b tx " th:case="Виробництво"
+                                                           th:text="${p.task.partOrAssemblyNumber + '-' + p.task.partOrAssemblyName}"
+                                                           th:href="@{/technologies/technology_terms/technology_parts/part_details/{id}(id=${p.task.projectNumber + ':' + p.task.partOrAssemblyNumber})}"/>
+                                                        <a class="text_b tx " th:case="${'Складання вузлів'}"
+                                                           th:text="${p.task.partOrAssemblyNumber + '-' + p.task.partOrAssemblyName}"
+                                                           th:href="@{/technologies/technology_terms/technology_assemblies/assembly_details/{id}(id=${p.task.projectNumber + ':' + p.task.partOrAssemblyNumber})}"/>
                                                     </td>
                                                     <td class="text_a ty col-xl-1 text-center "
                                                         th:text="${p.number}"></td>

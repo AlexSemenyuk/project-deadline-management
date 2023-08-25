@@ -6,7 +6,7 @@ import org.itstep.projectdeadlinemanagement.model.*;
 import org.itstep.projectdeadlinemanagement.repository.CustomerRepository;
 import org.itstep.projectdeadlinemanagement.repository.ProjectConditionRepository;
 import org.itstep.projectdeadlinemanagement.repository.ProjectRepository;
-import org.itstep.projectdeadlinemanagement.service.PartService;
+import org.itstep.projectdeadlinemanagement.service.PartOrAssemblyService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,7 +20,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 public class PartDetailsController {
-    private final PartService partService;
+    private final PartOrAssemblyService partService;
     private final ProjectRepository projectRepository;
     private final CustomerRepository customerRepository;
     private final ProjectConditionRepository projectConditionRepository;
@@ -43,7 +43,7 @@ public class PartDetailsController {
         String part = tasks.get(0).getPartOrAssemblyNumber() + "-" + tasks.get(0).getPartOrAssemblyName();
         model.addAttribute("part", part);
 
-        return "part_details";
+        return "technology_part_details";
     }
 
 

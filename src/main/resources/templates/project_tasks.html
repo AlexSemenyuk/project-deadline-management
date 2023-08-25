@@ -181,7 +181,7 @@
                                 <th class="text_p1 col-xl-1 px-1 text-center align-items-center">Id</th>
                                 <th class="text_p1 col-xl-1 text-center align-items-center">Номер проекту</th>
                                 <th class="text_p1 col-xl-2 text-center align-items-center">Обладнання</th>
-                                <th class="text_p1 col-xl-2 text-center align-items-center">Деталь</th>
+                                <th class="text_p1 col-xl-2 text-center align-items-center">Деталь / Вузол</th>
                                 <th class="text_p1 col-xl-1 text-center align-items-center">Номер операції</th>
                                 <th class="text_p1 col-xl-1 text-center align-items-center">Час операції</th>
                                 <th class="text_p1 col-xl-1 text-center align-items-center">Номер партії</th>
@@ -194,7 +194,15 @@
                                 <td class="text_p col-xl-1 text-center" th:text="${task.id}"></td>
                                 <td class="text_p col-xl-1 text-center"  th:text="${task.projectNumber}"></td>
                                 <td class="text_p col-xl-2 px-1"  th:text="${task.equipment.number + '-' + task.equipment.name}"></td>
-                                <td class="text_p col-xl-2 px-1"  th:text="${task.partOrAssemblyNumber + ' - ' + task.partOrAssemblyName}"></td>
+                                <td class="text_b tx col-xl-2" th:switch="${task.equipment.equipmentType.name}">
+                                    <a class="text_b tx " th:case="Виробництво"
+                                       th:text="${task.partOrAssemblyNumber + '-' + task.partOrAssemblyName}"
+                                       th:href="@{/technologies/technology_terms/technology_parts/part_details/{id}(id=${task.projectNumber + ':' + task.partOrAssemblyNumber})}"/>
+                                    <a class="text_b tx " th:case="${'Складання вузлів'}"
+                                       th:text="${task.partOrAssemblyNumber + '-' + task.partOrAssemblyName}"
+                                       th:href="@{/technologies/technology_terms/technology_assemblies/assembly_details/{id}(id=${task.projectNumber + ':' + task.partOrAssemblyNumber})}"/>
+                                </td>
+<!--                                <td class="text_p col-xl-2 px-1"  th:text="${task.partOrAssemblyNumber + ' - ' + task.partOrAssemblyName}"></td>-->
                                 <td class="text_p col-xl-1 text-center"  th:text="${task.termNumber}"></td>
                                 <td class="text_p col-xl-1 text-center"  th:text="${task.operationTime}"></td>
                                 <td class="text_p col-xl-1 text-center"  th:text="${task.lotNumber}"></td>

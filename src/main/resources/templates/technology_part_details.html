@@ -99,7 +99,7 @@
                                 <a class="link_menu_sub" th:href="@{/technologies/technology_terms/technology_parts/{id}(id=${project.id})}">Деталь</a>
                             </li>
                             <li  class="item_menu_sub">
-                                <a class="link_menu_sub_active" th:href="@{/technologies/technology_terms/technology_parts/parts/{projectAndPartId}(projectAndPartId=${project.number + ':' + tasks[0].partOrAssemblyNumber})}">Щодо деталі</a>
+                                <a class="link_menu_sub_active" th:href="@{/technologies/technology_terms/technology_parts/part_details/{projectAndPartId}(projectAndPartId=${project.number + ':' + tasks[0].partOrAssemblyNumber})}">Щодо деталі</a>
                             </li>
                             <li  class="item_menu_sub">
                                 <a class="link_menu_sub_finish" th:href="@{/technologies/technology_terms/finish/{id}(id=${project.id})}">Закінчити розробку</a>

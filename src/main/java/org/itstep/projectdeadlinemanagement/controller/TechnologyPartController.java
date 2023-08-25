@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.itstep.projectdeadlinemanagement.command.TechnologyPartCommand;
 import org.itstep.projectdeadlinemanagement.model.*;
 import org.itstep.projectdeadlinemanagement.repository.*;
-import org.itstep.projectdeadlinemanagement.service.PartService;
+import org.itstep.projectdeadlinemanagement.service.PartOrAssemblyService;
 import org.itstep.projectdeadlinemanagement.service.ProjectListService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,7 +27,7 @@ public class TechnologyPartController {
     private final PartRepository partRepository;
     private final TechnologyPartRepository technologyPartRepository;
     private final ProjectListService projectListService;
-    private final PartService partService;
+    private final PartOrAssemblyService partOrAssemblyService;
 
     @GetMapping("/{id}")
     public String findAllTechnologyPart(@PathVariable Integer id, Model model) {
@@ -74,7 +74,7 @@ public class TechnologyPartController {
         return "redirect:/technologies/technology_terms/technology_parts/{id}";
     }
 
-    @GetMapping("/parts/{projectAndPartId}")
+    @GetMapping("/part_details/{projectAndPartId}")
     public String partDetail(@PathVariable String projectAndPartId, Model model) {
         model.addAttribute("projectAndPartId", projectAndPartId);
 //        System.out.println("id = " + id);
@@ -83,16 +83,16 @@ public class TechnologyPartController {
         int partNumber = Integer.parseInt(tmp[1]);
 //        System.out.println("projectNumber = " + projectNumber);
 //        System.out.println("partNumber = " + partNumber);
-        Project project = partService.findProject(projectNumber);
+        Project project = partOrAssemblyService.findProject(projectNumber);
         model.addAttribute("project", project);
 
-        List<Task> tasks = partService.findTasks(project.getTasks(), partNumber);
+        List<Task> tasks = partOrAssemblyService.findTasks(project.getTasks(), partNumber);
         model.addAttribute("tasks", tasks);
 
         String part = tasks.get(0).getPartOrAssemblyNumber() + "-" + tasks.get(0).getPartOrAssemblyName();
         model.addAttribute("part", part);
 
-        return "part_details";
+        return "technology_part_details";
     }
 
 

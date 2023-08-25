@@ -142,8 +142,18 @@
                                             <tbody>
                                             <tr th:each="partList: ${partLists}">
                                                 <td class="text_n col-xl-2 text-center" th:text="${partList.part.id}"></td>
-                                                <td class="text_n col-xl-4 px-1"  th:text="${partList.part.number}"></td>
-                                                <td class="text_n col-xl-3 px-1"  th:text="${partList.part.name}"></td>
+                                                <td class="text_b tx col-xl-4 py-2" >
+                                                    <a class="text_b tx "
+                                                       th:text="${partList.part.number}"
+                                                       th:href="@{/technologies/technology_terms/technology_parts/part_details/{id}(id=${technologyProject.number + ':' + partList.part.number})}"/>
+                                                </td>
+                                                <td class="text_b tx col-xl-3 py-2" >
+                                                    <a class="text_b tx "
+                                                       th:text="${partList.part.name}"
+                                                       th:href="@{/technologies/technology_terms/technology_parts/part_details/{id}(id=${technologyProject.number + ':' + partList.part.number})}"/>
+                                                </td>
+<!--                                                <td class="text_n col-xl-4 px-1"  th:text="${partList.part.number}"></td>-->
+<!--                                                <td class="text_n col-xl-3 px-1"  th:text="${partList.part.name}"></td>-->
                                                 <td class="text_n col-xl-3 text-center"  th:text="${partList.amount}"></td>
                                             </tr>
                                             </tbody>
@@ -167,8 +177,12 @@
                             <tbody>
                             <tr th:each="technologyPart: ${technologyParts}">
                                 <td class="text_n col-xl-1 text-center" th:text="${technologyPart.id}"></td>
-                                <td class="text_n col-xl-3 px-1 " th:text="${technologyPart.part.number + ' - ' + technologyPart.part.name}">
-
+                                <td class="text_b tx col-xl-1 py-2" >
+                                    <a class="text_b tx "
+                                       th:text="${technologyPart.part.number + '-' + technologyPart.part.name}"
+                                       th:href="@{/technologies/technology_terms/technology_parts/part_details/{id}(id=${technologyProject.number + ':' + technologyPart.part.number})}"/>
+                                </td>
+<!--                                <td class="text_n col-xl-3 px-1 " th:text="${technologyPart.part.number + ' - ' + technologyPart.part.name}">-->
                                 </td>
                                 <td class="text_n col-xl-2 px-1 text-center" th:text="${technologyPart.number}"></td>
                                 <td class="text_n col-xl-3 px-1 text-center" th:text="${technologyPart.equipment.number + ' - ' + technologyPart.equipment.name}"></td>

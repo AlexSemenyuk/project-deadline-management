@@ -143,8 +143,16 @@
                                             <tbody>
                                             <tr th:each="assemblyList: ${assemblyLists}">
                                                 <td class="text_n col-xl-2 text-center" th:text="${assemblyList.assembly.id}"></td>
-                                                <td class="text_n col-xl-4 px-1"  th:text="${assemblyList.assembly.number}"></td>
-                                                <td class="text_n col-xl-3 px-1"  th:text="${assemblyList.assembly.name}"></td>
+                                                <td class="text_b tx col-xl-4 py-2" >
+                                                    <a class="text_b tx "
+                                                       th:text="${assemblyList.assembly.number}"
+                                                       th:href="@{/technologies/technology_terms/technology_assemblies/assembly_details/{id}(id=${technologyProject.number + ':' + assemblyList.assembly.number})}"/>
+                                                </td>
+                                                <td class="text_b tx col-xl-3 py-2" >
+                                                    <a class="text_b tx "
+                                                       th:text="${assemblyList.assembly.name}"
+                                                       th:href="@{/technologies/technology_terms/technology_assemblies/assembly_details/{id}(id=${technologyProject.number + ':' + assemblyList.assembly.number})}"/>
+                                                </td>
                                                 <td class="text_n col-xl-3 text-center"  th:text="${assemblyList.amount}"></td>
                                             </tr>
                                             </tbody>
@@ -168,7 +176,12 @@
                             <tbody>
                             <tr th:each="technologyAssembly: ${technologyAssemblies}">
                                 <td class="text_n col-xl-1 text-center" th:text="${technologyAssembly.id}"></td>
-                                <td class="text_n col-xl-3 px-1 " th:text="${technologyAssembly.assembly.number + ' - ' + technologyAssembly.assembly.name}"></td>
+                                <td class="text_b tx col-xl-3 py-2" >
+                                    <a class="text_b tx "
+                                       th:text="${technologyAssembly.assembly.number + '-' + technologyAssembly.assembly.name}"
+                                       th:href="@{/technologies/technology_terms/technology_assemblies/assembly_details/{id}(id=${technologyProject.number + ':' + technologyAssembly.assembly.number})}"/>
+                                </td>
+<!--                                <td class="text_n col-xl-3 px-1 " th:text="${technologyAssembly.assembly.number + ' - ' + technologyAssembly.assembly.name}"></td>-->
                                 <td class="text_n col-xl-2 px-1  text-center" th:text="${technologyAssembly.number}"></td>
                                 <td class="text_n col-xl-3 px-1 text-center" th:text="${technologyAssembly.equipment.number + ' - ' + technologyAssembly.equipment.name}"></td>
                                 <td class="text_n col-xl-1 px-1 text-center" th:text="${technologyAssembly.operationTime}"></td>

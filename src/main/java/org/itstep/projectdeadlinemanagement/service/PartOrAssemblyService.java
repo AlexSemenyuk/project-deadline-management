@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class PartService {
+public class PartOrAssemblyService {
     private final ProjectRepository projectRepository;
 
     public Project findProject (int projectNumber){
@@ -30,11 +30,12 @@ public class PartService {
         return projectTmp;
     }
 
-    public List<Task> findTasks (List<Task> taskList, int partNumber){
+    public List<Task> findTasks (List<Task> taskList, int partOrAssemblyNumber){
         List<Task> tasks = new CopyOnWriteArrayList<>();
         for (Task t: taskList){
-            if (t.getPartOrAssemblyNumber() == partNumber && t.getLotNumber() == 1){
+            if (t.getPartOrAssemblyNumber() == partOrAssemblyNumber && t.getLotNumber() == 1){
                 tasks.add(t);
+                System.out.println(t.getId() + ", " + t.getPartOrAssemblyNumber() + ", " + t.getLotNumber());
             }
         }
         if (!tasks.isEmpty()){

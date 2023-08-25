@@ -1,6 +1,7 @@
 package org.itstep.projectdeadlinemanagement.api.service;
 
 import lombok.RequiredArgsConstructor;
+import org.itstep.projectdeadlinemanagement.api.data.AssemblyChart;
 import org.itstep.projectdeadlinemanagement.api.data.PartChart;
 import org.itstep.projectdeadlinemanagement.api.data.TermHours;
 import org.itstep.projectdeadlinemanagement.model.Project;
@@ -13,28 +14,28 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class PartApiService {
-    private final PartOrAssemblyService partService;
+public class AssemblyApiService {
+    private final PartOrAssemblyService partOrAssemblyService;
 
-    public PartChart formPartChart(String projectAndPart) {
-        String [] tmp = projectAndPart.split(":");
+    public AssemblyChart formAssemblyChart(String projectAndAssembly) {
+        String [] tmp = projectAndAssembly.split(":");
         int projectNumber = Integer.parseInt(tmp[0]);
-        int partNumber = Integer.parseInt(tmp[1]);
+        int assemblyNumber = Integer.parseInt(tmp[1]);
 //        System.out.println("projectNumber = " + projectNumber);
 //        System.out.println("partNumber = " + partNumber);
 
-        Project project = partService.findProject(projectNumber);
-        List<Task> tasks = partService.findTasks(project.getTasks(), partNumber);
+        Project project = partOrAssemblyService.findProject(projectNumber);
+        List<Task> tasks = partOrAssemblyService.findTasks(project.getTasks(), assemblyNumber);
 
         List<TermHours> termHoursList = new ArrayList<>();
         List<Integer> termNumberList = new ArrayList<>();
         int projectNumberTMP = 0;
-        int partNumberTMP = 0;
-        String partNameTMP = "";
+        int assemblyNumberTMP = 0;
+        String assemblyNameTMP = "";
         if (!tasks.isEmpty()){
             projectNumberTMP = tasks.get(0).getProjectNumber();
-            partNumberTMP = tasks.get(0).getPartOrAssemblyNumber();
-            partNameTMP = tasks.get(0).getPartOrAssemblyName();
+            assemblyNumberTMP = tasks.get(0).getPartOrAssemblyNumber();
+            assemblyNameTMP = tasks.get(0).getPartOrAssemblyName();
             int deadlineTmp = 0;
             int start;
             int deadline;
@@ -52,18 +53,9 @@ public class PartApiService {
             }
         }
 
-        PartChart partChart = new PartChart(projectNumberTMP, partNumberTMP, partNameTMP, termNumberList, termHoursList);
-//        private int termNumber;
-//        private int start;
-//        private int deadline;
-//        private String projectNumber;
-//        private String partNumber;
-//        private String partName;
-//        List<TermHours> termHoursList;
-//        System.out.println("partChart = " + partChart);
-        return partChart;
+        return new AssemblyChart(projectNumberTMP, assemblyNumberTMP, assemblyNameTMP, termNumberList, termHoursList);
     }
-
 }
+
 
 
