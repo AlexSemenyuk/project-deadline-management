@@ -17,7 +17,7 @@
     <title>Project contracts</title>
 </head>
 <body>
-<header class="container-fluid fixed-top">
+<header class="container-fluid fixed-top p-0">
     <div class="row bg-dark text-bg-secondary align-items-center " style="height: 8vh">
         <div class="col-xl-1 text-center">
             <a class="text-white" th:href="@{/}">
@@ -32,6 +32,7 @@
                                                                        th:text="${#authentication.name}"></span></p>
         </div>
     </div>
+    <hr class="hr-line1 m-0">
 </header>
 <main style="max-height: 84vh;">
     <div class="container-fluid">
@@ -110,9 +111,9 @@
                             </thead>
                             <tbody>
                             <tr th:each="chartE: ${chartYearCommands}">
-                                <td class="text_b tx">
-                                    <a class="text_b tx" th:text="${chartE.equipment}"
-                                       th:href="@{/production_plans/equipment_plans/{id}(id=${chartE.equipmentId})}"/>
+                                <td class="text_n ty p-0 px-1" th:text="${chartE.equipment}">
+<!--                                    <a class="text_b tx" th:text="${chartE.equipment}"-->
+<!--                                       th:href="@{/production_plans/equipment_plans/{id}(id=${chartE.equipmentId})}"/>-->
                                 </td>
                                 <td class="text_a tx text-center p-0" th:each="day: ${chartE.chartMonthCommands[monthValue].chartDaysCommands}"
                                     th:switch="${day.dayNumber.dayOfWeek.toString()}">
@@ -195,7 +196,7 @@
 <!--                                                        th:text="${planCommand.task.partNumber + '-' + planCommand.task.partName}"></td>-->
                                                     <td class="text_b tx col-xl-1">
                                                         <a class="text_b tx " th:text="${planCommand.task.partOrAssemblyNumber + '-' + planCommand.task.partOrAssemblyName}"
-                                                           th:href="@{/parts/part_details/{id}(id=${planCommand.task.projectNumber + ':' + planCommand.task.partOrAssemblyNumber})}"/>
+                                                           th:href="@{/technologies/technology_terms/technology_parts/parts/{projectAndPartId}(projectAndPartId=${planCommand.task.projectNumber + ':' + planCommand.task.partOrAssemblyNumber})}"/>
                                                     </td>
                                                     <td class="text_a ty col-xl-1 text-center "
                                                         th:text="${planCommand.number}"></td>

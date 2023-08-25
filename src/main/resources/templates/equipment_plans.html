@@ -17,7 +17,7 @@
     <title>Project contracts</title>
 </head>
 <body>
-<header class="container-fluid fixed-top">
+<header class="container-fluid fixed-top p-0">
     <div class="row bg-dark text-bg-secondary align-items-center " style="height: 8vh">
         <div class="col-xl-1 text-center">
             <a class="text-white" th:href="@{/}">
@@ -31,6 +31,7 @@
             <p class="align-items-center text-end mb-0">Welcome: <span class="user" th:text="${#authentication.name}"></span></p>
         </div>
     </div>
+    <hr class="hr-line1 m-0">
 </header>
 <main style="max-height: 84vh;">
     <div class="container-fluid" >
@@ -67,6 +68,9 @@
                     <li class="item_menu">
                         <a class="link_menu_active" th:href="@{/equipment_plans}">Показники</a>
                     </li>
+                    <li class="item_menu">
+                        <a class="link_menu" th:href="@{/raznoe}">Показники</a>
+                    </li>
                 </ul>
             </div>
             <div class="free col-xl-2"></div>
@@ -77,11 +81,19 @@
                     </div>
                     <div class="col-xl-2">
                         <form method="post" class="px-2">
-                            <label class="form-label d-block me-1">
-                                <input class="form-control bg-white border-3 rounded-0"
-                                       id="dateInput"
-                                       type="month" th:value="${currentDate}">
-                            </label>
+                            <label for="year">Звітний період:</label>
+                            <input list="year-list" type="number" id="year" name="year" th:value="${year}"/>
+
+                            <datalist id="year-list">
+                                <option th:each="year: ${years}"
+                                        th:value="${year}"></option>
+                            </datalist>
+
+<!--                            <label class="form-label d-block me-1">-->
+<!--                                <input class="form-control bg-white border-3 rounded-0"-->
+<!--                                       id="dateInput"-->
+<!--                                       type="month" th:value="${currentDate}">-->
+<!--                            </label>-->
                             <input id="csrfToken" th:name="${_csrf.parameterName}" type="hidden" th:value="${_csrf.token}">
                         </form>
                     </div>
@@ -108,7 +120,7 @@
                             </thead>
                             <tbody>
                                 <tr th:each="chartE: ${chartYearCommands}">
-                                    <td class="text_n ty p-0" th:text="${chartE.equipment}"></td>
+                                    <td class="text_n ty p-0 px-1" th:text="${chartE.equipment}"></td>
                                     <th class="text_b tx text-center p-0"
                                         th:each="chartMonth: ${chartE.chartMonthCommands}" >
                                         <a class="text_b tx p-0" th:text="${chartMonth.factPercentsPerMonth}"
@@ -176,20 +188,17 @@
     new DataTable('#example');
     new DataTable('#example1');
     new DataTable('#example2');
-
-    const dateInput = document.getElementById('dateInput');
+    const year = document.getElementById('year');
     const csrfTokenInput = document.getElementById('csrfToken');
 
-    dateInput.addEventListener('change', sendDataToServer);
+    year.addEventListener('change', sendDataToServer);
 
     function sendDataToServer() {
-        const selectedDate = dateInput.value;
+        const selectedDate = year.value;
         const csrfToken = csrfTokenInput.value;
-        // const id = dateInput.getAttribute("name");
-        // console.log("id = " + id);
-        console.log("selectedDate = " + selectedDate);
-        const url = "/equipment_plans/date/" + selectedDate;
-        console.log("selectedDate = " + selectedDate);
+        // console.log("selectedDate = " + selectedDate);
+        // const url = "/equipment_plans/date/" + selectedDate;
+        // console.log("selectedDate = " + selectedDate);
         fetch(`/equipment_plans/date/${selectedDate}`, {
             method: 'POST',
             headers: {
@@ -211,6 +220,43 @@
                 console.error('Произошла ошибка:', error);
             });
     }
+
+
+    // const dateInput = document.getElementById('dateInput');
+    //
+    // const csrfTokenInput = document.getElementById('csrfToken');
+    //
+    // dateInput.addEventListener('change', sendDataToServer);
+    //
+    // function sendDataToServer() {
+    //     const selectedDate = dateInput.value;
+    //     const csrfToken = csrfTokenInput.value;
+    //     // const id = dateInput.getAttribute("name");
+    //     // console.log("id = " + id);
+    //     console.log("selectedDate = " + selectedDate);
+    //     const url = "/equipment_plans/date/" + selectedDate;
+    //     console.log("selectedDate = " + selectedDate);
+    //     fetch(`/equipment_plans/date/${selectedDate}`, {
+    //         method: 'POST',
+    //         headers: {
+    //             'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+    //             'X-CSRF-TOKEN': csrfToken
+    //         },
+    //         // body: `\${selectedDate}`,
+    //         // body: new URLSearchParams({ 'selectedDate': selectedDate }),
+    //     })
+    //         .then(response => {
+    //             if (response.ok) {
+    //                 console.log('Данные успешно отправлены на сервер!');
+    //                 location.reload();
+    //             } else {
+    //                 console.error('Ошибка при отправке данных на сервер.');
+    //             }
+    //         })
+    //         .catch(error => {
+    //             console.error('Произошла ошибка:', error);
+    //         });
+    // }
 </script>
 </body>
 </html>

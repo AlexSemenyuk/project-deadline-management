@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -42,6 +43,14 @@ public class EquipmentPlanController {
         }
 
         formParameter(model, session, 1, 1);
+
+        List<Integer> years = new ArrayList<>();
+        for (int i = 1900; i < 2051; i++) {
+            years.add(i);
+        }
+        model.addAttribute("years", years);
+
+
         return "equipment_plans";
     }
 
@@ -97,19 +106,15 @@ public class EquipmentPlanController {
     }
 
 
-    @PostMapping("/date/{month}")
-    String changeDate(@PathVariable String month, HttpSession session) {
+    @PostMapping("/date/{year}")
+    String changeDate(@PathVariable String year, HttpSession session) {
 //        System.out.println("monthFetch = " + month);
-        formDateParameter(month, session);
+//        formDateParameter(month, session);
+        LocalDate tmpDate = (LocalDate) session.getAttribute("tmpDate");
+        tmpDate = tmpDate.withYear(Integer.parseInt(year));
+        session.setAttribute("tmpDate", tmpDate);
         return "redirect:/equipment_plans";
     }
-
-//    @PostMapping("/{id}/date/{month}")
-//    String changeDateWithId(@PathVariable Integer id, @PathVariable String month, HttpSession session) {
-////        System.out.println("monthFetch = " + month);
-//        formDateParameter(month, session);
-//        return "redirect:/production_plans/equipment_plans/{id}";
-//    }
 
     private void formDateParameter(String month, HttpSession session) {
         String[] dateTmp = month.split("-");

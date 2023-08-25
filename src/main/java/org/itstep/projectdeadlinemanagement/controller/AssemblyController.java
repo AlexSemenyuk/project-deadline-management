@@ -3,7 +3,9 @@ package org.itstep.projectdeadlinemanagement.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.itstep.projectdeadlinemanagement.command.AssemblyCommand;
+import org.itstep.projectdeadlinemanagement.command.PartCommand;
 import org.itstep.projectdeadlinemanagement.model.Assembly;
+import org.itstep.projectdeadlinemanagement.model.Part;
 import org.itstep.projectdeadlinemanagement.repository.AssemblyRepository;
 import org.itstep.projectdeadlinemanagement.repository.PartRepository;
 import org.springframework.stereotype.Controller;
@@ -47,6 +49,28 @@ public class AssemblyController {
         Optional<Assembly> optionalAssembly = assemblyRepository.findById(id);
         optionalAssembly.ifPresent(assembly -> assemblyRepository.deleteById(id));
         return "redirect:/assemblies";
+    }
+
+    @GetMapping(("edit/{id}"))
+    String findById(@PathVariable Integer id, Model model) {
+        Optional<Assembly> optionalAssembly = assemblyRepository.findById(id);
+        if (optionalAssembly.isPresent()){
+            Assembly assembly = optionalAssembly.get();
+            model.addAttribute("assembly", assembly);
+        }
+        return "assembly_edit";
+    }
+
+    @PostMapping(("edit/{id}"))
+    String update(@PathVariable Integer id, AssemblyCommand command) {
+        Optional<Assembly> optionalAssembly = assemblyRepository.findById(id);
+        if (optionalAssembly.isPresent()){
+            Assembly assembly = optionalAssembly.get();
+            assembly.setNumber(command.number());
+            assembly.setName(command.name());
+            assemblyRepository.save(assembly);
+        }
+        return "redirect:/assemblies/edit/{id}";
     }
 
 }

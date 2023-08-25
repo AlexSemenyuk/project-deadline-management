@@ -7,6 +7,8 @@ import org.itstep.projectdeadlinemanagement.model.Project;
 import org.itstep.projectdeadlinemanagement.model.Task;
 import org.itstep.projectdeadlinemanagement.service.PartService;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -25,8 +27,8 @@ public class PartApiService {
         Project project = partService.findProject(projectNumber);
         List<Task> tasks = partService.findTasks(project.getTasks(), partNumber);
 
-        List<TermHours> termHoursList = new CopyOnWriteArrayList<>();
-        List<Integer> termNumberList = new CopyOnWriteArrayList<>();
+        List<TermHours> termHoursList = new ArrayList<>();
+        List<Integer> termNumberList = new ArrayList<>();
         int projectNumberTMP = 0;
         int partNumberTMP = 0;
         String partNameTMP = "";
