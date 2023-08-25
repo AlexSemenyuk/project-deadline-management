@@ -17,16 +17,14 @@
 <body>
 <header class="container-fluid fixed-top p-0">
     <div class="row bg-dark text-bg-secondary align-items-center " style="height: 80px">
-        <div class="col-xl-1 text-center">
-            <!--            <a class="text-white" th:href="@{/}">-->
-            <!--                <i class="bi bi-house-door-fill" style="font-size: 1.2rem;"></i>-->
-            <!--            </a>-->
+        <div class="col-xl-2 text-center">
             <a class="text-white" th:href="@{/}">
-                <img width="75px" th:src="@{/logo/logo.png}" alt="logo"/>
+                <img width="200px" th:src="@{/logo/logo.png}" alt="logo"/>
             </a>
         </div>
-        <div class="col-xl-8" style="line-height: 28px">
-            <h4 class="title text-center mb-0" id="task">Project Deadline Management</h4>
+        <div class="col-xl-7" style="line-height: 28px">
+            <h4 class="title text-center mb-0">Project deadline management</h4>
+            <h4 class="title text-center mb-0">for a machine-building enterprise </h4>
         </div>
         <div class="col-xl-2">
             <p class="align-items-center text-end mb-0">Welcome: <span class="user" th:text="${#authentication.name}"></span></p>
