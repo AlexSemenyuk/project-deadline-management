@@ -1,16 +1,13 @@
 package org.itstep.projectdeadlinemanagement.service;
 
 import lombok.RequiredArgsConstructor;
-import org.itstep.projectdeadlinemanagement.command.ChartDaysCommand;
-import org.itstep.projectdeadlinemanagement.command.ChartMonthCommand;
-import org.itstep.projectdeadlinemanagement.model.Equipment;
-import org.itstep.projectdeadlinemanagement.model.ProductionPlan;
-import org.itstep.projectdeadlinemanagement.model.Task;
+import org.itstep.projectdeadlinemanagement.model.*;
 import org.itstep.projectdeadlinemanagement.repository.*;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
@@ -23,11 +20,14 @@ public class ProductionPlanService {
 
     private final ProductionPlanRepository productionPlanRepository;
     private final EquipmentRepository equipmentRepository;
+    private final ProjectRepository projectRepository;
 
     public void formProductionPlans(List<Task> tasks) {
 
         List<Equipment> equipmentList = equipmentRepository.findAll();
         List<ProductionPlan> productionPlans = productionPlanRepository.findAll();
+        List<Project> projects = projectRepository.findAll();
+        Project currentProject = null;
 
         // формирование ProductionPlans
         if (!equipmentList.isEmpty()) {
@@ -45,13 +45,20 @@ public class ProductionPlanService {
                 }
 
                 if (!tasks.isEmpty()) {
+                    Integer projectNumber = tasks.get(0).getProjectNumber();
+                    if (!projects.isEmpty()) {
+                        for (Project project : projects) {
+                            if (Objects.equals(project.getNumber(), projectNumber)) {
+                                currentProject = project;
+                                break;
+                            }
+                        }
+                    }
                     for (Task task : tasks) {
                         if (Objects.equals(equipment.getNumber(), task.getEquipment().getNumber())) {
                             ProductionPlan productionPlan = new ProductionPlan(count + 1);
                             productionPlan.setTask(task);
                             productionPlan.setEquipment(equipment);
-//                            Optional<Equipment> optionalEquipment = equipmentRepository.findById(productionPlan.getTask().getEquipment().getId());
-//                            optionalEquipment.ifPresent(productionPlan::setEquipment);
                             productionPlan.setCurrentStart(task.getStartProduction());
                             productionPlanRepository.save(productionPlan);
                             count++;
@@ -61,67 +68,180 @@ public class ProductionPlanService {
             }
         }
 
-        formCurrentStart();
-    }
 
-    private void formCurrentStart() {
-        // Дата + время, описывающее окончание предыдущего по списку ProductionPlans для данного оборудования
-        LocalDateTime[] currentDeadlineTmp = new LocalDateTime[2];
-        List<Equipment> equipmentList = equipmentRepository.findAll();
-
-        List<ProductionPlan> productionPlans = productionPlanRepository.findAll();
-        if (!productionPlans.isEmpty()) {
-            productionPlans = productionPlans.stream()
+        List<ProductionPlan> currentProductionPlans = productionPlanRepository.findAll();
+        if (!currentProductionPlans.isEmpty()) {
+            currentProductionPlans = currentProductionPlans.stream()
                     .sorted(Comparator.comparing(ProductionPlan::getNumber))
                     .collect(Collectors.toList());
         }
 
+        formCurrentStartForPart(equipmentList, currentProductionPlans, currentProject);
+        formCurrentStartForAssembly(equipmentList, currentProductionPlans, currentProject);
+    }
+
+    private void formCurrentStartForPart(List<Equipment> equipmentList, List<ProductionPlan> productionPlans, Project currentProject) {
+
         if (!equipmentList.isEmpty()) {
             for (Equipment equipment : equipmentList) {
-                // DateTime является CurrentStart для текущего (является Deadline, с учетом OperationTime от предыдущего ProductionPlan с состоянием не "New")
-                currentDeadlineTmp[0] = null;
-                // DateTime является CurrentStart для текущего с учетом termNumber
-                currentDeadlineTmp[1] = null;
+                List<ProductionPlan> partProductionPlans = new ArrayList<>();
+                List<ProductionPlan> assemblyProductionPlans = new ArrayList<>();
 
-                productionPlans.forEach(plan -> {
-                    if (Objects.equals(plan.getEquipment().getNumber(), equipment.getNumber())) {
-
-                        if (!plan.getTask().getTaskCondition().getName().equals("New")) {
-                            // Определение start для текущего (окончание предыдущего ProductionPlan)
-                            currentDeadlineTmp[0] = TimeService
-                                    .localDateTimeAddHours(plan.getCurrentStart(),
-                                            plan.getTask().getOperationTime()
-                                    );
-                        } else {                                                // Работаем только с состоянием "New"
-                            // Проверка currentDeadline с предыдущего по TermNumber значения (partNumber = const, lotNumber=const)
-                            if (currentDeadlineTmp[0] != null) {                // Есть очередь (есть предыдущий) - в конец
-                                // Коррекция по termNumber
-                                if (plan.getTask().getTermNumber() > 1) {
-                                    currentDeadlineTmp[1] = getCurrentDeadlineFromPreviousTermNumber(plan);
-                                    if (currentDeadlineTmp[1].isAfter(currentDeadlineTmp[0])) {
-                                        currentDeadlineTmp[0] = currentDeadlineTmp[1];
-                                    }
-                                }
-                                // Коррекция по StartProduction, в зависимости от design, technology and contract
-                                if (plan.getTask().getStartProduction().isAfter(currentDeadlineTmp[0])) {
-                                    currentDeadlineTmp[0] = plan.getTask().getStartProduction();
-                                }
-                            } else {                                    // Если нет очереди - дата task
-                                currentDeadlineTmp[0] = plan.getTask().getStartProduction();
-                                currentDeadlineTmp[0] = TimeService.excludeWeekend(currentDeadlineTmp[0]);
+                // Виробництво - for Part
+                if (equipment.getEquipmentType().getId() == 1) {
+                    for (ProductionPlan productionPlan : productionPlans) {
+                        if (Objects.equals(productionPlan.getEquipment().getNumber(), equipment.getNumber())) {
+                            if (productionPlan.getTask().getTaskType().getId() == 1) {
+                                partProductionPlans.add(productionPlan);
                             }
-                            plan.setCurrentStart(currentDeadlineTmp[0]);
-                            productionPlanRepository.save(plan);
-                            currentDeadlineTmp[0] = TimeService
-                                    .localDateTimeAddHours(plan.getCurrentStart(),
-                                            plan.getTask().getOperationTime()
-                                    );
                         }
                     }
-                });
+                    getPartQueue(partProductionPlans);
+                }
+
+            }
+        }
+    }
+
+    private void formCurrentStartForAssembly(List<Equipment> equipmentList, List<ProductionPlan> productionPlans, Project currentProject) {
+
+        // Определение окончания componentContracts
+        LocalDateTime contractTMP = currentProject.getStart();
+        for (Contract contract : currentProject.getContracts()) {
+            if (contract.getContractType().getId() == 2 && contract.getDeadline().isAfter(contractTMP)) {
+                contractTMP = contract.getDeadline();
+            }
+        }
+//        System.out.println("contractTMP = " + contractTMP);
+
+        // Определение окончания currentStart from partProductionPlans
+        LocalDateTime deadlinePartProductionPlanTMP = currentProject.getStart();
+        List<ProductionPlan> partProductionPlansFromCurrentProject = new ArrayList<>();
+
+        for (ProductionPlan productionPlan : productionPlans) {
+            if (Objects.equals(productionPlan.getTask().getProjectNumber(), currentProject.getNumber()) &&
+                    productionPlan.getTask().getTaskType().getId() == 1) {
+                partProductionPlansFromCurrentProject.add(productionPlan);
             }
         }
 
+        for (ProductionPlan productionPlan : partProductionPlansFromCurrentProject) {
+            LocalDateTime currentStartPartProductionPlan = TimeService.localDateTimeAddHours(productionPlan.getCurrentStart(),
+                    productionPlan.getTask().getOperationTime());
+            if (Objects.equals(productionPlan.getTask().getProjectNumber(), currentProject.getNumber()) &&
+                    currentStartPartProductionPlan.isAfter(deadlinePartProductionPlanTMP)) {
+                deadlinePartProductionPlanTMP = currentStartPartProductionPlan;
+            }
+        }
+        deadlinePartProductionPlanTMP = TimeService.localDateTimeAddDays(deadlinePartProductionPlanTMP, 1);
+//        System.out.println("deadlinePartProductionPlanTMP = " + deadlinePartProductionPlanTMP);
+
+        // Определение max componentContracts и currentStart from partProductionPlans
+        LocalDateTime assemblyProductionStart = null;
+        if (contractTMP.isAfter(deadlinePartProductionPlanTMP)) {
+            assemblyProductionStart = contractTMP;
+        } else {
+            assemblyProductionStart = deadlinePartProductionPlanTMP;
+        }
+//        System.out.println("assemblyProductionStart1 = " + assemblyProductionStart);
+        assemblyProductionStart = TimeService.excludeWeekend(assemblyProductionStart.plusDays(1));
+//        System.out.println("assemblyProductionStart2 = " +assemblyProductionStart);
+
+        if (!equipmentList.isEmpty()) {
+            for (Equipment equipment : equipmentList) {
+                List<ProductionPlan> assemblyProductionPlans = new ArrayList<>();
+
+                // Складання вузлів - for Assembly
+                if (equipment.getEquipmentType().getId() == 2) {
+                    for (ProductionPlan productionPlan : productionPlans) {
+                        if (Objects.equals(productionPlan.getEquipment().getNumber(), equipment.getNumber())) {
+                            if (productionPlan.getTask().getTaskType().getId() == 2) {
+                                assemblyProductionPlans.add(productionPlan);
+                            }
+                        }
+                    }
+                }
+
+                getAssemblyQueue(assemblyProductionPlans, assemblyProductionStart);
+            }
+        }
+    }
+
+    private void getPartQueue(List<ProductionPlan> productionPlans) {
+        // currentDeadlineTmp - Дата + время, описывающее окончание предыдущего по списку ProductionPlans для данного оборудования
+        // (CurrentStart с учетом OperationTime от предыдущего ProductionPlan с состоянием не "New")
+        LocalDateTime[] currentDeadlineTmp = new LocalDateTime[1];
+        currentDeadlineTmp[0] = null;
+
+        // currentDeadlineFromPreviousTermNumberTmp является CurrentStart для текущего с учетом termNumber
+        LocalDateTime[] currentDeadlineFromPreviousTermNumberTmp = new LocalDateTime[1];
+        currentDeadlineFromPreviousTermNumberTmp[0] = null;
+
+
+        for (ProductionPlan productionPlan : productionPlans) {
+            if (!productionPlan.getTask().getTaskCondition().getName().equals("New")) {
+                // Определение start для текущего (окончание предыдущего ProductionPlan)
+                currentDeadlineTmp[0] = TimeService.localDateTimeAddHours(productionPlan.getCurrentStart(),
+                        productionPlan.getTask().getOperationTime());
+            } else {                                                // Работаем только с состоянием "New"
+                // Проверка currentDeadline с предыдущего по TermNumber значения (partNumber = const, lotNumber=const)
+                if (currentDeadlineTmp[0] != null) {                // Есть очередь (есть предыдущий) - в конец
+                    // Коррекция по termNumber
+                    if (productionPlan.getTask().getTermNumber() > 1) {
+                        currentDeadlineFromPreviousTermNumberTmp[0] = getCurrentDeadlineFromPreviousTermNumber(productionPlan);
+                        if (currentDeadlineFromPreviousTermNumberTmp[0].isAfter(currentDeadlineTmp[0])) {
+                            currentDeadlineTmp[0] = currentDeadlineFromPreviousTermNumberTmp[0];
+                        }
+                    }
+                    // Коррекция по StartProduction, в зависимости от design, technology and contract
+                    if (productionPlan.getTask().getStartProduction().isAfter(currentDeadlineTmp[0])) {
+                        currentDeadlineTmp[0] = productionPlan.getTask().getStartProduction();
+                    }
+                } else {                                    // Если нет очереди - дата task
+                    currentDeadlineTmp[0] = productionPlan.getTask().getStartProduction();
+                    currentDeadlineTmp[0] = TimeService.excludeWeekend(currentDeadlineTmp[0]);
+                }
+                productionPlan.setCurrentStart(currentDeadlineTmp[0]);
+                productionPlanRepository.save(productionPlan);
+                currentDeadlineTmp[0] = TimeService.localDateTimeAddHours(productionPlan.getCurrentStart(),
+                        productionPlan.getTask().getOperationTime());
+            }
+        }
+    }
+
+    private void getAssemblyQueue(List<ProductionPlan> productionPlans, LocalDateTime assemblyProductionStart) {
+
+        // currentDeadlineTmp - Дата + время, описывающее окончание предыдущего по списку ProductionPlans для данного оборудования
+        // (CurrentStart с учетом OperationTime от предыдущего ProductionPlan с состоянием не "New")
+        LocalDateTime[] currentDeadlineTmp = new LocalDateTime[1];
+        currentDeadlineTmp[0] = null;
+
+        for (ProductionPlan productionPlan : productionPlans) {
+            if (!productionPlan.getTask().getTaskCondition().getName().equals("New")) {
+                // Определение start для текущего (окончание предыдущего ProductionPlan)
+                currentDeadlineTmp[0] = TimeService.localDateTimeAddHours(productionPlan.getCurrentStart(),
+                        productionPlan.getTask().getOperationTime());
+            } else {                                                // Работаем только с состоянием "New"
+                if (currentDeadlineTmp[0] == null) {                // Если нет очереди - дата task
+                    currentDeadlineTmp[0] = assemblyProductionStart;
+                    currentDeadlineTmp[0] = TimeService.excludeWeekend(currentDeadlineTmp[0]);
+                } else {
+                    // Коррекция по assemblyProductionStart
+                    if (assemblyProductionStart.isAfter(currentDeadlineTmp[0]) ) {
+                        currentDeadlineTmp[0] = assemblyProductionStart;
+                    }
+                    // Проверка currentDeadline с предыдущего по TermNumber значения (partNumber = const, lotNumber=const)
+                    if (productionPlan.getTask().getStartProduction().isAfter(currentDeadlineTmp[0]) ) {
+                        currentDeadlineTmp[0] = productionPlan.getTask().getStartProduction();
+                    }
+                }
+//                System.out.println("currentDeadlineTmp[0] = " + currentDeadlineTmp[0]);
+                productionPlan.setCurrentStart(currentDeadlineTmp[0]);
+                productionPlanRepository.save(productionPlan);
+                currentDeadlineTmp[0] = TimeService.localDateTimeAddHours(productionPlan.getCurrentStart(),
+                        productionPlan.getTask().getOperationTime());
+            }
+        }
     }
 
     // Сохранение цепочки termNumber - Получение currentDeadline с предыдущего по TermNumber значения (partNumber = const, lotNumber=const)

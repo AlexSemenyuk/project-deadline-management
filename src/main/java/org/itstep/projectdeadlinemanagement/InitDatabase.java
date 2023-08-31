@@ -27,6 +27,7 @@ public class InitDatabase implements CommandLineRunner {
     private final ProjectConditionRepository projectConditionRepository;
     private final CustomerRepository customerRepository;
     private final TaskConditionRepository taskConditionRepository;
+    private final TaskTypeRepository taskTypeRepository;
     private final EquipmentRepository equipmentRepository;
     private final ProjectRepository projectRepository;
     private final ProjectListRepository projectListRepository;
@@ -128,21 +129,28 @@ public class InitDatabase implements CommandLineRunner {
         taskConditionRepository.save(new TaskCondition("Technology"));
         taskConditionRepository.save(new TaskCondition("Archive"));
 
-        // 9. ContractTypes
+        // 9. Создание taskType (Part, Assembly)
+        taskTypeRepository.save(new TaskType("Деталь"));
+        taskTypeRepository.save(new TaskType("Вузол"));
+
+
+        // 10. ContractTypes
         contractTypeRepository.save(new ContractType("Матеріали"));
         contractTypeRepository.save(new ContractType("Комплектуючі вироби"));
 
 
-        // 10. Создание Project
+        // 11. Создание Project
         // Project 1001
         addProject(new ProjectCommand(
                 1001, null, 1,
-                LocalDateTime.parse("2023-06-05T00:00"), LocalDateTime.parse("2023-06-29T00:00"),
+                LocalDateTime.parse("2023-06-05T00:00"), LocalDateTime.parse("2023-07-07T00:00"),
                 4));
-        addDesignTerm(1, 5);                                                   // DesignTerm
-        addAssemblyListToProject(1, new AssemblyListCommand(2, 2));     // ProjectLists
-        addAssemblyListToProject(1, new AssemblyListCommand(3, 2));
+        // DesignTerm
+        addDesignTerm(1, 5);
 
+        // ProjectLists
+        addAssemblyListToProject(1, new AssemblyListCommand(2, 3));
+        addAssemblyListToProject(1, new AssemblyListCommand(3, 2));
 
         addPartListToProject(1, new PartListCommand(7, 1));
         addPartListToProject(1, new PartListCommand(8, 2));
@@ -173,21 +181,33 @@ public class InitDatabase implements CommandLineRunner {
 
         addTechnologyTerm(1, 5);                               // TechnologyTerm
 
-        addContract(1, new ContractCommand(                                   // Contracts
-                "№10000-1", "Закупка металла",
+        addContract(1, new ContractCommand(                                   // Contracts material
+                "№10000-1", "Закупівля металу",
                 LocalDateTime.parse("2023-06-08T00:00"),
                 LocalDateTime.parse("2023-06-14T00:00"),
                 1));
         addContract(1, new ContractCommand(
-                "№10000-2", "Закупка металла",
+                "№10000-2", "Закупівля металу",
                 LocalDateTime.parse("2023-06-09T00:00"),
                 LocalDateTime.parse("2023-06-15T00:00"),
                 1));
         addContract(1, new ContractCommand(
-                "№10000-3", "Закупка металла",
+                "№10000-3", "Закупівля металу",
                 LocalDateTime.parse("2023-06-09T00:00"),
-                LocalDateTime.parse("2023-06-18T00:00"),
+                LocalDateTime.parse("2023-06-17T00:00"),
                 1));
+
+        addContract(1, new ContractCommand(                                   // Contracts component
+                "№10000-4", "Закупівля комплектуючих виробів",
+                LocalDateTime.parse("2023-06-08T00:00"),
+                LocalDateTime.parse("2023-06-19T00:00"),
+                2));
+        addContract(1, new ContractCommand(
+                "№10000-5", "Закупівля комплектуючих виробів",
+                LocalDateTime.parse("2023-06-09T00:00"),
+                LocalDateTime.parse("2023-06-19T00:00"),
+                2));
+
 
         productionPlanService.formProductionPlans(taskService.formTasks(1));
         changeProjectCondition(1,4);
@@ -196,11 +216,13 @@ public class InitDatabase implements CommandLineRunner {
 
         // Project 1002
         addProject(new ProjectCommand(
-                1002, null, 1,
-                LocalDateTime.parse("2023-07-25T00:00"), LocalDateTime.parse("2023-09-12T00:00"),
+                1002, null, 2,
+                LocalDateTime.parse("2023-07-25T00:00"), LocalDateTime.parse("2023-09-25T00:00"),
                 1));
-        addDesignTerm(2, 7);                                      // DesignTerm
-        addAssemblyListToProject(2, new AssemblyListCommand(1, 2));     // ProjectLists
+        // DesignTerm
+        addDesignTerm(2, 7);
+        // ProjectLists
+        addAssemblyListToProject(2, new AssemblyListCommand(1, 2));
         addAssemblyListToProject(2, new AssemblyListCommand(4, 2));
         addPartListToProject(2, new PartListCommand(5, 1));
         addPartListToProject(2, new PartListCommand(6, 2));
@@ -213,27 +235,36 @@ public class InitDatabase implements CommandLineRunner {
         createTechnologyPart(new TechnologyPartCommand(2, 2, 3, 8));
 
         createTechnologyAssembly(new TechnologyAssemblyCommand(1, 1, 4, 2));
-        createTechnologyAssembly(new TechnologyAssemblyCommand(2, 1, 4, 1));
-        createTechnologyAssembly(new TechnologyAssemblyCommand(3, 1, 4, 4));
         createTechnologyAssembly(new TechnologyAssemblyCommand(4, 1, 4, 3));
 
         addTechnologyTerm(2, 7);                               // TechnologyTerm
 
-        addContract(2, new ContractCommand(                                   // Contracts
-                "№10000-4", "Закупка металла",
+        addContract(2, new ContractCommand(                                   // Contracts material
+                "№10000-6", "Закупівля металу",
                 LocalDateTime.parse("2023-08-04T00:00"),
                 LocalDateTime.parse("2023-08-14T00:00"),
                 1));
         addContract(2, new ContractCommand(
-                "№10000-5", "Закупка металла",
+                "№10000-7", "Закупівля металу",
                 LocalDateTime.parse("2023-08-05T00:00"),
                 LocalDateTime.parse("2023-08-11T00:00"),
                 1));
         addContract(2, new ContractCommand(
-                "№10000-6", "Закупка металла",
+                "№10000-8", "Закупівля металу",
                 LocalDateTime.parse("2023-08-09T00:00"),
                 LocalDateTime.parse("2023-08-15T00:00"),
                 1));
+
+        addContract(2, new ContractCommand(                                   // Contracts component
+                "№10000-9", "Закупівля комплектуючих виробів",
+                LocalDateTime.parse("2023-08-10T00:00"),
+                LocalDateTime.parse("2023-08-27T00:00"),
+                2));
+        addContract(2, new ContractCommand(
+                "№10000-10", "Закупівля комплектуючих виробів",
+                LocalDateTime.parse("2023-08-09T00:00"),
+                LocalDateTime.parse("2023-09-05T00:00"),
+                2));
 //
         productionPlanService.formProductionPlans(taskService.formTasks(2));
 

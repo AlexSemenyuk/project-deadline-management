@@ -9,8 +9,10 @@ public class ProjectChart {
     private TermDate project;
     private TermDate design;
     private TermDate technology;
-    private TermDate contracts;
-    private TermDate production;
+    private TermDate materialContracts;
+    private TermDate partProduction;
+    private TermDate componentContracts;
+    private TermDate assemblyProduction;
 
 //    public Term getProject() {
 //        return project;

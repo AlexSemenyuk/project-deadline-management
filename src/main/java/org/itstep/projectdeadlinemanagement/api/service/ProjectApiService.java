@@ -3,6 +3,7 @@ package org.itstep.projectdeadlinemanagement.api.service;
 import lombok.*;
 import org.itstep.projectdeadlinemanagement.api.data.ProjectChart;
 import org.itstep.projectdeadlinemanagement.api.data.TermDate;
+import org.itstep.projectdeadlinemanagement.model.Contract;
 import org.itstep.projectdeadlinemanagement.model.ProductionPlan;
 import org.itstep.projectdeadlinemanagement.model.Project;
 import org.itstep.projectdeadlinemanagement.repository.ProductionPlanRepository;
@@ -13,6 +14,8 @@ import org.itstep.projectdeadlinemanagement.service.TimeService;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -26,115 +29,165 @@ public class ProjectApiService {
     private final TaskService taskService;
 
     public ProjectChart formProjectChart(int id) {
-        LocalDate [] start = new LocalDate[1];
-        LocalDate [] deadline = new LocalDate[1];
-        TermDate[] projectTmp = new TermDate[1];
-        projectTmp[0] = new TermDate();
-        TermDate[] designTmp = new TermDate[1];
-        designTmp[0] = new TermDate();
-        TermDate[] technologyTmp = new TermDate[1];
-        technologyTmp[0] = new TermDate();
-        TermDate[] contractsTmp = new TermDate[1];
-        contractsTmp[0] = new TermDate();
-        TermDate[] productionTmp = new TermDate[1];
-        productionTmp[0] = new TermDate();
-        LocalDate [] dateTmp = new LocalDate[1];
-        int [] daysTmp = new int[1];
-        int [] reminderTmp = new int[1];
+        LocalDate start = null;
+        LocalDate deadline = null;
+        TermDate projectTmp = new TermDate();
+        TermDate designTmp = new TermDate();
+        TermDate technologyTmp = new TermDate();
+        TermDate materialContractsTmp = new TermDate();
+        TermDate partProductionTmp = new TermDate();
+        TermDate componentContractsTmp = new TermDate();
+        TermDate assemblyProductionTmp = new TermDate();
+        LocalDateTime deadlineTmp;
 
         List<ProductionPlan> productionPlans = productionPlanRepository.findAll();
-
         Optional<Project> optionalProject = projectRepository.findById(id);
-        optionalProject.ifPresent(project -> {
+        if (optionalProject.isPresent() && !productionPlans.isEmpty()) {
+            Project currentProject = optionalProject.get();
+
+            List<ProductionPlan> partProductionPlansForCurrentProject = new ArrayList<>();
+            List<ProductionPlan> assemblyProductionPlansForCurrentProject = new ArrayList<>();
+            for (ProductionPlan productionPlan : productionPlans) {
+                if (Objects.equals(productionPlan.getTask().getProjectNumber(), currentProject.getNumber())) {
+                    if (productionPlan.getTask().getTaskType().getId() == 1) {
+                        partProductionPlansForCurrentProject.add(productionPlan);
+                    }
+                    if (productionPlan.getTask().getTaskType().getId() == 2) {
+                        assemblyProductionPlansForCurrentProject.add(productionPlan);
+                    }
+                }
+            }
 
             // ProjectTerm
-            start[0] = LocalDate.from(project.getStart());
-            deadline[0] = LocalDate.from(project.getDeadline());
+            start = LocalDate.from(currentProject.getStart());
+            deadline = LocalDate.from(currentProject.getDeadline());
 
-            projectTmp[0].setStart(start[0]);
-            projectTmp[0].setDeadline(deadline[0]);
+            projectTmp.setStart(start);
+            projectTmp.setDeadline(deadline);
 
             // DesignTerm
 //            start[0] = LocalDate.from(project.getStart());
-            start[0] = TimeService.excludeWeekend(start[0]);
-            deadline[0] = TimeService.localDateAddDays(start[0], project.getDesignTerm());
+            start = TimeService.excludeWeekend(start);
+            deadline = TimeService.localDateAddDays(start, currentProject.getDesignTerm() - 1);
 
-            designTmp[0].setStart(start[0]);
-            designTmp[0].setDeadline(deadline[0]);
-//            System.out.println("designTmp[0].getStart() = " + designTmp[0].getStart());
-//            System.out.println("designTmp[0].getDeadline() = " + designTmp[0].getDeadline());
+            designTmp.setStart(start);
+            designTmp.setDeadline(deadline);
 
             // TechnologyTerm
-            start[0] = TimeService.excludeWeekend(designTmp[0].getDeadline().plusDays(1));
-            deadline[0] = TimeService.localDateAddDays(start[0], project.getTechnologyTerm());
+            start = TimeService.excludeWeekend(designTmp.getDeadline().plusDays(1));
+            deadline = TimeService.localDateAddDays(start, currentProject.getTechnologyTerm() - 1);
 
-            technologyTmp[0].setStart(start[0]);
-            technologyTmp[0].setDeadline(deadline[0]);
-//            System.out.println("technologyTmp[0].getStart() = " + technologyTmp[0].getStart());
-//            System.out.println("technologyTmp[0].getDeadline() = " + technologyTmp[0].getDeadline());
+            technologyTmp.setStart(start);
+            technologyTmp.setDeadline(deadline);
 
-            // Contracts
-            start[0] = LocalDate.from(project.getDeadline());
-            deadline[0] = LocalDate.from(project.getStart());
+            // materialContracts
+            start = LocalDate.from(currentProject.getDeadline());
+            deadline = LocalDate.from(currentProject.getStart());
 
-            if (!project.getContracts().isEmpty()){
-                project.getContracts().forEach(contract -> {
-                    LocalDate contractStartTmp = LocalDate.from(contract.getStart());
-                    LocalDate contractDeadlineTmp = LocalDate.from(contract.getDeadline());
-                    if (contractStartTmp.isBefore(start[0])){
-                        start[0] = contractStartTmp;
+            if (!currentProject.getContracts().isEmpty()) {
+                for (Contract contract : currentProject.getContracts()) {
+                    if (contract.getContractType().getId() == 1) {
+                        LocalDate contractStartTmp = LocalDate.from(contract.getStart());
+                        LocalDate contractDeadlineTmp = LocalDate.from(contract.getDeadline());
+                        if (contractStartTmp.isBefore(start)) {
+                            start = contractStartTmp;
+                        }
+                        if (contractDeadlineTmp.isAfter(deadline)) {
+                            deadline = contractDeadlineTmp;
+                        }
                     }
-                    if (contractDeadlineTmp.isAfter(deadline[0])){
-                        deadline[0] = contractDeadlineTmp;
-                    }
-                });
-            }
-
-            contractsTmp[0].setStart(start[0]);
-            contractsTmp[0].setDeadline(deadline[0]);
-//            System.out.println("contractsTmp[0].getStart() = " + contractsTmp[0].getStart());
-//            System.out.println("contractsTmp[0].getDeadline() = " + contractsTmp[0].getDeadline());
-
-            // Max from DesignOrTechnologyDeadline or Contracts
-            if (technologyTmp[0].getDeadline().isAfter(contractsTmp[0].getDeadline())){
-                start[0] = technologyTmp[0].getDeadline().plusDays(1);
+                }
             } else {
-                start[0] = contractsTmp[0].getDeadline().plusDays(1);
+                start = LocalDate.from(currentProject.getStart());
+                deadline = LocalDate.from(currentProject.getStart());
             }
 
-            deadline[0] = start[0];
+            materialContractsTmp.setStart(start);
+            materialContractsTmp.setDeadline(deadline);
 
-            if (!productionPlans.isEmpty()){
-                dateTmp[0] = null;
-                daysTmp[0] = 0;
-                productionPlans.forEach(plan -> {
-                    if (Objects.equals(plan.getTask().getProjectNumber(), project.getNumber())){
-                        daysTmp[0] = plan.getTask().getOperationTime() / TimeService.HOURS_PER_DAY;
-                        reminderTmp[0] = plan.getTask().getOperationTime() % TimeService.HOURS_PER_DAY;
-                        if (reminderTmp[0] > 0){
-                            daysTmp[0]++;
-                        }
+            // partProductionPlan
+            // Max from DesignOrTechnologyDeadline or Contracts
+            if (technologyTmp.getDeadline().isAfter(materialContractsTmp.getDeadline())) {
+                start = TimeService.excludeWeekend(technologyTmp.getDeadline().plusDays(1));
+            } else {
+                start = TimeService.excludeWeekend(materialContractsTmp.getDeadline().plusDays(1));
+            }
 
-                        dateTmp[0] = TimeService.localDateAddDays(LocalDate.from(plan.getCurrentStart()), daysTmp[0]);
-                        if (dateTmp[0].isAfter(deadline[0])){
-                            deadline[0] = dateTmp[0];
-                        }
+            deadline = start;
 
+            if (!partProductionPlansForCurrentProject.isEmpty()) {
+                deadlineTmp = null;
+
+                for (ProductionPlan plan : partProductionPlansForCurrentProject) {
+                    deadlineTmp = TimeService.localDateTimeAddHours(plan.getCurrentStart(), plan.getTask().getOperationTime());
+                    if (LocalDate.from(deadlineTmp).isAfter(deadline)) {
+                        deadline = LocalDate.from(deadlineTmp);
                     }
-                });
+                }
             }
-            productionTmp[0].setStart(start[0]);
-            productionTmp[0].setDeadline(deadline[0]);
-//            System.out.println("productionTmp[0].getStart() = " + productionTmp[0].getStart());
-//            System.out.println("productionTmp[0].getDeadline() = " + productionTmp[0].getDeadline());
+            partProductionTmp.setStart(start);
+            partProductionTmp.setDeadline(deadline);
 
-        });
+            // componentContracts
+            start = LocalDate.from(currentProject.getDeadline());
+            deadline = LocalDate.from(currentProject.getStart());
 
-        ProjectChart projectChart = new ProjectChart (projectTmp[0], designTmp[0], technologyTmp[0], contractsTmp[0], productionTmp[0]);
+            if (!currentProject.getContracts().isEmpty()) {
+                for (Contract contract: currentProject.getContracts()){
+                    if (contract.getContractType().getId() == 2) {
+                        LocalDate contractStartTmp = LocalDate.from(contract.getStart());
+                        LocalDate contractDeadlineTmp = LocalDate.from(contract.getDeadline());
+                        if (contractStartTmp.isBefore(start)) {
+                            start = contractStartTmp;
+                        }
+                        if (contractDeadlineTmp.isAfter(deadline)) {
+                            deadline = contractDeadlineTmp;
+                        }
+                    }
+                }
+
+                if (start.equals(LocalDate.from(currentProject.getDeadline()))) {
+                    start = LocalDate.from(currentProject.getStart());
+                }
+                if (deadline.equals(LocalDate.from(currentProject.getStart()))) {
+                    deadline = LocalDate.from(currentProject.getStart());
+                }
+            } else {
+                start = LocalDate.from(currentProject.getStart());
+                deadline = LocalDate.from(currentProject.getStart());
+            }
+            componentContractsTmp.setStart(start);
+            componentContractsTmp.setDeadline(deadline);
+
+            // assemblyProductionPlan
+            // Max from partProductionDeadline or componentContracts
+            if (partProductionTmp.getDeadline().isAfter(componentContractsTmp.getDeadline())) {
+                start = TimeService.excludeWeekend(partProductionTmp.getDeadline().plusDays(1));
+            } else {
+                start = TimeService.excludeWeekend(componentContractsTmp.getDeadline().plusDays(1));
+//
+            }
+            deadline = start;
+
+            if (!assemblyProductionPlansForCurrentProject.isEmpty()) {
+                deadlineTmp = null;
+
+                for (ProductionPlan plan : assemblyProductionPlansForCurrentProject) {
+                    deadlineTmp = TimeService.localDateTimeAddHours(plan.getCurrentStart(), plan.getTask().getOperationTime());
+                    if (LocalDate.from(deadlineTmp).isAfter(deadline)) {
+                        deadline = LocalDate.from(deadlineTmp);
+                    }
+                }
+            }
+            assemblyProductionTmp.setStart(start);
+            assemblyProductionTmp.setDeadline(deadline);
+        }
+
+        ProjectChart projectChart = new ProjectChart(projectTmp, designTmp, technologyTmp,
+                materialContractsTmp, partProductionTmp, componentContractsTmp, assemblyProductionTmp);
 
         return projectChart;
     }
-
 
 
 }

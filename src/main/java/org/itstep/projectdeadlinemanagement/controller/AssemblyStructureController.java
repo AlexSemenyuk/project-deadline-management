@@ -73,7 +73,6 @@ public class AssemblyStructureController {
 
     @GetMapping("/part_lists/{id}/delete/{partListId}")
     String deletePartList(@PathVariable Integer id, @PathVariable Integer partListId) {
-//        Optional<Assembly> optionalAssembly = assemblyRepository.findById(id);
         Optional<PartList> optionalPartList = partListRepository.findById(partListId);
         optionalPartList.ifPresent(partListRepository::delete);
         return "redirect:/assemblies/structure/part_lists/{id}";
@@ -116,7 +115,6 @@ public class AssemblyStructureController {
 
     @GetMapping("/assembly_lists/{id}/delete/{assemblyListId}")
     String deleteAssemblyList(@PathVariable Integer id, @PathVariable Integer assemblyListId) {
-//        Optional<Assembly> optionalAssembly = assemblyRepository.findById(id);
         Optional<AssemblyList> optionalAssemblyList = assemblyListRepository.findById(assemblyListId);
         optionalAssemblyList.ifPresent(assemblyListRepository::delete);
         return "redirect:/assemblies/structure/assembly_lists/{id}";

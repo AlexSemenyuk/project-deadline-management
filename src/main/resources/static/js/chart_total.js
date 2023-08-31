@@ -5,15 +5,19 @@ class ProjectChart {
     project
     design
     technology
-    contracts
-    production
+    materialContracts
+    partProduction
+    componentContracts
+    assemblyProduction
 
-    constructor(project, design, technology, contracts, production) {
+    constructor(project, design, technology, materialContracts, partProduction, componentContracts, assemblyProduction) {
         this.project = project;
         this.design = design;
         this.technology = technology;
-        this.contracts = contracts;
-        this.production = production;
+        this.materialContracts = materialContracts;
+        this.partProduction = partProduction;
+        this.componentContracts = componentContracts;
+        this.assemblyProduction = assemblyProduction;
     }
 
     get project() {
@@ -40,20 +44,35 @@ class ProjectChart {
         this.technology = technology;
     }
 
-    get contracts() {
-        return this.contracts;
+    get materialContracts() {
+        return this.materialContracts;
     }
 
-    set contracts(contracts) {
-        this.contracts = contracts;
+    set materialContracts(materialContracts) {
+        this.materialContracts = materialContracts;
     }
 
-    get production() {
-        return this.production;
+    get partProduction() {
+        return this.partProduction;
     }
 
-    set production(production) {
-        this.production = production;
+    set partProduction(partProduction) {
+        this.partProduction = partProduction;
+    }
+    get componentContracts() {
+        return this.componentContracts;
+    }
+
+    set componentContracts(componentContracts) {
+        this.componentContracts = componentContracts;
+    }
+
+    get assemblyProduction() {
+        return this.assemblyProduction;
+    }
+
+    set assemblyProduction(assemblyProduction) {
+        this.assemblyProduction = assemblyProduction;
     }
 }
 
@@ -63,9 +82,13 @@ function projectChartResponse(json) {
     const project = json.project;
     const design = json.design;
     const technology = json.technology;
-    const contracts = json.contracts;
-    const production = json.production;
-    const projectChart = new ProjectChart(project, design, technology, contracts, production);
+    const materialContracts = json.materialContracts;
+    const partProduction = json.partProduction;
+    const componentContracts = json.componentContracts;
+    const assemblyProduction = json.assemblyProduction;
+    const projectChart = new ProjectChart(project, design, technology,
+                                            materialContracts, partProduction,
+                                            componentContracts, assemblyProduction);
     console.dir(projectChart);
 
     // const tmpp = projectChart.project.start;
@@ -73,15 +96,17 @@ function projectChartResponse(json) {
 
     // Работа с графиком №1
     const data = {
-        labels: ['Конструктор', 'Технолог', 'Контракти', 'Виробництво', 'Проект загалом'],
+        labels: ['Конструктор', 'Технолог', 'Контракти на матеріали', 'Виробництво деталей', 'Контракти на комплектуючі вироби', 'Складання вузлів', 'Проект загалом'],
         datasets: [{
             label: 'Термін виконання етапів проекту',
             data: [
                 // ['2023-07-01', '2023-07-05'],
                 [projectChart.design.start, projectChart.design.deadline],
                 [projectChart.technology.start, projectChart.technology.deadline],
-                [projectChart.contracts.start, projectChart.contracts.deadline],
-                [projectChart.production.start, projectChart.production.deadline],
+                [projectChart.materialContracts.start, projectChart.materialContracts.deadline],
+                [projectChart.partProduction.start, projectChart.partProduction.deadline],
+                [projectChart.componentContracts.start, projectChart.componentContracts.deadline],
+                [projectChart.assemblyProduction.start, projectChart.assemblyProduction.deadline],
                 [projectChart.project.start, projectChart.project.deadline]
             ],
             backgroundColor: [
@@ -90,6 +115,7 @@ function projectChartResponse(json) {
                 'rgb(81,169,21, 1)',
                 'rgba(54, 162, 235, 1)',
                 'rgba(255, 26, 104, 1)',
+                'rgb(255,95,26, 1)',
                 'rgba(153, 102, 255, 1)'
             ],
             borderColor: [
@@ -98,6 +124,7 @@ function projectChartResponse(json) {
                 'rgb(81,169,21, 1)',
                 'rgba(54, 162, 235, 1)',
                 'rgba(255, 26, 104, 1)',
+                'rgb(255,95,26, 1)',
                 'rgba(153, 102, 255, 1)'
             ],
             barPercentage: 0.8

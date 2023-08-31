@@ -46,6 +46,9 @@ public class Task {
     private LocalDateTime startProduction;
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private TaskType taskType;
+
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private TaskCondition taskCondition;
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})

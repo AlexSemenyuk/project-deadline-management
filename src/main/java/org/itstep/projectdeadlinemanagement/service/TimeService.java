@@ -18,7 +18,8 @@ public class TimeService {
     }
 
     public static LocalDate localDateAddDays(LocalDate start, int days){
-        for (int i = 0; i < days - 1 ; i++) {
+
+        for (int i = 0; i < days; i++) {
             start =  TimeService.excludeWeekend(start);
             start =  TimeService.excludeWeekend(start.plusDays(1));
         }
