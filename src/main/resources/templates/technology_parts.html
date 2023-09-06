@@ -52,12 +52,12 @@
                     <h3 class="title_h"><span class="title_s">М</span>ЕНЮ</h3>
                 </div>
                 <ul class="list_menu">
-                    <li class="item_menu">
-                        <a class="link_menu" th:href="@{/divisions}">Дивізіони</a>
-                    </li>
-                    <li class="item_menu">
-                        <a class="link_menu" th:href="@{/equipments}">Обладнання</a>
-                    </li>
+<!--                    <li class="item_menu">-->
+<!--                        <a class="link_menu" th:href="@{/divisions}">Дивізіони</a>-->
+<!--                    </li>-->
+<!--                    <li class="item_menu">-->
+<!--                        <a class="link_menu" th:href="@{/equipments}">Обладнання</a>-->
+<!--                    </li>-->
                     <li class="item_menu">
                         <a class="link_menu" th:href="@{/projects}">Проекти</a>
                     </li>
@@ -85,14 +85,17 @@
                         <a class="link_menu" th:href="@{/contracts}">Контракти</a>
                     </li>
                     <li class="item_menu">
-                        <a class="link_menu" th:href="@{/tasks}">Завдання</a>
+                        <a class="link_menu" th:href="@{/production}">Виробництво</a>
                     </li>
-                    <li class="item_menu">
-                        <a class="link_menu" th:href="@{/production_plans}">План виробництва</a>
-                    </li>
-                    <li class="item_menu">
-                        <a class="link_menu" th:href="@{/equipment_plans}">Показники</a>
-                    </li>
+<!--                    <li class="item_menu">-->
+<!--                        <a class="link_menu" th:href="@{/tasks}">Завдання</a>-->
+<!--                    </li>-->
+<!--                    <li class="item_menu">-->
+<!--                        <a class="link_menu" th:href="@{/production_plans}">План виробництва</a>-->
+<!--                    </li>-->
+<!--                    <li class="item_menu">-->
+<!--                        <a class="link_menu" th:href="@{/equipment_plans}">Показники</a>-->
+<!--                    </li>-->
                 </ul>
             </div>
             <div class="free col-xl-2"></div>
@@ -189,13 +192,13 @@
                                 <td class="text_n col-xl-1 px-1 text-center" th:text="${technologyPart.operationTime}"></td>
                                 <td class="text_n col-xl-2 text-center">
                                     <div class="row">
-                                        <div class="text_n col-xl-6 text-center">
-                                            <a class="text-dark px-1" th:href="@{/technologies/technology_parts/{id}/edit/{termId}(id=${technologyProject.id}, termId=${technologyPart.id})}">
-                                                <i class="bi bi-pencil-fill" style="font-size: 1rem;"></i>
-                                            </a>
-                                        </div>
-                                        <div class="text_n col-xl-6 text-center">
-                                            <a class="text-dark px-1" th:href="@{/technologies/technology_parts/{id}/delete/{termId}(id=${technologyProject.id}, termId=${technologyPart.id})}">
+<!--                                        <div class="text_n col-xl-6 text-center">-->
+<!--                                            <a class="text-dark px-1" th:href="@{/technologies/technology_parts/{id}/edit/{termId}(id=${technologyProject.id}, termId=${technologyPart.id})}">-->
+<!--                                                <i class="bi bi-pencil-fill" style="font-size: 1rem;"></i>-->
+<!--                                            </a>-->
+<!--                                        </div>-->
+                                        <div class="text_n col-xl-12 text-center">
+                                            <a class="text-dark px-1" th:href="@{/technologies/technology_terms/technology_parts/{id}/delete/{termId}(id=${technologyProject.id}, termId=${technologyPart.id})}">
                                                 <i class="bi bi-trash-fill" style="font-size: 1rem;"></i>
                                             </a>
                                         </div>

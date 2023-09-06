@@ -51,6 +51,35 @@ body {
     padding-left: 400px;
 }
 
+.home-row {
+    height: 80vh;
+}
+
+.home-title{
+    font-size: 28px;
+    color: var(--color-background-hr);
+    font-weight: 700;
+    /*padding-left: 400px;*/
+    text-align: center;
+}
+
+.high{
+    padding-top: 5%;
+}
+
+.home-goal {
+    text-align: center;
+    width: 85%;
+    padding-left: 20%;
+}
+
+.home-image {
+    /*padding-top: 40%;*/
+
+    width: 90%;
+    text-align: right;
+}
+
 .user {
     color: var(--color-text-alternanive);
     font-weight: 700;

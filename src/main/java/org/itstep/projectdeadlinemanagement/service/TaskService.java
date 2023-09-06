@@ -35,7 +35,7 @@ public class TaskService {
             Task partTaskTMP = getLastPartTask(project, partTasks);
 //                    Task partTaskTMP = partTasks.get(partTasks.size() - 1);
             LocalDateTime finishPartProduction = TimeService.localDateTimeAddHours(partTaskTMP.getStartProduction(), partTaskTMP.getOperationTime());
-            System.out.println("finishPartProduction = " + finishPartProduction);
+//            System.out.println("finishPartProduction = " + finishPartProduction);
             assemblyTasks = formAssemblyTasks(project, finishPartProduction);
             taskRepository.saveAll(assemblyTasks);
 //            getAllListsWithAmountOnProject(project.getProjectList());
@@ -93,7 +93,7 @@ public class TaskService {
 
     public List<Task> formAssemblyTasks(Project project, LocalDateTime finishPartProduction) {
         Integer projectNumberTMP = project.getNumber();
-        LocalDateTime startAssemblyProduction = formStartAssemblyProduction(project, finishPartProduction);       ///////////////////////////
+        LocalDateTime startAssemblyProduction = formStartAssemblyProduction(project, finishPartProduction);
         List<AssemblyList> assemblyLists = projectListService.getAllAssemblyListsWithAmountOnProject(project.getProjectList());
 
         List<Task> tasks = new CopyOnWriteArrayList<>();
