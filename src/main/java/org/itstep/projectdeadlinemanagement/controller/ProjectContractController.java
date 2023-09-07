@@ -4,9 +4,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.itstep.projectdeadlinemanagement.command.ContractCommand;
 import org.itstep.projectdeadlinemanagement.model.*;
-import org.itstep.projectdeadlinemanagement.repository.ContractRepository;
-import org.itstep.projectdeadlinemanagement.repository.ContractTypeRepository;
-import org.itstep.projectdeadlinemanagement.repository.ProjectRepository;
+import org.itstep.projectdeadlinemanagement.repository.*;
+import org.itstep.projectdeadlinemanagement.service.ProductionPlanService;
+import org.itstep.projectdeadlinemanagement.service.TaskService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +23,11 @@ public class ProjectContractController {
     private final ContractRepository contractRepository;
     private final ContractTypeRepository contractTypeRepository;
     private final ProjectRepository projectRepository;
+    private final ProjectConditionRepository projectConditionRepository;
+    private final ProjectStatusRepository projectStatusRepository;
+    private final TaskService taskService;
+    private final ProductionPlanService productionPlanService;
+
     @GetMapping("/{id}")
     public String findAll(@PathVariable Integer id, Model model) {
         Optional<Project> optionalProject = projectRepository.findById(id);
@@ -48,6 +53,32 @@ public class ProjectContractController {
             contractRepository.save(contract);
         }
         return "redirect:/contracts/project_contracts/{id}";
+    }
+
+    @GetMapping(("finish/{id}"))
+    String finish(@PathVariable Integer id) {
+        Optional<Project> optionalProject = projectRepository.findById(id);
+        optionalProject.ifPresent(project -> {
+            Optional<ProjectStatus> optionalProjectStatus = projectStatusRepository.findById(2);
+            if (optionalProjectStatus.isPresent()) {
+                ProjectStatus projectStatus = optionalProjectStatus.get();
+
+                project.setContractStatus(projectStatus);
+                projectRepository.save(project);
+
+                if (project.getProjectCondition().getName().equals("Production") &&
+                    project.getDesignStatus().getName().equals("Finish") &&
+                    project.getTechnologyStatus().getName().equals("Finish") &&
+                    project.getContractStatus().getName().equals("Finish")){
+                    List<Task> tasks = taskService.formTasks(id);
+                    productionPlanService.formProductionPlans(tasks);
+                }
+
+            }
+
+
+        });
+        return "redirect:/";
     }
 
     @GetMapping(("{id}/delete/{contractId}"))
@@ -92,6 +123,9 @@ public class ProjectContractController {
         }
         return "redirect:/contracts/project_contracts/{id}/edit/{contractId}";
     }
+
+
+
 }
 
 

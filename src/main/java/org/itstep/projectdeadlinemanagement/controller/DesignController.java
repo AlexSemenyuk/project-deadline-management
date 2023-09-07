@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -23,9 +24,10 @@ public class DesignController {
     @GetMapping
     public String home(Model model) {
         List<Project> tmpProjects = projectRepository.findAll();
-        List<Project> projects = new CopyOnWriteArrayList<>();
+        List<Project> projects = new ArrayList<>();
         for (Project p:tmpProjects){
-            if (p.getProjectCondition().getName().equals("Design")){
+            if (p.getProjectCondition().getName().equals("Design") &&
+                p.getDesignStatus().getName().equals("Work")){
                 projects.add(p);
             }
         }

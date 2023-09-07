@@ -33,12 +33,10 @@ public class TaskService {
             taskRepository.saveAll(partTasks);
 
             Task partTaskTMP = getLastPartTask(project, partTasks);
-//                    Task partTaskTMP = partTasks.get(partTasks.size() - 1);
             LocalDateTime finishPartProduction = TimeService.localDateTimeAddHours(partTaskTMP.getStartProduction(), partTaskTMP.getOperationTime());
-//            System.out.println("finishPartProduction = " + finishPartProduction);
+
             assemblyTasks = formAssemblyTasks(project, finishPartProduction);
             taskRepository.saveAll(assemblyTasks);
-//            getAllListsWithAmountOnProject(project.getProjectList());
 
             partTasks.addAll(assemblyTasks);
 
@@ -193,6 +191,9 @@ public class TaskService {
         return startAssemblyProduction;
     }
 
+    public void deleteTaskForProject(Project project) {
+        taskRepository.deleteAll(project.getTasks());
+    }
 }
 
 

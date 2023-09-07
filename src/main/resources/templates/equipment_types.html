@@ -15,7 +15,7 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link th:href="@{/css/style.css}" rel="stylesheet"/>
-    <title>Design Terms</title>
+    <title>Equipment types</title>
 </head>
 <body>
 <header class="container-fluid fixed-top p-0">
@@ -122,27 +122,27 @@
                                 <tr>
                                     <th class="td_st col-xl-3 px-1 text-center">Id</th>
                                     <th class="td_st col-xl-6 text-center">Назва</th>
-                                    <th class="td_st col-xl-3 text-center">Примітка</th>
+<!--                                    <th class="td_st col-xl-3 text-center">Примітка</th>-->
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <tr th:each="equipmentType: ${equipmentTypes}">
                                     <td class="td_st col-xl-2 text-center" th:text="${equipmentType.id}"></td>
-                                    <td class="col-xl-4 px-1" th:text="${equipmentType.name}"></td>
-                                    <td class="col-xl-2 text-center">
-                                        <div class="row">
-                                            <div class="col-xl-6 text-center">
-                                                <a class="text-dark px-1" th:href="@{/equipments/types/edit/{id}(id=${equipmentType.id})}">
-                                                    <i class="bi bi-pencil-fill" style="font-size: 1.2rem;"></i>
-                                                </a>
-                                            </div>
-                                            <div class="col-xl-6 text-center">
-                                                <a class="text-dark px-1" th:href="@{/equipments/types/delete/{id}(id=${equipmentType.id})}">
-                                                    <i class="bi bi-trash-fill" style="font-size: 1.2rem;"></i>
-                                                </a>
-                                            </div>
-                                        </div>
-                                      </td>
+                                    <td class="col-xl-4 text-center" th:text="${equipmentType.name}"></td>
+<!--                                    <td class="col-xl-2 text-center">-->
+<!--                                        <div class="row">-->
+<!--                                            <div class="col-xl-6 text-center">-->
+<!--                                                <a class="text-dark px-1" th:href="@{/equipments/types/edit/{id}(id=${equipmentType.id})}">-->
+<!--                                                    <i class="bi bi-pencil-fill" style="font-size: 1.2rem;"></i>-->
+<!--                                                </a>-->
+<!--                                            </div>-->
+<!--                                            <div class="col-xl-6 text-center">-->
+<!--                                                <a class="text-dark px-1" th:href="@{/equipments/types/delete/{id}(id=${equipmentType.id})}">-->
+<!--                                                    <i class="bi bi-trash-fill" style="font-size: 1.2rem;"></i>-->
+<!--                                                </a>-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                    </td>-->
                                 </tr>
                                 </tbody>
                             </table>
@@ -152,15 +152,15 @@
                 </div>
 
                 <div class="col-xl-3">
-                    <h2 class="text_h">Створити тип дивізіону</h2>
-                    <form method="post" class="my-5 px-2">
-                        <label class="form-label d-block me-1" >
-                            <input class="form-control bg-white border-3 rounded-0" name="name" placeholder="Назва типу обладнання (унікальна)" required>
-                        </label>
-                        <br/>
-                        <input th:name="${_csrf.parameterName}" type="hidden" th:value="${_csrf.token}">
-                        <input class="btn btn-primary border-3 rounded-0 w-100 text-center" type="submit"  value="Створити">
-                    </form>
+<!--                    <h2 class="text_h">Створити тип дивізіону</h2>-->
+<!--                    <form method="post" class="my-5 px-2">-->
+<!--                        <label class="form-label d-block me-1" >-->
+<!--                            <input class="form-control bg-white border-3 rounded-0" name="name" placeholder="Назва типу обладнання (унікальна)" required>-->
+<!--                        </label>-->
+<!--                        <br/>-->
+<!--                        <input th:name="${_csrf.parameterName}" type="hidden" th:value="${_csrf.token}">-->
+<!--                        <input class="btn btn-primary border-3 rounded-0 w-100 text-center" type="submit"  value="Створити">-->
+<!--                    </form>-->
                 </div>
             </div>
 

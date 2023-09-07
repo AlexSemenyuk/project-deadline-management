@@ -10,8 +10,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 @Controller
 @RequiredArgsConstructor
@@ -25,7 +27,13 @@ public class ContractController {
 
     @GetMapping
     public String home(Model model) {
-        List<Project> projects = projectRepository.findAll();
+        List<Project> tmpProjects = projectRepository.findAll();
+        List<Project> projects = new ArrayList<>();
+        for (Project p:tmpProjects){
+            if (p.getContractStatus().getName().equals("Work")){
+                projects.add(p);
+            }
+        }
         model.addAttribute("projects", projects);
         return "contracts";
     }

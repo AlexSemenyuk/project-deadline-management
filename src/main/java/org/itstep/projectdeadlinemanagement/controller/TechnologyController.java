@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -25,9 +26,10 @@ public class TechnologyController {
     @GetMapping
     public String home(Model model) {
         List<Project> tmpProjects = projectRepository.findAll();
-        List<Project> projects = new CopyOnWriteArrayList<>();
+        List<Project> projects = new ArrayList<>();
         for (Project p:tmpProjects){
-            if (p.getProjectCondition().getName().equals("Technology")){
+            if (p.getProjectCondition().getName().equals("Technology") &&
+                    p.getTechnologyStatus().getName().equals("Work")){
                 projects.add(p);
             }
         }

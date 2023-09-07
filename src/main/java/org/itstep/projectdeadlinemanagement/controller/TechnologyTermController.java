@@ -6,6 +6,8 @@ import org.itstep.projectdeadlinemanagement.command.TechnologyAssemblyCommand;
 import org.itstep.projectdeadlinemanagement.command.TechnologyPartCommand;
 import org.itstep.projectdeadlinemanagement.model.*;
 import org.itstep.projectdeadlinemanagement.repository.*;
+import org.itstep.projectdeadlinemanagement.service.ProductionPlanService;
+import org.itstep.projectdeadlinemanagement.service.TaskService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +23,9 @@ import java.util.Optional;
 public class TechnologyTermController {
     private final ProjectRepository projectRepository;
     private final ProjectConditionRepository projectConditionRepository;
+    private final ProjectStatusRepository projectStatusRepository;
+    private final TaskService taskService;
+    private final ProductionPlanService productionPlanService;
 
     @GetMapping("/{id}")
     public String term(@PathVariable Integer id, Model model) {
@@ -47,10 +52,24 @@ public class TechnologyTermController {
         Optional<Project> optionalProject = projectRepository.findById(id);
         optionalProject.ifPresent(project -> {
             Optional<ProjectCondition> optionalProjectCondition = projectConditionRepository.findById(3);
-            optionalProjectCondition.ifPresent(condition -> {
-                project.setProjectCondition(condition);
+            Optional<ProjectStatus> optionalProjectStatus = projectStatusRepository.findById(2);
+            if (optionalProjectCondition.isPresent() &&
+                optionalProjectStatus.isPresent()) {
+
+                ProjectCondition projectCondition = optionalProjectCondition.get();
+                ProjectStatus projectStatus = optionalProjectStatus.get();
+                project.setProjectCondition(projectCondition);
+                project.setTechnologyStatus(projectStatus);
                 projectRepository.save(project);
-            });
+
+                if (project.getProjectCondition().getName().equals("Production") &&
+                        project.getDesignStatus().getName().equals("Finish") &&
+                        project.getTechnologyStatus().getName().equals("Finish") &&
+                        project.getContractStatus().getName().equals("Finish") ){
+                    List<Task> tasks = taskService.formTasks(id);
+                    productionPlanService.formProductionPlans(tasks);
+                }
+            }
         });
         return "redirect:/";
     }

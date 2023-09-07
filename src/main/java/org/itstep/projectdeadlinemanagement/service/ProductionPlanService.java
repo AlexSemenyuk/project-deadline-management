@@ -310,6 +310,15 @@ public class ProductionPlanService {
         }
         return plansOfCurrentDay;
     }
+
+    public void deleteProductionPlansForProject(Project project) {
+        List<ProductionPlan> productionPlans = productionPlanRepository.findAll();
+        for (ProductionPlan productionPlan: productionPlans){
+            if (Objects.equals(productionPlan.getTask().getProjectNumber(), project.getNumber())){
+                productionPlanRepository.delete(productionPlan);
+            }
+        }
+    }
 }
 
 

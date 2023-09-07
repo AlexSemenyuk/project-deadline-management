@@ -111,36 +111,30 @@
         </div>
         <div class="free col-xl-2"></div>
         <div class="free col-xl-10">
-            <h2 class="text_h">Виберіть проект для відображення/формування виробничих завдань</h2>
+            <h2 class="text_h">Виберіть проект для відображення виробничих завдань</h2>
             <div class="row">
-                <div class="col-xl-2"></div>
-                <div class="col-xl-8">
+                <div class="col-xl-1"></div>
+                <div class="col-xl-10">
                     <form method="post" class="row my-5">
-                        <div class="col-xl-12">
-<!--                        <label class="form-label">-->
-                            <select class="form-select bg-white border-3 rounded-0 my-2"  aria-label="Default select example" name="id">
-                                <option th:each="project: ${projects}"
-                                        th:value="${project.id}"
-                                        th:text="${project.number + ' : ' + project.start + ' ... ' + project.deadline + ' : ' + project.projectCondition.name}">
-                                </option>
-                            </select>
-<!--                        </label>-->
+                        <div class="col-xl-10">
+                            <label class="form-label d-block me-1">
+                                <select class="form-select bg-white border-3 rounded-0 p-2 mb-2 "  aria-label="Default select example" name="id">
+                                    <option th:each="project: ${projects}"
+                                            th:value="${project.id}"
+                                            th:text="${project.number + ' : ' + project.customer.name + ' : ' + project.start + ' ... ' + project.deadline + ' : ' + project.projectCondition.name}">
+                                    </option>
+                                </select>
+                            </label>
                         </div>
-                        <br/>
-                            <div class="col-xl-1 ps-3 my-2">
-                                <input class="form-check-input" type="checkbox" value="ON" id="formTasks" name="form" >
-                            </div>
-                            <div class="col-xl-6 px-1 my-2">
-                                <label class="form-check-label d-inline-block " for="formTasks">Сформувати завдання</label>
-                            </div>
-                        <br/>
-                        <input th:name="${_csrf.parameterName}" type="hidden" th:value="${_csrf.token}">
-                        <div class="col-xl-12 my-2">
-                            <input class="btn btn-primary border-3 rounded-0 d-block w-100 text-center" type="submit" value="Ok">
+                        <div class="col-xl-1">
+                            <input th:name="${_csrf.parameterName}" type="hidden" th:value="${_csrf.token}">
+                        </div>
+                        <div class="col-xl-1">
+                            <input class="btn btn-primary" type="submit" value="Ok">
                         </div>
                     </form>
                 </div>
-                <div class="col-xl-2"></div>
+                <div class="col-xl-1"></div>
             </div>
 
         </div>

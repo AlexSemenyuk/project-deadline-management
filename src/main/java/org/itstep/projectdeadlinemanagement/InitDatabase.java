@@ -25,6 +25,7 @@ public class InitDatabase implements CommandLineRunner {
     private final AssemblyListRepository assemblyListRepository;
     private final PartListRepository partListRepository;
     private final ProjectConditionRepository projectConditionRepository;
+    private final ProjectStatusRepository projectStatusRepository;
     private final CustomerRepository customerRepository;
     private final TaskConditionRepository taskConditionRepository;
     private final TaskTypeRepository taskTypeRepository;
@@ -54,12 +55,6 @@ public class InitDatabase implements CommandLineRunner {
         divisionRepository.save(new Division("Мх-1"));
         divisionRepository.save(new Division("Мх-2"));
         divisionRepository.save(new Division("Мх-3"));
-//        addDivision(new DivisionCommand("Мх-2"));
-//        addDivision(new DivisionCommand("Мх-3"));
-//        private void addDivision(DivisionCommand command) {
-//            Division division = Division.fromCommand(command);
-//            divisionRepository.save(division);
-//        }
 
         // 3. Создание оборудования
         addEquipment(new EquipmentCommand(11, "Токарний", 1, 1));
@@ -115,13 +110,17 @@ public class InitDatabase implements CommandLineRunner {
         projectConditionRepository.save(new ProjectCondition("Production"));
         projectConditionRepository.save(new ProjectCondition("Archive"));
 
-        // 7. Создание Customer / Заказчиков
+        // 7. Создание ProjectStatus (Status для Design, Technology, Contract)
+        projectStatusRepository.save(new ProjectStatus("Work"));
+        projectStatusRepository.save(new ProjectStatus("Finish"));
+
+        // 8. Создание Customer / Заказчиков
         customerRepository.save(new Customer("Запоріжсталь", "Запоріжжя"));
         customerRepository.save(new Customer("Арселорміттал Кривий Ріг", "Кривий Ріг"));
         customerRepository.save(new Customer("ArcelorMittalGalati", "Galati"));
         customerRepository.save(new Customer("U.S.Steel Kosice", "Kosice"));
 
-        // 8. Создание состояний task (Production, Stop, Ок, Archive)
+        // 9. Создание состояний task (Production, Stop, Ок, Archive)
         taskConditionRepository.save(new TaskCondition("New"));
         taskConditionRepository.save(new TaskCondition("Production"));
         taskConditionRepository.save(new TaskCondition("Ок"));
@@ -129,22 +128,22 @@ public class InitDatabase implements CommandLineRunner {
         taskConditionRepository.save(new TaskCondition("Technology"));
         taskConditionRepository.save(new TaskCondition("Archive"));
 
-        // 9. Создание taskType (Part, Assembly)
+        // 10. Создание taskType (Part, Assembly)
         taskTypeRepository.save(new TaskType("Деталь"));
         taskTypeRepository.save(new TaskType("Вузол"));
 
 
-        // 10. ContractTypes
+        // 11. ContractTypes
         contractTypeRepository.save(new ContractType("Матеріали"));
         contractTypeRepository.save(new ContractType("Комплектуючі вироби"));
 
 
-        // 11. Создание Project
+        // 12. Создание Project
         // Project 1001
         addProject(new ProjectCommand(
                 1001, null, 1,
                 LocalDateTime.parse("2023-06-05T00:00"), LocalDateTime.parse("2023-07-07T00:00"),
-                4));
+                1,1,1,4));
         // DesignTerm
         addDesignTerm(1, 5);
 
@@ -218,7 +217,7 @@ public class InitDatabase implements CommandLineRunner {
         addProject(new ProjectCommand(
                 1002, null, 2,
                 LocalDateTime.parse("2023-07-25T00:00"), LocalDateTime.parse("2023-09-25T00:00"),
-                1));
+                1, 1, 1, 1));
         // DesignTerm
         addDesignTerm(2, 7);
         // ProjectLists
@@ -394,12 +393,21 @@ public class InitDatabase implements CommandLineRunner {
     private void addProject(ProjectCommand command) {
         Optional<Customer> optionalCustomer = customerRepository.findById(command.customerId());
         Optional<ProjectCondition> optionalProjectCondition = projectConditionRepository.findById(1);
-        if (optionalCustomer.isPresent() && optionalProjectCondition.isPresent()) {
+        Optional<ProjectStatus> optionalProjectStatus = projectStatusRepository.findById(1);
+        if (optionalCustomer.isPresent() &&
+                optionalProjectCondition.isPresent() &&
+                optionalProjectStatus.isPresent()) {
             Customer customer = optionalCustomer.get();
             ProjectCondition projectCondition = optionalProjectCondition.get();
+            ProjectStatus projectStatus = optionalProjectStatus.get();
+
             Project project = Project.fromCommand(command);
             project.setCustomer(customer);
             project.setProjectCondition(projectCondition);
+
+            project.setDesignStatus(projectStatus);
+            project.setTechnologyStatus(projectStatus);
+            project.setContractStatus(projectStatus);
 
             ProjectList projectList = new ProjectList();
             project.setProjectList(projectList);

@@ -4,8 +4,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.itstep.projectdeadlinemanagement.model.Project;
 import org.itstep.projectdeadlinemanagement.model.ProjectCondition;
+import org.itstep.projectdeadlinemanagement.model.ProjectStatus;
 import org.itstep.projectdeadlinemanagement.repository.ProjectConditionRepository;
 import org.itstep.projectdeadlinemanagement.repository.ProjectRepository;
+import org.itstep.projectdeadlinemanagement.repository.ProjectStatusRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,6 +24,7 @@ import java.util.Optional;
 public class DesignTermController {
     private final ProjectRepository projectRepository;
     private final ProjectConditionRepository projectConditionRepository;
+    private final ProjectStatusRepository projectStatusRepository;
 
     @GetMapping("/{id}")
     public String findAll(@PathVariable Integer id, Model model) {
@@ -47,10 +50,16 @@ public class DesignTermController {
         Optional<Project> optionalProject = projectRepository.findById(id);
         optionalProject.ifPresent(project -> {
                     Optional<ProjectCondition> optionalProjectCondition = projectConditionRepository.findById(2);
-                    optionalProjectCondition.ifPresent(condition -> {
-                        project.setProjectCondition(condition);
+                    Optional<ProjectStatus> optionalProjectStatus = projectStatusRepository.findById(2);
+                    if (optionalProjectCondition.isPresent() &&
+                        optionalProjectStatus.isPresent()){
+
+                        ProjectCondition projectCondition = optionalProjectCondition.get();
+                        ProjectStatus projectStatus = optionalProjectStatus.get();
+                        project.setProjectCondition(projectCondition);
+                        project.setDesignStatus(projectStatus);
                         projectRepository.save(project);
-                    });
+                    }
                 });
         return "redirect:/";
     }

@@ -14,7 +14,7 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link th:href="@{/css/style.css}" rel="stylesheet"/>
-    <title>Project contracts</title>
+    <title>Project details</title>
     <style>
         * {
             margin: 0;
@@ -78,7 +78,7 @@
             </ul>
         </div>
     </div>
-    <hr class="hr-line1 m-0">
+    <hr class="hr-line m-0">
 </header>
 <main style="max-height: 84vh;">
     <div class="container-fluid" >
@@ -144,9 +144,11 @@
                                 <th class="text_n1 col-xl-1 text-center">Замовник</th>
                                 <th class="text_n1 col-xl-1 text-center ">ЧРК (роб. днів)</th>
                                 <th class="text_n1 col-xl-1 text-center ">ЧРТ (роб. днів)</th>
-                                <th class="text_n1 col-xl-2 text-center">Початок</th>
-                                <th class="text_n1 col-xl-2 text-center">Закінчення</th>
+                                <th class="text_n1 col-xl-1 text-center">Початок</th>
+                                <th class="text_n1 col-xl-1 text-center">Закінчення</th>
+                                <th class="text_n1 col-xl-2 text-center">Статус</th>
                                 <th class="text_n1 col-xl-1 text-center ">Стан</th>
+                                <th class="text_n1 col-xl-1 text-center">Завдання</th>
                                 <th class="text_n1 col-xl-1 text-center">Примітка</th>
                             </tr>
                             </thead>
@@ -157,9 +159,28 @@
                                 <td class="text_n col-xl-1 text-center" th:text="${project.customer.name}"></td>
                                 <td class="text_n col-xl-1 text-center" th:text="${project.designTerm}"></td>
                                 <td class="text_n col-xl-1 text-center" th:text="${project.technologyTerm}"></td>
-                                <td class="text_n col-xl-2 text-center" th:text="${project.start}"></td>
-                                <td class="text_n col-xl-2 text-center" th:text="${project.deadline}"></td>
+                                <td class="text_n col-xl-1 text-center" th:text="${project.start}"></td>
+                                <td class="text_n col-xl-1 text-center" th:text="${project.deadline}"></td>
+                                <td class="text_n col-xl-1 text-start px-1" >
+                                    <p class="text_n text-start px-1 m-0" th:text="${'Конструктор - ' + project.designStatus.name}"></p>
+                                    <p class="text_n text-start px-1 m-0" th:text="${'Технолог - ' + project.technologyStatus.name}"></p>
+                                    <p class="text_n text-start px-1 m-0" th:text="${'Контракты - ' + project.contractStatus.name}"></p>
+                                </td>
                                 <td class="text_n col-xl-1 px-1 text-center" th:text="${project.projectCondition.name}"></td>
+                                <td class="text_n col-xl-1 text-center">
+                                    <div class="row">
+                                        <div class="col-xl-6 text-center">
+                                            <a class="text-dark px-1" th:href="@{/projects/project_details/delete_tasks/{id}(id=${project.id})}">
+                                                <i class="bi bi-bag-dash-fill" style="font-size: 1.2rem;"></i>
+                                            </a>
+                                        </div>
+                                        <div class="col-xl-6 text-center">
+                                            <a class="text-dark px-1" th:href="@{/projects/project_details/add_tasks/{id}(id=${project.id})}">
+                                                <i class="bi bi-bag-plus-fill" style="font-size: 1.2rem;"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </td>
                                 <td class="text_n col-xl-1 text-center">
                                     <div class="row">
                                         <div class="col-xl-6 text-center">

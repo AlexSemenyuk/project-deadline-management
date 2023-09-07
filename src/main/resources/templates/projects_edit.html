@@ -105,16 +105,17 @@
             <div class="free col-xl-10" >
                 <div class="row">
                     <div class="col-xl-9">
-                        <h2 class="text_h">Технологічні операції щодо проекту</h2>
+                        <h2 class="text_h">Ваш проект</h2>
                         <table  class="table_sm table table-striped table-hover table-bordered border-secondary-subtle ">
                             <thead>
                             <tr>
                                 <th  class="td_st col-xl-1 px-1 text-center">Id</th>
-                                <th class="td_st col-xl-2 px-1 text-center">Number</th>
-                                <th class="td_st col-xl-2 px-1 text-center">Customer</th>
-                                <th class="td_st col-xl-3 px-1 text-center">Start project</th>
-                                <th class="td_st col-xl-3 px-1 text-center">Deadline project</th>
-                                <th class="td_st col-xl-1 px-1 text-center">Conditions</th>
+                                <th class="td_st col-xl-2 px-1 text-center">Номер</th>
+                                <th class="td_st col-xl-2 px-1 text-center">Замовник</th>
+                                <th class="td_st col-xl-2 px-1 text-center">Початок</th>
+                                <th class="td_st col-xl-2 px-1 text-center">Закінчення</th>
+                                <th class="td_st col-xl-2 px-1 text-center">Статус</th>
+                                <th class="td_st col-xl-1 px-1 text-center">Стан</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -122,8 +123,13 @@
                                 <td class="td_st col-xl-1 text-center" th:text="${project.id}"></td>
                                 <td class="col-xl-2 text-center" th:text="${project.number}"></td>
                                 <td class="col-xl-2 px-1 text-center" th:text="${project.customer.name}"></td>
-                                <td class="col-xl-3 px-1 text-center" th:text="${project.start}"></td>
-                                <td class="col-xl-3 px-1 text-center" th:text="${project.deadline}"></td>
+                                <td class="col-xl-2 px-1 text-center" th:text="${project.start}"></td>
+                                <td class="col-xl-2 px-1 text-center" th:text="${project.deadline}"></td>
+                                <td class="text_n col-xl-2 text-start px-1" >
+                                    <p class="text_n text-start px-1 m-0" th:text="${'Конструктор - ' + project.designStatus.name}"></p>
+                                    <p class="text_n text-start px-1 m-0" th:text="${'Технолог - ' + project.technologyStatus.name}"></p>
+                                    <p class="text_n text-start px-1 m-0" th:text="${'Контракты - ' + project.contractStatus.name}"></p>
+                                </td>
                                 <td class="col-xl-1 px-1 text-center" th:text="${project.projectCondition.name}"></td>
                             </tr>
                             </tbody>
@@ -207,7 +213,7 @@
                             <label class="form-label d-block me-1" >
                                 <input class="form-control bg-white border-3 rounded-0" type="number" name="number" th:value="${project.number}">
                             </label>
-                            <br/>
+<!--                            <br/>-->
                             <label class="form-label d-block me-1">
                                 Замовники
                                 <select class="form-control bg-white border-3 rounded-0"  aria-label="Default select example" name="customerId">
@@ -227,15 +233,45 @@
                             <label class="form-label d-block me-1" >
                                 Deadline project<input class="form-control bg-white border-3 rounded-0" type="datetime-local" name="deadline" th:value="${project.deadline}">
                             </label>
-                            <br/>
+<!--                            <br/>-->
                             <label class="form-label d-block me-1">
-                                <select class="form-control bg-white border-3 rounded-0"  aria-label="Default select example" name="projectConditionId">
-                                    <option th:each="condition: ${projectConditions}"
-                                            th:value="${condition.id}"
-                                            th:text="${condition.name}"
-                                            th:selected="${idProjectCondition == condition.id}">
+                                Статус щодо конструктора
+                                <select class="form-control bg-white border-3 rounded-0"  aria-label="Default select example" name="designStatusId">
+                                <option th:each="projectDesignStatus: ${projectStatuses}"
+                                        th:value="${projectDesignStatus.id}"
+                                        th:text="${projectDesignStatus.name}"
+                                        th:selected="${idDesignStatus == projectDesignStatus.id}">
+                                </option>
+                            </select>
+                            </label>
+                            <label class="form-label d-block me-1">
+                                Статус щодо технолога
+                                <select class="form-control bg-white border-3 rounded-0"  aria-label="Default select example" name="technologyStatusId">
+                                    <option th:each="projectTechnologyStatus: ${projectStatuses}"
+                                            th:value="${projectTechnologyStatus.id}"
+                                            th:text="${projectTechnologyStatus.name}"
+                                            th:selected="${idTechnologyStatus == projectTechnologyStatus.id}">
                                     </option>
                                 </select>
+                            </label>
+                            <label class="form-label d-block me-1">
+                                Статус щодо контрактів
+                                <select class="form-control bg-white border-3 rounded-0"  aria-label="Default select example" name="contractStatusId">
+                                    <option th:each="projectContractStatus: ${projectStatuses}"
+                                            th:value="${projectContractStatus.id}"
+                                            th:text="${projectContractStatus.name}"
+                                            th:selected="${idContractStatus == projectContractStatus.id}">
+                                    </option>
+                                </select>
+                            </label>
+                            <label class="form-label d-block me-1">
+                                Стан<select class="form-control bg-white border-3 rounded-0"  aria-label="Default select example" name="projectConditionId">
+                                <option th:each="condition: ${projectConditions}"
+                                        th:value="${condition.id}"
+                                        th:text="${condition.name}"
+                                        th:selected="${idProjectCondition == condition.id}">
+                                </option>
+                            </select>
                             </label>
                             <br/>
                             <input th:name="${_csrf.parameterName}" type="hidden" th:value="${_csrf.token}">

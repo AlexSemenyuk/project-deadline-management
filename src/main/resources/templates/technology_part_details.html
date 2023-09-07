@@ -88,29 +88,52 @@
                     </li>
                     <li class="item_menu">
                         <a class="link_menu" th:href="@{/technologies}">Технолог</a>
-                        <ul class="list_menu_sub">
-                            <li  class="item_menu_sub">
-                                <a class="link_menu_sub" th:href="@{/technologies/technology_terms/{id}(id=${project.id})}">Термін розробки</a>
-                            </li>
-                            <li  class="item_menu_sub">
-                                <a class="link_menu_sub" th:href="@{/technologies/technology_terms/technology_assemblies/{id}(id=${project.id})}">Вузол</a>
-                            </li>
-                            <li  class="item_menu_sub">
-                                <a class="link_menu_sub" th:href="@{/technologies/technology_terms/technology_parts/{id}(id=${project.id})}">Деталь</a>
-                            </li>
-                            <li  class="item_menu_sub">
-                                <a class="link_menu_sub_active" th:href="@{/technologies/technology_terms/technology_parts/part_details/{projectAndPartId}(projectAndPartId=${project.number + ':' + tasks[0].partOrAssemblyNumber})}">Щодо деталі</a>
-                            </li>
-                            <li  class="item_menu_sub">
-                                <a class="link_menu_sub_finish" th:href="@{/technologies/technology_terms/finish/{id}(id=${project.id})}">Закінчити розробку</a>
-                            </li>
-                        </ul>
+<!--                        <ul class="list_menu_sub">-->
+<!--                            <li  class="item_menu_sub">-->
+<!--                                <a class="link_menu_sub" th:href="@{/technologies/technology_terms/{id}(id=${project.id})}">Термін розробки</a>-->
+<!--                            </li>-->
+<!--                            <li  class="item_menu_sub">-->
+<!--                                <a class="link_menu_sub" th:href="@{/technologies/technology_terms/technology_assemblies/{id}(id=${project.id})}">Вузол</a>-->
+<!--                            </li>-->
+<!--                            <li  class="item_menu_sub">-->
+<!--                                <a class="link_menu_sub" th:href="@{/technologies/technology_terms/technology_parts/{id}(id=${project.id})}">Деталь</a>-->
+<!--                            </li>-->
+<!--                            <li  class="item_menu_sub">-->
+<!--                                <a class="link_menu_sub_active" th:href="@{/technologies/technology_terms/technology_parts/part_details/{projectAndPartId}(projectAndPartId=${project.number + ':' + tasks[0].partOrAssemblyNumber})}">Щодо деталі</a>-->
+<!--                            </li>-->
+<!--                            <li  class="item_menu_sub">-->
+<!--                                <a class="link_menu_sub_finish" th:href="@{/technologies/technology_terms/finish/{id}(id=${project.id})}">Закінчити розробку</a>-->
+<!--                            </li>-->
+<!--                        </ul>-->
                     </li>
                     <li class="item_menu">
                         <a class="link_menu" th:href="@{/contracts}">Контракти</a>
                     </li>
                     <li class="item_menu">
                         <a class="link_menu" th:href="@{/production}">Виробництво</a>
+                        <ul class="list_menu_sub">
+                            <li class="item_menu_sub">
+                                <a class="link_menu_sub" th:href="@{/divisions}">Дивізіони</a>
+                            </li>
+                            <li class="item_menu_sub">
+                                <a class="link_menu_sub" th:href="@{/equipments}">Обладнання</a>
+                            </li>
+                            <li  class="item_menu_sub">
+                                <a class="link_menu_sub" th:href="@{/equipments/types}">Тип обладнання</a>
+                            </li>
+                            <li class="item_menu_sub">
+                                <a class="link_menu_sub" th:href="@{/tasks}">Завдання</a>
+                            </li>
+                            <li  class="item_menu_sub">
+                                <a class="link_menu_sub_active" th:href="@{/technologies/technology_terms/technology_parts/part_details/{projectAndPartId}(projectAndPartId=${project.number + ':' + tasks[0].partOrAssemblyNumber})}">Щодо деталі</a>
+                            </li>
+                            <li class="item_menu_sub">
+                                <a class="link_menu_sub" th:href="@{/production_plans}">План</a>
+                            </li>
+                            <li class="item_menu_sub">
+                                <a class="link_menu_sub" th:href="@{/equipment_plans}">Показники</a>
+                            </li>
+                        </ul>
                     </li>
 <!--                    <li class="item_menu">-->
 <!--                        <a class="link_menu" th:href="@{/tasks}">Завдання</a>-->

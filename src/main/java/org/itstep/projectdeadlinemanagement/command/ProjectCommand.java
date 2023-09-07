@@ -11,6 +11,9 @@ public record ProjectCommand(
         Integer customerId,
         LocalDateTime start,
         LocalDateTime deadline,
+        Integer designStatusId,
+        Integer technologyStatusId,
+        Integer contractStatusId,
         Integer projectConditionId
 ) {
 }

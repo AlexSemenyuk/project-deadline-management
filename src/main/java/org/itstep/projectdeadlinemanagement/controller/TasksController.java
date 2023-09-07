@@ -38,7 +38,8 @@ public class TasksController {
         List<Project> tmpProjects = projectRepository.findAll();
         List<Project> projects = new CopyOnWriteArrayList<>();
         for (Project p:tmpProjects){
-            if (p.getProjectCondition().getName().equals("Production")){
+            if (p.getProjectCondition().getName().equals("Production") ||
+                    p.getProjectCondition().getName().equals("Archive")){
                 projects.add(p);
             }
         }

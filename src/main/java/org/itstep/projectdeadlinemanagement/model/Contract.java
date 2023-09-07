@@ -61,8 +61,9 @@ public class Contract {
         return new Contract (
                 command.number(),
                 command.name(),
-                command.start(),
-                command.deadline());
+                command.start().withHour(0).withMinute(0),
+                command.deadline().withHour(0).withMinute(0)
+        );
     }
 
 }

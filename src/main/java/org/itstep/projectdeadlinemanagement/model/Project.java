@@ -38,6 +38,15 @@ public class Project {
     private LocalDateTime deadline;
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private ProjectStatus designStatus;
+
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private ProjectStatus technologyStatus;
+
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private ProjectStatus contractStatus;
+
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private ProjectCondition projectCondition;
 
     @OneToMany(mappedBy = "project")
@@ -67,11 +76,24 @@ public class Project {
         this.projectCondition = projectCondition;
     }
 
+    public void setDesignStatus(ProjectStatus designStatus) {
+        designStatus.getDesignProjects().add(this);
+        this.designStatus = designStatus;
+    }
+
+    public void setTechnologyStatus(ProjectStatus technologyStatus) {
+        technologyStatus.getTechnologyProjects().add(this);
+        this.technologyStatus = technologyStatus;
+    }
+    public void setContractStatus(ProjectStatus contractStatus) {
+        contractStatus.getContractProjects().add(this);
+        this.contractStatus = contractStatus;
+    }
 
     public static Project fromCommand(ProjectCommand command) {
         return new Project(command.number(),
-                command.start(),
-                command.deadline());
+                command.start().withHour(0).withMinute(0),
+                command.deadline().withHour(0).withMinute(0));
     }
 }
 

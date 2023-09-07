@@ -3,14 +3,8 @@ package org.itstep.projectdeadlinemanagement.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.itstep.projectdeadlinemanagement.command.ProjectCommand;
-import org.itstep.projectdeadlinemanagement.model.Customer;
-import org.itstep.projectdeadlinemanagement.model.Project;
-import org.itstep.projectdeadlinemanagement.model.ProjectCondition;
-import org.itstep.projectdeadlinemanagement.model.ProjectList;
-import org.itstep.projectdeadlinemanagement.repository.CustomerRepository;
-import org.itstep.projectdeadlinemanagement.repository.ProjectConditionRepository;
-import org.itstep.projectdeadlinemanagement.repository.ProjectListRepository;
-import org.itstep.projectdeadlinemanagement.repository.ProjectRepository;
+import org.itstep.projectdeadlinemanagement.model.*;
+import org.itstep.projectdeadlinemanagement.repository.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,6 +24,7 @@ public class ProjectCreateController {
     private final CustomerRepository customerRepository;
     private final ProjectConditionRepository projectConditionRepository;
     private final ProjectListRepository projectListRepository;
+    private final ProjectStatusRepository projectStatusRepository;
 
     @GetMapping
     public String home(Model model) {
@@ -46,13 +41,22 @@ public class ProjectCreateController {
         log.info("ProjectCommand {}", command);
         Optional<Customer> optionalCustomer = customerRepository.findById(command.customerId());
         Optional<ProjectCondition> optionalProjectCondition = projectConditionRepository.findById(1);
-        if (optionalCustomer.isPresent() && optionalProjectCondition.isPresent()
+        Optional<ProjectStatus> optionalProjectStatus = projectStatusRepository.findById(1);
+        if (optionalCustomer.isPresent() &&
+                optionalProjectCondition.isPresent() &&
+                optionalProjectStatus.isPresent()
         ) {
             Customer customer = optionalCustomer.get();
             ProjectCondition projectCondition = optionalProjectCondition.get();
+            ProjectStatus projectStatus = optionalProjectStatus.get();
+
             Project project = Project.fromCommand(command);
             project.setCustomer(customer);
             project.setProjectCondition(projectCondition);
+
+            project.setDesignStatus(projectStatus);
+            project.setTechnologyStatus(projectStatus);
+            project.setContractStatus(projectStatus);
 
             ProjectList projectList = new ProjectList();
             project.setProjectList(projectList);

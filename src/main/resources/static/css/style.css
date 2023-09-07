@@ -74,10 +74,11 @@ body {
 }
 
 .home-image {
-    /*padding-top: 40%;*/
+    padding-top: 10%;
+}
 
-    width: 90%;
-    text-align: right;
+.production-image {
+    width: 100%;
 }
 
 .user {
@@ -214,7 +215,7 @@ li.item_menu_sub{
 }
 
 .link_menu_sub_finish {
-    font-size: 20px;
+    font-size: 22px;
     color: var(--color-text-finish);
     text-decoration: none;
     cursor: pointer;

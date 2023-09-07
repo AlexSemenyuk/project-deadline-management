@@ -7,6 +7,8 @@ import org.itstep.projectdeadlinemanagement.command.PartListCommand;
 import org.itstep.projectdeadlinemanagement.command.ProjectCommand;
 import org.itstep.projectdeadlinemanagement.model.*;
 import org.itstep.projectdeadlinemanagement.repository.*;
+import org.itstep.projectdeadlinemanagement.service.ProductionPlanService;
+import org.itstep.projectdeadlinemanagement.service.TaskService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,9 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 @Controller
 @RequestMapping("projects/project_details")
@@ -27,11 +27,14 @@ public class ProjectDetailsController {
     private final ProjectRepository projectRepository;
     private final CustomerRepository customerRepository;
     private final ProjectConditionRepository projectConditionRepository;
+    private final ProjectStatusRepository projectStatusRepository;
     private final AssemblyRepository assemblyRepository;
     private final PartRepository partRepository;
     private final AssemblyListRepository assemblyListRepository;
     private final PartListRepository partListRepository;
     private final TaskConditionRepository taskConditionRepository;
+    private final ProductionPlanService productionPlanService;
+    private final TaskService taskService;
 
     @GetMapping("/{id}")
     public String home(@PathVariable Integer id, Model model) {
@@ -58,6 +61,13 @@ public class ProjectDetailsController {
             model.addAttribute("project", project);
             model.addAttribute("customers", customerRepository.findAll());
             model.addAttribute("idCustomer", project.getCustomer().getId());
+
+            model.addAttribute("projectConditions", projectConditionRepository.findAll());
+            model.addAttribute("projectStatuses", projectStatusRepository.findAll());
+
+            model.addAttribute("idDesignStatus", project.getDesignStatus().getId());
+            model.addAttribute("idTechnologyStatus", project.getTechnologyStatus().getId());
+            model.addAttribute("idContractStatus", project.getContractStatus().getId());
             model.addAttribute("idProjectCondition", project.getProjectCondition().getId());
             model.addAttribute("projectConditions", projectConditionRepository.findAll());
         }
@@ -69,18 +79,39 @@ public class ProjectDetailsController {
         Optional<Project> optionalProject = projectRepository.findById(id);
         Optional<Customer> optionalCustomer = customerRepository.findById(command.customerId());
         Optional<ProjectCondition> optionalProjectCondition = projectConditionRepository.findById(command.projectConditionId());
+        Optional<ProjectStatus> optionalDesignStatus = projectStatusRepository.findById(command.designStatusId());
+        Optional<ProjectStatus> optionalTechnologyStatus = projectStatusRepository.findById(command.technologyStatusId());
+        Optional<ProjectStatus> optionalContractStatus = projectStatusRepository.findById(command.contractStatusId());
         Optional<TaskCondition> optionalTaskCondition = taskConditionRepository.findById(6);
         if (optionalProject.isPresent() &&
                 optionalProjectCondition.isPresent() &&
-                optionalCustomer.isPresent()){
+                optionalCustomer.isPresent() &&
+                optionalDesignStatus.isPresent() &&
+                optionalTechnologyStatus.isPresent() &&
+                optionalContractStatus.isPresent()
+        ){
             Project project = optionalProject.get();
             project.setNumber(command.number());
-            ProjectCondition projectCondition = optionalProjectCondition.get();
+
+
             Customer customer = optionalCustomer.get();
             project.setCustomer(customer);
+
             project.setStart(command.start());
             project.setDeadline(command.deadline());
+
+            ProjectStatus designStatus = optionalDesignStatus.get();
+            project.setDesignStatus(designStatus);
+
+            ProjectStatus technologyStatus = optionalTechnologyStatus.get();
+            project.setTechnologyStatus(technologyStatus);
+
+            ProjectStatus contractStatus = optionalContractStatus.get();
+            project.setContractStatus(contractStatus);
+
+            ProjectCondition projectCondition = optionalProjectCondition.get();
             project.setProjectCondition(projectCondition);
+
             if (projectCondition.getName().equals("Archive")){
                 TaskCondition taskCondition = optionalTaskCondition.get();
                 if (!project.getTasks().isEmpty()){
@@ -92,6 +123,34 @@ public class ProjectDetailsController {
             projectRepository.save(project);
         }
         return "redirect:/projects/project_details/edit/{id}";
+    }
+
+    @GetMapping("delete_tasks/{id}")
+    public String deleteTasksAndProductPlans(@PathVariable Integer id) {
+        Optional<Project> optionalProject = projectRepository.findById(id);
+        if (optionalProject.isPresent()){
+            Project project = optionalProject.get();
+            productionPlanService.deleteProductionPlansForProject(project);
+            taskService.deleteTaskForProject(project);
+        }
+        return "redirect:/projects/project_details/{id}";
+    }
+
+    @GetMapping("add_tasks/{id}")
+    public String addTasksAndProductPlans(@PathVariable Integer id) {
+        Optional<Project> optionalProject = projectRepository.findById(id);
+        if (optionalProject.isPresent()){
+            Project project = optionalProject.get();
+
+            if (project.getProjectCondition().getName().equals("Production") &&
+                    project.getDesignStatus().getName().equals("Finish") &&
+                    project.getTechnologyStatus().getName().equals("Finish") &&
+                    project.getContractStatus().getName().equals("Finish")){
+                List<Task> tasks = taskService.formTasks(id);
+                productionPlanService.formProductionPlans(tasks);
+            }
+        }
+        return "redirect:/projects/project_details/{id}";
     }
 
     @GetMapping("/assembly_lists/{id}")
