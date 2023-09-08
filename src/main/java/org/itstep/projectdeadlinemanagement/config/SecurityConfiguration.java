@@ -46,28 +46,28 @@ public class SecurityConfiguration  {
         UserDetails admin = User.builder()
                 .username("admin")
                 .password("$2a$10$3uUBBq3ikiB5lXsNbrudeue.NwNkmFcd59t5qeDCuiFp70Af.8H9W") // соответствует строке "admin"
-                .roles("ADMIN", "PRODUCT", "EQUIPMENT", "USER")
+                .roles("ADMIN", "PROJECT", "DESIGN", "TECHNOLOGY", "CONTRACT", "PRODUCTION")
                 .build();
-        UserDetails product = User.builder()
-                .username("product")
-                .roles("PRODUCT", "USER")
-                .password("$2a$10$MgLGGRdNXgUtzNJ1W3bt1uyz9G056PzG2uuAoQkBD/Y8jnACCFbwS") // соответствует строке "product"
-                .build();
-        UserDetails equipment = User.builder()
-                .username("equipment")
-                .roles("EQUIPMENT", "USER")
-                .password("$2a$10$Gm5uICwnx4/ojao3t.YFbOwjkN7VX3ZkZFR6M5So95An1V/pT9SGG") // соответствует строке "equipment"
-                .build();
-        UserDetails user = User.builder()
-                .username("user")
-                .roles("USER")
-                .password("$2a$10$Djl8U2HDSuCmbCSm1Xxb8eJSbqczMOoLSl0MxWkr.p8kchB75hOXu") // соответствует строке "user"
-                .build();
+//        UserDetails product = User.builder()
+//                .username("product")
+//                .roles("PRODUCT", "USER")
+//                .password("$2a$10$MgLGGRdNXgUtzNJ1W3bt1uyz9G056PzG2uuAoQkBD/Y8jnACCFbwS") // соответствует строке "product"
+//                .build();
+//        UserDetails equipment = User.builder()
+//                .username("equipment")
+//                .roles("EQUIPMENT", "USER")
+//                .password("$2a$10$Gm5uICwnx4/ojao3t.YFbOwjkN7VX3ZkZFR6M5So95An1V/pT9SGG") // соответствует строке "equipment"
+//                .build();
+//        UserDetails user = User.builder()
+//                .username("user")
+//                .roles("USER")
+//                .password("$2a$10$Djl8U2HDSuCmbCSm1Xxb8eJSbqczMOoLSl0MxWkr.p8kchB75hOXu") // соответствует строке "user"
+//                .build();
         JdbcUserDetailsManager detailsManager = new JdbcUserDetailsManager(dataSource);
         detailsManager.createUser(admin);
-        detailsManager.createUser(product);
-        detailsManager.createUser(equipment);
-        detailsManager.createUser(user);
+//        detailsManager.createUser(product);
+//        detailsManager.createUser(equipment);
+//        detailsManager.createUser(user);
         return detailsManager;
     }
 
@@ -76,35 +76,32 @@ public class SecurityConfiguration  {
         return http
                 .authorizeHttpRequests(authorize ->
                         authorize
-                                .requestMatchers("/").permitAll()
-//                                .requestMatchers("/").hasAnyRole("USER", "EDITOR", "ADMIN")
+                                .requestMatchers("/").permitAll()       // "ADMIN", "PROJECT", "DESIGN", "TECHNOLOGY", "CONTRACT", "PRODUCTION"
+                                .requestMatchers("/css**").permitAll()
+                                .requestMatchers("/icons**").permitAll()
+                                .requestMatchers("/images**").permitAll()
+                                .requestMatchers("/logo**").permitAll()
+                                .requestMatchers("/login").permitAll()
                                 .requestMatchers(AntPathRequestMatcher.antMatcher("/h2-console/**")).permitAll()
                                 .requestMatchers(AntPathRequestMatcher.antMatcher("/api/**")).permitAll()
-                                .requestMatchers(HttpMethod.GET, "/divisions").hasAnyRole("ADMIN", "PRODUCT", "EQUIPMENT", "USER")
-                                .requestMatchers(HttpMethod.POST, "/divisions").hasAnyRole("ADMIN", "PRODUCT", "EQUIPMENT", "USER")
-                                .requestMatchers(HttpMethod.GET, "/divisions/edit/**").hasAnyRole("ADMIN", "PRODUCT", "EQUIPMENT", "USER")
-                                .requestMatchers(HttpMethod.POST, "/divisions/edit/**").hasAnyRole("ADMIN", "PRODUCT", "EQUIPMENT", "USER")
-                                .requestMatchers(HttpMethod.GET, "/divisions/delete/**").hasAnyRole("ADMIN", "PRODUCT", "EQUIPMENT", "USER")
-                                .requestMatchers(HttpMethod.GET, "/division_types").hasAnyRole("ADMIN", "PRODUCT", "EQUIPMENT", "USER")
-                                .requestMatchers(HttpMethod.POST, "/division_types").hasAnyRole("ADMIN", "PRODUCT", "EQUIPMENT", "USER")
-                                .requestMatchers(HttpMethod.GET, "/division_types/edit/**").hasAnyRole("EDITOR", "ADMIN")
-                                .requestMatchers(HttpMethod.POST, "/division_types/edit/**").hasAnyRole("EDITOR", "ADMIN")
-                                .requestMatchers(HttpMethod.GET, "/division_types/delete/**").hasRole("ADMIN")
-                                .requestMatchers(HttpMethod.GET, "/books").hasAnyRole("USER", "EDITOR", "ADMIN")
-                                .requestMatchers(HttpMethod.POST, "/books").hasAnyRole("EDITOR", "ADMIN")
-                                .requestMatchers(HttpMethod.GET, "/books/edit/**").hasAnyRole("EDITOR", "ADMIN")
-                                .requestMatchers(HttpMethod.POST, "/books/edit/**").hasAnyRole("EDITOR", "ADMIN")
-                                .requestMatchers(HttpMethod.GET, "/books/delete/**").hasRole("ADMIN")
-                                .requestMatchers(HttpMethod.GET, "/authors").hasAnyRole("EDITOR", "ADMIN")
-                                .requestMatchers(HttpMethod.POST, "/authors").hasAnyRole("EDITOR", "ADMIN")
-                                .requestMatchers(HttpMethod.GET, "/authors/edit/**").hasAnyRole("EDITOR", "ADMIN")
-                                .requestMatchers(HttpMethod.POST, "/authors/edit/**").hasAnyRole("EDITOR", "ADMIN")
-                                .requestMatchers(HttpMethod.GET, "/authors/delete/**").hasRole("ADMIN")
-                                .requestMatchers(HttpMethod.GET, "/publishers").hasAnyRole("EDITOR", "ADMIN")
-                                .requestMatchers(HttpMethod.POST, "/publishers").hasAnyRole("EDITOR", "ADMIN")
-                                .requestMatchers(HttpMethod.GET, "/publishers/edit/**").hasAnyRole("EDITOR", "ADMIN")
-                                .requestMatchers(HttpMethod.POST, "/publishers/edit/**").hasAnyRole("EDITOR", "ADMIN")
-                                .requestMatchers(HttpMethod.GET, "/publishers/delete/**").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.GET, "/registration").hasAnyRole("ADMIN", "PROJECT")
+                                .requestMatchers(HttpMethod.GET, "/registration").hasAnyRole("ADMIN", "PROJECT")
+                                .requestMatchers("/projects**").hasAnyRole("ADMIN", "PROJECT")
+                                .requestMatchers("/design**").hasAnyRole("ADMIN", "DESIGN")
+                                .requestMatchers("/assemblies**").hasAnyRole("ADMIN", "DESIGN")
+                                .requestMatchers("/parts**").hasAnyRole("ADMIN", "DESIGN")
+                                .requestMatchers("/technologies**").hasAnyRole("ADMIN", "TECHNOLOGY")
+                                .requestMatchers("/contracts**").hasAnyRole("ADMIN", "CONTRACT")
+                                .requestMatchers("/production").hasAnyRole("ADMIN", "PROJECT", "PRODUCTION")
+                                .requestMatchers("/divisions**").hasAnyRole("ADMIN", "PRODUCTION")
+                                .requestMatchers("/equipments**").hasAnyRole("ADMIN", "PRODUCTION")
+                                .requestMatchers("/tasks").hasAnyRole("ADMIN", "PROJECT", "PRODUCTION")
+                                .requestMatchers("/technologies/technology_terms/technology_parts/part_details**").hasAnyRole("ADMIN", "PROJECT", "PRODUCTION")
+                                .requestMatchers("/technologies/technology_terms/technology_assemblies/assembly_details**").hasAnyRole("ADMIN", "PROJECT", "PRODUCTION")
+                                .requestMatchers("/production_plans**").hasAnyRole("ADMIN", "PROJECT", "PRODUCTION")
+                                .requestMatchers("/equipment_plans**").hasAnyRole("ADMIN", "PROJECT", "PRODUCTION")
+//                                .requestMatchers(HttpMethod.GET, "/divisions").hasAnyRole("ADMIN", "PRODUCT", "EQUIPMENT", "USER")
+//                                .requestMatchers(HttpMethod.POST, "/divisions").hasAnyRole("ADMIN", "PRODUCT", "EQUIPMENT", "USER")
                                 .anyRequest().authenticated())
                 .csrf(csrf -> csrf.ignoringRequestMatchers(AntPathRequestMatcher.antMatcher("/h2-console/**")))
                 .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))

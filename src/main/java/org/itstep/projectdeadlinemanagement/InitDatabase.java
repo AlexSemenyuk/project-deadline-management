@@ -9,6 +9,10 @@ import org.itstep.projectdeadlinemanagement.repository.*;
 import org.itstep.projectdeadlinemanagement.service.ProductionPlanService;
 import org.itstep.projectdeadlinemanagement.service.TaskService;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -39,19 +43,18 @@ public class InitDatabase implements CommandLineRunner {
     private final ProductionPlanService productionPlanService;
     private final ContractTypeRepository contractTypeRepository;
     private final ContractRepository contractRepository;
-
+    private final UserRoleRepository userRoleRepository;
+    private final UserDetailsManager userDetailsManager;
+    private final PasswordEncoder encoder;
 
     @Transactional
     @Override
     public void run(String... args) throws Exception {
         // 1. Тип дивизиона (подготовка / производство)
-
         equipmentTypeRepository.save(new EquipmentType("Виробництво"));
         equipmentTypeRepository.save(new EquipmentType("Складання вузлів"));
 
         // 2. Создание дивизионов (конструкторский отдел, технологический отдел, мх-1 (механо-сборочный цех №1), мх-2, мх-3)
-//        addDivision(new DivisionCommand("Design", 1));
-//        addDivision(new DivisionCommand("Technology", 1));
         divisionRepository.save(new Division("Мх-1"));
         divisionRepository.save(new Division("Мх-2"));
         divisionRepository.save(new Division("Мх-3"));
@@ -71,7 +74,6 @@ public class InitDatabase implements CommandLineRunner {
         addEquipment(new EquipmentCommand(32, "Токарний", 3, 1));
         addEquipment(new EquipmentCommand(33, "Расточной", 3, 1));
         addEquipment(new EquipmentCommand(34, "Складання вузлів", 3, 2));
-
 
         // 4. Создание Parts / деталей
         partRepository.save(new Part(1, "Корпус"));
@@ -132,13 +134,57 @@ public class InitDatabase implements CommandLineRunner {
         taskTypeRepository.save(new TaskType("Деталь"));
         taskTypeRepository.save(new TaskType("Вузол"));
 
-
         // 11. ContractTypes
         contractTypeRepository.save(new ContractType("Матеріали"));
         contractTypeRepository.save(new ContractType("Комплектуючі вироби"));
 
+        // 12. Создание UserRole
+        userRoleRepository.save(new UserRole("ADMIN"));
+        userRoleRepository.save(new UserRole("PROJECT"));
+        userRoleRepository.save(new UserRole("DESIGN"));
+        userRoleRepository.save(new UserRole("TECHNOLOGY"));
+        userRoleRepository.save(new UserRole("CONTRACT"));
+        userRoleRepository.save(new UserRole("PRODUCTION"));
 
-        // 12. Создание Project
+        // 13. Создание Users
+        UserDetails userProject = User.builder()
+                .username("PROJECT")
+                .roles("PROJECT")
+                .password(encoder.encode("PROJECT"))
+                .build();
+        userDetailsManager.createUser(userProject);
+
+        UserDetails userDesign = User.builder()
+                .username("DESIGN")
+                .roles("DESIGN")
+                .password(encoder.encode("DESIGN"))
+                .build();
+        userDetailsManager.createUser(userDesign);
+
+        UserDetails userTechnology = User.builder()
+                .username("TECHNOLOGY")
+                .roles("TECHNOLOGY")
+                .password(encoder.encode("TECHNOLOGY"))
+                .build();
+        userDetailsManager.createUser(userTechnology);
+
+        UserDetails userContract = User.builder()
+                .username("CONTRACT")
+                .roles("CONTRACT")
+                .password(encoder.encode("CONTRACT"))
+                .build();
+        userDetailsManager.createUser(userContract);
+
+        UserDetails userProduction = User.builder()
+                .username("PRODUCTION")
+                .roles("PRODUCTION")
+                .password(encoder.encode("PRODUCTION"))
+                .build();
+        userDetailsManager.createUser(userProduction);
+
+
+
+        // 14. Создание Project
         // Project 1001
         addProject(new ProjectCommand(
                 1001, null, 1,
@@ -338,6 +384,9 @@ public class InitDatabase implements CommandLineRunner {
 //                1));
 //
 //        productionPlanService.formProductionPlans(taskService.formTasks(4));
+
+
+
 
     }
 
