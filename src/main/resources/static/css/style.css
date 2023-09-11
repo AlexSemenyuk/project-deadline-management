@@ -244,6 +244,18 @@ li.item_menu_sub{
     font-size: 22px;
 }
 
+.instruction_p{
+    text-align: start;
+    font-weight: 700;
+    font-size: 18px;
+}
+.instruction_i{
+    text-align: start;
+    padding-left: 30px;
+    font-weight: 700;
+    font-size: 20px;
+}
+
 .text_h1 {
     text-align: left;
     font-weight: 700;
@@ -332,8 +344,40 @@ li.item_menu_sub{
 .tm {
     color: var(--text-primary);
 }
+.sections_item {
+    list-style-type: decimal;
+    font-size: 18px;
+    font-weight: 400;
+    text-decoration: none;
+    color: var(--text-primary);
+}
+.sections_item:hover {
+    list-style-type: decimal;
+    font-size: 18px;
+    font-weight: 400;
+    text-decoration: none;
+    color: var(--color-text-alternanive);
+}
 
 .instruction_item {
+    list-style-type: disc;
+    font-size: 18px;
+    font-weight: 400;
+}
+
+.instruction_item_sub {
+    list-style-type: circle;
+    font-size: 18px;
+    font-weight: 400;
+}
+
+.instruction_item_sub_sub {
+    list-style-type: square;
+    font-size: 18px;
+    font-weight: 400;
+}
+.instruction_item_none {
+    list-style-type: none;
     font-size: 18px;
     font-weight: 400;
 }

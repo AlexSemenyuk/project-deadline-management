@@ -87,16 +87,264 @@
             <h2 class="instruction_h text-center">Інструкція</h2>
             <div class="row">
                 <div class="col-xl-1"></div>
-                <div class="col-xl-8">
-                    <ol class="instruction">
-                        <li class="instruction_item">Створити виробничі дивізіони</li>
-                        <li class="instruction_item">У відповідних дивізіонах створити обладнання</li>
-                        <li class="instruction_item"></li>
-                        <li class="instruction_item"></li>
-                        <li class="instruction_item"></li>
+                <div class="col-xl-10">
+                    <h2 class="instruction_i">Зміст</h2>
+                    <ol>
+                        <li><a class="sections_item" href="javascript:void(0);" onclick="scrollToAnchor('structure', 50)">Структура програми</a></li>
+                        <li><a class="sections_item" href="javascript:void(0);" onclick="scrollToAnchor('security', 50)">Безпека</a></li>
+                        <li><a class="sections_item" href="javascript:void(0);" onclick="scrollToAnchor('project', 50)">Проекти</a></li>
+                        <li><a class="sections_item" href="javascript:void(0);" onclick="scrollToAnchor('design', 50)">Конструктор</a></li>
+                        <li><a class="sections_item" href="javascript:void(0);" onclick="scrollToAnchor('technology', 50)">Технолог</a></li>
+                        <li><a class="sections_item" href="javascript:void(0);" onclick="scrollToAnchor('contract', 50)">Контракти</a></li>
+                        <li><a class="sections_item" href="javascript:void(0);" onclick="scrollToAnchor('production', 50)">Виробництво</a></li>
+                        <li><a class="sections_item" href="javascript:void(0);" onclick="scrollToAnchor('rezult', 50)">Результат</a></li>
+                    </ol>
+                    <h2 class="instruction_i">Розділи</h2>
+                    <ol class="instruction" >
+                        <li class="instruction_p my-3" >
+                            <h3 class="instruction_p" id="structure">Структура програми</h3>
+                            <ul>
+                                <li class="instruction_item">Проекти (Відділ маркетингу)</li>
+                                <li class="instruction_item">Конструктор (Конструкторський відділ)</li>
+                                <li class="instruction_item">Технолог (Технологічний відділ)</li>
+                                <li class="instruction_item">Контракти (Відділ закупівель)</li>
+                                <li class="instruction_item">Виробництво (Цеха, координаційний центр/відділ підготовки виробництва)</li>
+                            </ul>
+                        </li>
+                        <li class="instruction_p my-3" >
+                            <h3 class="instruction_p" id="security">Безпека</h3>
+                            <p class="instruction_p m-0">2.1 Ролі</p>
+                            <ul>
+                                <li class="instruction_item">ADMIN</li>
+                                <li class="instruction_item">PROJECT</li>
+                                <li class="instruction_item">DESIGN</li>
+                                <li class="instruction_item">TECHNOLOGY</li>
+                                <li class="instruction_item">CONTRACT</li>
+                                <li class="instruction_item">PRODUCTION</li>
+                            </ul>
+                            <p class="instruction_p m-0">2.2 Доступ</p>
+                            <ul>
+                                <li class="instruction_item">ADMIN – доступ до всіх вкладок</li>
+                                <li class="instruction_item">PROJECT - Доступ до вкладок Проект та Виробництво (завдання, план, показники)</li>
+                                <li class="instruction_item">DESIGN - Доступ до вкладки Конструктор</li>
+                                <li class="instruction_item">TECHNOLOGY - Доступ до вкладки Технолог</li>
+                                <li class="instruction_item">CONTRACT - Доступ до вкладки Контракти</li>
+                                <li class="instruction_item">PRODUCTION - Доступ до вкладки Виробництво</li>
+                            </ul>
+                        </li>
+                        <li class="instruction_p my-3">
+                            <h3 class="instruction_p" id="project">Проекти</h3>
+                            <ul>
+                                <li class="instruction_item">Управління списком Замовників (створення, редагування, видалення)</li>
+                                <li class="instruction_item">Створити проект, вибрати проект для роботи</li>
+                                <li class="instruction_item">Додати список обладнання, що постачається (вкладки додати вузли / деталі)</li>
+                                <li class="instruction_item">Управління станом та статусом підготовки до виробництва (за потреби)</li>
+                                <li class="instruction_item">
+                                    Інформація для поточного контролю
+                                    <ul>
+                                        <li class="instruction_item_sub">Інформація щодо проекту</li>
+                                        <li class="instruction_item_sub">Список обладнання, що поставляється</li>
+                                        <li class="instruction_item_sub">Список контрактів</li>
+                                        <li class="instruction_item_sub">Список виробничих завдань</li>
+                                        <li class="instruction_item_sub">Графік проекту</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="instruction_p my-3">
+                            <h3 class="instruction_p" id="design">Конструктор</h3>
+                            <ul>
+                                <li class="instruction_item">Архів вузлів / деталей – керування елементами, для яких згодом буде створено виробничі завдання</li>
+                                <li class="instruction_item">Структура вузла аналогічна конструкторській документації (вузол має списки вузлів та списки деталей з відповідною кількістю)</li>
+                                <li class="instruction_item">Для роботи з проектом потрібно вибрати проект на головній вкладці (у списку лише проекти зі станом «design»)</li>
+                                <li class="instruction_item">Конструктор встановлює час, необхідний для розробки проекту (у робочих днях)</li>
+                                <li class="instruction_item">
+                                    Інформація для поточного контролю
+                                    <ul>
+                                        <li class="instruction_item_sub">Інформація щодо проекту</li>
+                                        <li class="instruction_item_sub">Список обладнання, що поставляється</li>
+                                    </ul>
+                                </li>
+                                <li class="instruction_item">
+                                    Вкладка «Закінчити розробку» означає:
+                                    <ul>
+                                        <li class="instruction_item_sub">Закінчення конструкторської розробки (статус «finish»)</li>
+                                        <li class="instruction_item_sub">Початок технологічної розробки (стан «technology»)</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="instruction_p my-3">
+                            <h3 class="instruction_p" id="technology">Технолог</h3>
+                            <ul>
+                                <li class="instruction_item">Для роботи з проектом потрібно вибрати проект на головній вкладці (у списку лише проекти зі станом «technology»)</li>
+                                <li class="instruction_item">На вкладках вузол / деталь технолог створює послідовність технологічних операцій, необхідних для виготовлення кожної з деталей, що поставляються. У технологічних операціях вибирається деталь/вузол, а також вказуються послідовність виконання, обладнання та час.</li>
+                                <li class="instruction_item">Технолог встановлює час, необхідний для розробки проекту (у робочих днях)</li>
+                                <li class="instruction_item">
+                                    Інформація для роботи з проектом
+                                    <ul>
+                                        <li class="instruction_item_sub">Інформація щодо проекту</li>
+                                        <li class="instruction_item_sub">Список обладнання, що поставляється</li>
+                                        <li class="instruction_item_sub">Списки вузлів/деталей з урахуванням кількості на проект</li>
+                                    </ul>
+                                </li>
+                                <li class="instruction_item">
+                                    Вкладка «Закінчити розробку» означає:
+                                    <ul>
+                                        <li class="instruction_item_sub">Закінчення технологічної розробки (статус «finish»)</li>
+                                        <li class="instruction_item_sub">Встановлення стану «Production» (виробництво)</li>
+                                        <li class="instruction_item_sub">Якщо роботу з контрактами завершено (статус «finish»), виконується авто формування виробничих завдань</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="instruction_p my-3">
+                            <h3 class="instruction_p" id="contract">Контракти (Відділ закупівель)</h3>
+                            <ul>
+                                <li class="instruction_item">Для роботи з проектом потрібно вибрати проект на головній вкладці (у списку всі проекти зі станами «design» та «technology»)</li>
+                                <li class="instruction_item">Під час опрацювання проекту необхідно створити контракти із зазначенням початку та закінчення контрактів (дата).</li>
+                                <li class="instruction_item">Контракти 2 видів – закупівля матеріалу, закупівля комплектуючих виробів.</li>
+                                <li class="instruction_item">
+                                    Інформація для роботи з проектом
+                                    <ul>
+                                        <li class="instruction_item_sub">Інформація щодо проекту</li>
+                                        <li class="instruction_item_sub">Список обладнання, що поставляється</li>
+                                    </ul>
+                                </li>
+                                <li class="instruction_item">
+                                    Вкладка «Закінчити розробку» означає:
+                                    <ul>
+                                        <li class="instruction_item_sub">Закінчення розробки (статус «finish»)</li>
+                                        <li class="instruction_item_sub">Якщо технологічна розробка завершена (стан «Production» та статус «finish»), виконується авто формування виробничих завдань</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="instruction_p my-3">
+                            <h3 class="instruction_p" id="production">Виробництво</h3>
+
+                            <p class="instruction_p m-0">7.1 Дивізіони та обладнання</p>
+                            <ul>
+                                <li class="instruction_item">Для роботи додатка потрібно створити виробничу структуру (дивізіони (виробничі цехи) та встановлене в них обладнання).</li>
+                                <li class="instruction_item">Є 2 види обладнання: виробництво (верстат) та складання вузлів (майданчик для складання)</li>
+                            </ul>
+                            <p class="instruction_p m-0">7.2 Завдання</p>
+                            <ul>
+                                <li class="instruction_item">Завдання – об'єкт, що відображає інформацію від конструктора (вузол / деталь), а також інформацію від технолога (номер та час операції, обладнання) і все це з урахуванням кількості на проект (номер партії)</li>
+                                <li class="instruction_item">Виробниче завдання – це завдання перерозподілене на відповідне обладнання з урахуванням черги (послідовності виконання)</li>
+                                <li class="instruction_item">
+                                    Стан виробничих завдань
+                                    <ul>
+                                        <li class="instruction_item_sub">"New" – немає розподілу</li>
+                                        <li class="instruction_item_sub">"Production" – розподілено (готове до виробництва)</li>
+                                        <li class="instruction_item_sub">"Ок" – завдання виконане</li>
+                                        <li class="instruction_item_sub">"Design" – завдання віддано конструктору за повідомленням (не реалізовано)</li>
+                                        <li class="instruction_item_sub">"Technology" – завдання віддано технологу за повідомленням (не реалізовано)</li>
+                                        <li class="instruction_item_sub">"Archive" – весь проект виконано та знаходиться в архіві</li>
+                                    </ul>
+                                </li>
+                                <li class="instruction_item">Клітинки стовпчика вузол / деталь мають посилання на відповідні сторінки, що відображають технологію виготовлення / складання, яка представлена у вигляді таблиці та графіка</li>
+                            </ul>
+                            <p class="instruction_p m-0">7.3 Вкладка План</p>
+                            <ul>
+                                <li class="instruction_item">
+                                    План виробництва (вкладення план) – це діаграма Ганта, представлена у вигляді таблиці:
+                                    <ul>
+                                        <li class="instruction_item_sub">По осі Y (вертикаль) – список обладнання</li>
+                                        <li class="instruction_item_sub">По осі Х (горизонталь) – поточний календарний місяць</li>
+                                        <li class="instruction_item_sub">Клітинки - це списки виробничих завдань, причому кожне завдання подано зі своїми термінами виконання (початок та довжина), розташовані за впорядкованою чергою на відповідне обладнання.</li>
+                                    </ul>
+                                </li>
+                                <li class="instruction_item">Діаграма представлена на поточний місяць, при цьому є можливість зміни місяця та року для відображення відповідного періоду.</li>
+                                <li class="instruction_item">Числа з червоним фоном відображають вихідні дні (субота та неділя)</li>
+                                <li class="instruction_item">
+                                    Наприкінці головної таблиці виведено розрахункові параметри щодо планового та фактичного завантаження кожного з видів обладнання:
+                                    <ul>
+                                        <li class="instruction_item_sub">П(г) - Планове завантаження обладнання на місяць (годин(и))</li>
+                                        <li class="instruction_item_sub">Ф(г) - Фактичне завантаження обладнання на місяць (годин(и))</li>
+                                        <li class="instruction_item_sub">Ф(%) - Фактичне завантаження обладнання на місяць (відсоток)</li>
+                                        <li class="instruction_item_sub">ПВЗ(%) - План виконаних завдань на поточну дату (відсоток)</li>
+                                        <li class="instruction_item_sub">ФВЗ(%) - Факт виконання завдань щодо їх планової кількості (відсоток)</li>
+                                        <li class="instruction_item_sub">Планові показники показані жовтим кольором, фактичні зеленим.</li>
+                                    </ul>
+                                </li>
+                                <li class="instruction_item">Клітинки - це також посилання, що відображає списки виробничих завдань на відповідне число та обладнання. Список відображається у п.6.</li>
+                                <li class="instruction_item">
+                                    Колір шрифту на клітинках діаграми означає виконання на поточну дату:
+                                    <ul>
+                                        <li class="instruction_item_sub">Червоний - поточна дата пройшла, а завдання не виконане (стан New або Production)</li>
+                                        <li class="instruction_item_sub">Зелений - поточна дата пройшла, завдання виконане (стан Ок або Archive)</li>
+                                        <li class="instruction_item_sub">Чорний - поточна дата не підійшла до поточного періоду</li>
+                                    </ul>
+                                </li>
+                                <li class="instruction_item">Повний список виробничих завдань на поточний місяць відображено у п.7</li>
+                                <li class="instruction_item">
+                                    Списки, представлені в п.6 і 7 структурно однакові, при цьому на клітинках таблиці є посилання:
+                                    <ul>
+                                        <li class="instruction_item_sub">На проект (клітинки номера проекту) для отримання термінів реалізації даного проекту та графіка реалізації</li>
+                                        <li class="instruction_item_sub">На вузол / деталь (клітинки вузол / деталь) мають посилання на відповідні сторінки, що відображають технологію виготовлення / складання, яка представлена у вигляді таблиці та графіка</li>
+                                    </ul>
+                                </li>
+                                <li class="instruction_item">
+                                    Формування виробничих завдань у чергу виконується наступним чином:
+                                    <ul>
+                                        <li class="instruction_item_sub">Під час створення вказується номер черги на відповідне обладнання</li>
+                                        <li class="instruction_item_sub">Всі нові нерозподілені виробничі завдання позначаються станом «New»</li>
+                                        <li class="instruction_item_sub">Після розподілу виробничого завдання йому присвоюється стан «Production»</li>
+                                        <li class="instruction_item_sub">Формування дат виконується лише зі станом «New», дати для інших станів не коригуються</li>
+                                        <li class="instruction_item_sub">Формування дат виконується з урахуванням однозмінної роботи (зміна – 8 годин), без урахування вихідних</li>
+                                        <li class="instruction_item_sub">
+                                            При формуванні дат на виробництво деталі виконується:
+                                            <ul>
+                                                <li class="instruction_item_sub_sub">Принцип після закінчення технології та виконання термінів поставки матеріалів</li>
+                                                <li class="instruction_item_sub_sub">Або якщо зазначена дата занята іншими проектами – то завдання переміщується до кінця черги.</li>
+                                                <li class="instruction_item_sub_sub">Виконується корекція з урахуванням послідовності виконання операцій на різному устаткуванні</li>
+                                            </ul>
+                                        </li>
+                                        <li class="instruction_item_sub">
+                                            При формуванні дат на складання вузлів виконується:
+                                            <ul>
+                                                <li class="instruction_item_sub_sub">Принцип після закінчення виробництва вcіх деталей</li>
+                                                <li class="instruction_item_sub_sub">Або після виконання термінів поставки комплектуючих виробів</li>
+                                                <li class="instruction_item_sub_sub">Або якщо зазначена дата занята іншими проектами – то завдання переміщується до кінця черги.</li>
+                                            </ul>
+                                        </li>
+                                        <li class="instruction_item_sub">Користувач вручну коригує дату початку виконання завдання та надає стан «Production»</li>
+                                        <li class="instruction_item_sub">Після виконання завдання користувач вручну надає стан «Ok», тобто виконано</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                            <p class="instruction_p m-0">7.4 Вкладка Показники</p>
+                            <ul>
+                                <li class="instruction_item">Показники – це статистика, що відображає планові та фактичні показники за звітний період (рік). Планові показники показані жовтим кольором, фактичні зеленим.</li>
+                                <li class="instruction_item">Клітинки перетину місяця та обладнання мають посилання для відображення відповідних показників за місяцем (див. п. 6)</li>
+                                <li class="instruction_item">Статистика представлена на поточний рік, при цьому є можливість зміни року для відображення відповідного періоду.</li>
+                            </ul>
+                        </li>
+                        <li class="instruction_p my-3">
+                            <h3 class="instruction_p" id="rezult">Результат</h3>
+                            <ul>
+                                <li class="instruction_item_none">
+                                    Головним результатом є 3 веб-сторінки:
+                                    <ul>
+                                        <li class="instruction_item">Вкладка щодо проекту – діаграма Ганта, графік виконання проекту за основними етапами</li>
+                                        <li class="instruction_item">
+                                            Вкладка план – діаграма Ганта (основна таблиця), що дозволяє:
+                                            <ul>
+                                                <li class="instruction_item_sub">Виконувати поточний контроль за термінами виконання проектів</li>
+                                                <li class="instruction_item_sub">Виявляти вузькі місця (перевантаження певного виду обладнання у певний проміжок часу)</li>
+                                                <li class="instruction_item_sub">Керувати термінами виконання проектів</li>
+                                            </ul>
+                                        </li>
+                                        <li class="instruction_item">Вкладка показники – це статистика, що відображає планові та фактичні показники за звітний період (рік).</li>
+                                    </ul>
+                                </li>
+
+                            </ul>
+                        </li>
                     </ol>
                 </div>
-                <div class="col-xl-3"></div>
+                <div class="col-xl-1"></div>
             </div>
         </div>
     </div>
@@ -113,5 +361,18 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
         crossorigin="anonymous"></script>
+<script>
+    // Функция для прокрутки к якорю с учетом смещения
+    function scrollToAnchor(anchorId, offset) {
+        var element = document.getElementById(anchorId);
+        if (element) {
+            var offsetPosition = element.offsetTop - offset;
+            window.scrollTo({
+                top: offsetPosition,
+                behavior: "smooth"
+            });
+        }
+    }
+</script>
 </body>
 </html>

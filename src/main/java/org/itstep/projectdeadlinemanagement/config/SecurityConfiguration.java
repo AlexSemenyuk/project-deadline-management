@@ -98,6 +98,7 @@ public class SecurityConfiguration  {
                                 .requestMatchers("/tasks").hasAnyRole("ADMIN", "PROJECT", "PRODUCTION")
                                 .requestMatchers("/technologies/technology_terms/technology_parts/part_details**").hasAnyRole("ADMIN", "PROJECT", "PRODUCTION")
                                 .requestMatchers("/technologies/technology_terms/technology_assemblies/assembly_details**").hasAnyRole("ADMIN", "PROJECT", "PRODUCTION")
+                                .requestMatchers("/projects/project_details**").hasAnyRole("ADMIN", "PROJECT", "PRODUCTION")
                                 .requestMatchers("/production_plans**").hasAnyRole("ADMIN", "PROJECT", "PRODUCTION")
                                 .requestMatchers("/equipment_plans**").hasAnyRole("ADMIN", "PROJECT", "PRODUCTION")
 //                                .requestMatchers(HttpMethod.GET, "/divisions").hasAnyRole("ADMIN", "PRODUCT", "EQUIPMENT", "USER")
