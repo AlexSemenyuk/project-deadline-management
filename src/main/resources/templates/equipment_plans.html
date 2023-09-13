@@ -152,7 +152,7 @@
                                         th:text="${chartMonth.monthNumber}">
                                     </th>
                                     <th class="text_n1 text-center m-0 p-0 px-1"  style="background-color: yellow" >П(г)</th>
-                                    <th class="text_n1 text-center m-0 p-0 px-1"  style="background-color: yellow" >Ф(г)</th>
+                                    <th class="text_n1 text-center m-0 p-0 px-1"  style="background-color: limegreen" >Ф(г)</th>
                                     <th class="text_n1 text-center m-0 p-0 px-1"  style="background-color: limegreen" >Ф(%)</th>
                                     <th class="text_n1 text-center m-0 p-0 px-1" style="background-color: yellow" >ПВЗ(%)</th>
                                     <th class="text_n1 text-center m-0 p-0 px-1" style="background-color: limegreen">ФВЗ(%)</th>
@@ -167,7 +167,7 @@
                                            th:href="@{/equipment_plans/{id}(id=${chartE.equipmentId + ':' + chartMonth.monthNumber})}"/>
                                     </th>
                                     <th class="text_n tx text-center p-0" style="background-color: yellow" th:text="${chartE.planHoursPerYear}"></th>
-                                    <th class="text_n tx text-center p-0" style="background-color: yellow" th:text="${chartE.factHoursPerYear}"></th>
+                                    <th class="text_n tx text-center p-0" style="background-color: limegreen" th:text="${chartE.factHoursPerYear}"></th>
                                     <th class="text_n tx text-center p-0" style="background-color: limegreen" th:text="${chartE.factPercentsPerYear}"></th>
                                     <th class="text_n tx text-center p-0" style="background-color: yellow"  th:text="${chartE.planForPlanDoneOnTheCurrentDatePerYear}"></th>
                                     <th class="text_n tx text-center p-0" style="background-color: limegreen"  th:text="${chartE.factForPlanDonePerYear}"></th>

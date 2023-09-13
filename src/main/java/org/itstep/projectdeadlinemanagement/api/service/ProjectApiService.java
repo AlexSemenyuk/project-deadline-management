@@ -183,10 +183,8 @@ public class ProjectApiService {
             assemblyProductionTmp.setDeadline(deadline);
         }
 
-        ProjectChart projectChart = new ProjectChart(projectTmp, designTmp, technologyTmp,
+        return new ProjectChart(projectTmp, designTmp, technologyTmp,
                 materialContractsTmp, partProductionTmp, componentContractsTmp, assemblyProductionTmp);
-
-        return projectChart;
     }
 
 

@@ -65,9 +65,7 @@ public class UserRoleController {
     @GetMapping(("edit/{id}"))
     String findById(@PathVariable Integer id, Model model) {
         Optional<UserRole> optionalUserRole = userRoleRepository.findById(id);
-        if (optionalUserRole.isPresent()){
-            model.addAttribute("userRole", optionalUserRole.get());
-        }
+        optionalUserRole.ifPresent(userRole -> model.addAttribute("userRole", userRole));
         return "user_role_edit";
     }
     @PostMapping(("edit/{id}"))

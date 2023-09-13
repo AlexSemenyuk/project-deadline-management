@@ -52,16 +52,7 @@ public class PartApiService {
             }
         }
 
-        PartChart partChart = new PartChart(projectNumberTMP, partNumberTMP, partNameTMP, termNumberList, termHoursList);
-//        private int termNumber;
-//        private int start;
-//        private int deadline;
-//        private String projectNumber;
-//        private String partNumber;
-//        private String partName;
-//        List<TermHours> termHoursList;
-//        System.out.println("partChart = " + partChart);
-        return partChart;
+        return new PartChart(projectNumberTMP, partNumberTMP, partNameTMP, termNumberList, termHoursList);
     }
 
 }

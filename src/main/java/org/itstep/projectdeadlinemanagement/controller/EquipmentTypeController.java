@@ -66,9 +66,7 @@ public class EquipmentTypeController {
     @GetMapping(("edit/{id}"))
     String findById(@PathVariable Integer id, Model model) {
         Optional<EquipmentType> optionalEquipmentType = equipmentTypeRepository.findById(id);
-        if (optionalEquipmentType.isPresent()){
-            model.addAttribute("equipmentType", optionalEquipmentType.get());
-        }
+        optionalEquipmentType.ifPresent(equipmentType -> model.addAttribute("equipmentType", equipmentType));
         return "equipment_types_edit";
     }
     @PostMapping(("edit/{id}"))

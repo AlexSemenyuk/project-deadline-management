@@ -14,8 +14,8 @@ import java.util.List;
 @Entity
 @Table(name = "equipments")
 @NoArgsConstructor
-@ToString(exclude = {"partTerms", "assemblyTerms", "tasks"})
-@EqualsAndHashCode(exclude = {"partTerms", "assemblyTerms", "tasks"})
+@ToString(exclude = {"technologyParts", "technologyAssemblies", "tasks"})
+@EqualsAndHashCode(exclude = {"technologyParts", "technologyAssemblies", "tasks"})
 public class Equipment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,10 +34,10 @@ public class Equipment {
 
 
     @OneToMany(mappedBy = "equipment")
-    private List<TechnologyPart> TechnologyParts = new ArrayList<>();
+    private List<TechnologyPart> technologyParts = new ArrayList<>();
 
     @OneToMany(mappedBy = "equipment")
-    private List<TechnologyAssembly> TechnologyAssemblies = new ArrayList<>();
+    private List<TechnologyAssembly> technologyAssemblies = new ArrayList<>();
 
     @OneToMany(mappedBy = "equipment")
     private List<Task> tasks = new ArrayList<>();

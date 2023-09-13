@@ -18,8 +18,7 @@ public class PartApiController {
     @PostMapping("/chart_part/{id}")
     PartChart chart (@PathVariable String id){
 //        System.out.println("id = " + id);
-        PartChart partChart = partApiService.formPartChart(id);
-        return partChart;
+        return partApiService.formPartChart(id);
     }
 }
 

@@ -119,9 +119,7 @@ public class ProductionPlanController {
     @GetMapping("/edit/{id}")
     String datails(@PathVariable Integer id, Model model) {
         Optional<ProductionPlan> productionPlan = productionPlanRepository.findById(id);
-        productionPlan.ifPresent(plan -> {
-            model.addAttribute("plan", plan);
-        });
+        productionPlan.ifPresent(plan -> model.addAttribute("plan", plan) );
         List<TaskCondition> taskConditions = taskConditionRepository.findAll();
         model.addAttribute("taskConditions", taskConditions);
         return "production_plan_edit";

@@ -12,8 +12,7 @@ public class ProjectApiController {
     private final ProjectApiService projectApiService;
     @PostMapping("/chart/{id}")
     ProjectChart chart (@PathVariable Integer id){
-        ProjectChart projectChart = projectApiService.formProjectChart(id);
-        return projectChart;
+        return projectApiService.formProjectChart(id);
     }
 
 }

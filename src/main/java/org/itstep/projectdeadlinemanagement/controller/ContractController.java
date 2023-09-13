@@ -30,7 +30,9 @@ public class ContractController {
         List<Project> tmpProjects = projectRepository.findAll();
         List<Project> projects = new ArrayList<>();
         for (Project p:tmpProjects){
-            if (p.getContractStatus().getName().equals("Work")){
+            if ((p.getProjectCondition().getName().equals("Design") ||
+                    p.getProjectCondition().getName().equals("Technology")) &&
+                    p.getContractStatus().getName().equals("Work")){
                 projects.add(p);
             }
         }
@@ -41,8 +43,7 @@ public class ContractController {
     @PostMapping
     public String create(Integer id, Model model) {
         Optional<Project> optionalProject = projectRepository.findById(id);
-        String redirect = "redirect:/contracts/project_contracts/" + id;
-        return redirect;
+        return "redirect:/contracts/project_contracts/" + id;
     }
 
 }

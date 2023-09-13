@@ -15,8 +15,8 @@ import java.util.List;
 @Data
 @Table(name = "project_status")
 @NoArgsConstructor
-@ToString(exclude = {"designProjects", "technologyProjects", "contractStatus"})
-@EqualsAndHashCode(exclude = {"designProjects", "technologyProjects", "contractStatus"})
+@ToString(exclude = {"designProjects", "technologyProjects", "contractProjects"})
+@EqualsAndHashCode(exclude = {"designProjects", "technologyProjects", "contractProjects"})
 public class ProjectStatus {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

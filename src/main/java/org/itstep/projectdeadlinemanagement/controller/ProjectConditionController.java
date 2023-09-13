@@ -6,6 +6,7 @@ import org.hibernate.dialect.lock.OptimisticEntityLockException;
 import org.itstep.projectdeadlinemanagement.command.ProjectConditionCommand;
 import org.itstep.projectdeadlinemanagement.model.ProjectCondition;
 import org.itstep.projectdeadlinemanagement.repository.ProjectConditionRepository;
+import org.itstep.projectdeadlinemanagement.repository.ProjectStatusRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -21,10 +22,12 @@ import java.util.stream.Collectors;
 @Slf4j
 public class ProjectConditionController {
     private final ProjectConditionRepository projectConditionRepository;
+    private final ProjectStatusRepository projectStatusRepository;
 
     @GetMapping
     String findAll(Model model) {
         model.addAttribute("projectConditions", projectConditionRepository.findAll());
+        model.addAttribute("projectStatuses", projectStatusRepository.findAll());
         return "project_conditions";
     }
 

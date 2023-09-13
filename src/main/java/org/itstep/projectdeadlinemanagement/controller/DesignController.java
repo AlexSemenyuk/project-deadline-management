@@ -38,7 +38,6 @@ public class DesignController {
     @PostMapping
     public String create(Integer id, Model model) {
         Optional<Project> optionalProject = projectRepository.findById(id);
-        String redirect = "redirect:/designs/design_terms/" + id;
-        return redirect;
+        return "redirect:/designs/design_terms/" + id;
     }
 }
