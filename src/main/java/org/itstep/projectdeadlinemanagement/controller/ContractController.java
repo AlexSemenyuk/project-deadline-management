@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 @Controller
 @RequiredArgsConstructor
@@ -21,9 +20,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 @RequestMapping("/contracts")
 public class ContractController {
 
-    private final ContractRepository contractRepository;
     private final ProjectRepository projectRepository;
-
 
     @GetMapping
     public String home(Model model) {
@@ -31,7 +28,8 @@ public class ContractController {
         List<Project> projects = new ArrayList<>();
         for (Project p:tmpProjects){
             if ((p.getProjectCondition().getName().equals("Design") ||
-                    p.getProjectCondition().getName().equals("Technology")) &&
+                    p.getProjectCondition().getName().equals("Technology") ||
+            p.getProjectCondition().getName().equals("Production")) &&
                     p.getContractStatus().getName().equals("Work")){
                 projects.add(p);
             }

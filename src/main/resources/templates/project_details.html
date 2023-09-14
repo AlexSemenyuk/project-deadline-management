@@ -223,25 +223,25 @@
                                                 <td class="text_a ty col-xl-3 text-center"></td>
                                                 <td class="text_n1 ty col-xl-3 text-center">Вузли</td>
                                                 <th class="text_a ty col-xl-2 text-center"></th>
-                                                <th class="text_b tx col-xl-2 text-center p-1">
-                                                    <a class="text_b tx" th:href="@{/projects/project_details/assembly_lists/{id}(id=${project.id})}">
-                                                        <i class="bi bi-plus-slash-minus" style="font-size: 1.2rem;"></i>
-                                                    </a>
+                                                <th class="text_a ty col-xl-2 text-center p-1">
+<!--                                                    <a class="text_b tx" th:href="@{/projects/project_details/assembly_lists/{id}(id=${project.id})}">-->
+<!--                                                        <i class="bi bi-plus-slash-minus" style="font-size: 1.2rem;"></i>-->
+<!--                                                    </a>-->
                                                 </th>
                                             </tr>
                                             <tr th:each="assemblyList: ${project.projectList.assemblyLists}">
                                                 <td class="text_a ty col-xl-2 text-center"  th:text="${assemblyList.id}"></td>
-                                                <td class="text_b tx col-xl-4 "  >
-                                                    <a  class="text_b tx"
-                                                        th:href="@{/assemblies/structure/{id}(id=${assemblyList.assembly.id})}"
-                                                        th:text="${assemblyList.assembly.number}">
-                                                    </a>
+                                                <td class="text_a ty col-xl-4 " th:text="${assemblyList.assembly.number}" >
+<!--                                                    <a  class="text_b tx"-->
+<!--                                                        th:href="@{/assemblies/structure/{id}(id=${assemblyList.assembly.id})}"-->
+<!--                                                        th:text="${assemblyList.assembly.number}">-->
+<!--                                                    </a>-->
                                                 </td>
-                                                <td class="text_b tx col-xl-4 ">
-                                                    <a class="text_b tx"
-                                                       th:href="@{/assemblies/structure/{id}(id=${assemblyList.assembly.id})}"
-                                                       th:text="${assemblyList.assembly.name}">
-                                                    </a>
+                                                <td class="text_a ty col-xl-4 " th:text="${assemblyList.assembly.name}">
+<!--                                                    <a class="text_b tx"-->
+<!--                                                       th:href="@{/assemblies/structure/{id}(id=${assemblyList.assembly.id})}"-->
+<!--                                                       th:text="${assemblyList.assembly.name}">-->
+<!--                                                    </a>-->
                                                 </td>
                                                 <td class="text_a ty col-xl-4 px-1 text-center" th:text="${assemblyList.amount}"></td>
                                                 <td class="text_a ty col-xl-2 text-center" ></td>
@@ -252,9 +252,9 @@
                                                 <td class="text_n1 ty col-xl-3 text-center">Деталі</td>
                                                 <th class="text_a ty col-xl-2 text-center"></th>
                                                 <th class="text_b tx col-xl-2 text-center p-1">
-                                                    <a class="text_b tx" th:href="@{/projects/project_details/part_lists/{id}(id=${project.id})}">
-                                                        <i class="bi bi-plus-slash-minus" style="font-size: 1.2rem;"></i>
-                                                    </a>
+<!--                                                    <a class="text_b tx" th:href="@{/projects/project_details/part_lists/{id}(id=${project.id})}">-->
+<!--                                                        <i class="bi bi-plus-slash-minus" style="font-size: 1.2rem;"></i>-->
+<!--                                                    </a>-->
                                                 </th>
                                             </tr>
                                             <tr th:each="partList: ${project.projectList.partLists}">

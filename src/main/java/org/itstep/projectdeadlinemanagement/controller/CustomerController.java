@@ -3,12 +3,8 @@ package org.itstep.projectdeadlinemanagement.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.dialect.lock.OptimisticEntityLockException;
-import org.itstep.projectdeadlinemanagement.command.ContractCommand;
 import org.itstep.projectdeadlinemanagement.command.CustomerCommand;
-import org.itstep.projectdeadlinemanagement.model.Contract;
-import org.itstep.projectdeadlinemanagement.model.ContractType;
 import org.itstep.projectdeadlinemanagement.model.Customer;
-import org.itstep.projectdeadlinemanagement.model.Project;
 import org.itstep.projectdeadlinemanagement.repository.CustomerRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,7 +13,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 

@@ -39,9 +39,7 @@ public class ProjectDetailsController {
     @GetMapping("/{id}")
     public String home(@PathVariable Integer id, Model model) {
         Optional<Project> optionalProject = projectRepository.findById(id);
-        optionalProject.ifPresent(project -> {
-            model.addAttribute("project", project);
-        });
+        optionalProject.ifPresent(project -> model.addAttribute("project", project));
         return "project_details";
     }
 
@@ -156,9 +154,7 @@ public class ProjectDetailsController {
     @GetMapping("/assembly_lists/{id}")
     public String assemblyListForProject(@PathVariable Integer id, Model model) {
         Optional<Project> optionalProject = projectRepository.findById(id);
-        optionalProject.ifPresent(project -> {
-            model.addAttribute("project", project);
-        });
+        optionalProject.ifPresent(project -> model.addAttribute("project", project));
         List<Assembly> assemblies = assemblyRepository.findAll();
         model.addAttribute("assemblies", assemblies);
         return "project_lists_assembly";
@@ -192,9 +188,7 @@ public class ProjectDetailsController {
     @GetMapping("/part_lists/{id}")
     public String partListForProject(@PathVariable Integer id, Model model) {
         Optional<Project> optionalProject = projectRepository.findById(id);
-        optionalProject.ifPresent(project -> {
-            model.addAttribute("project", project);
-        });
+        optionalProject.ifPresent(project -> model.addAttribute("project", project));
         List<Part> parts = partRepository.findAll();
         model.addAttribute("parts", parts);
         return "project_lists_part";

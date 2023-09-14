@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 @Controller
 @RequiredArgsConstructor
@@ -32,8 +31,7 @@ public class ProjectController {
     @PostMapping
     public String select(Integer id, Model model) {
         Optional<Project> optionalProject = projectRepository.findById(id);
-        String redirect = "redirect:/projects/project_details/" + id;
-        return redirect;
+        return "redirect:/projects/project_details/" + id;
     }
 
     @GetMapping("/details/{projectNumber}")

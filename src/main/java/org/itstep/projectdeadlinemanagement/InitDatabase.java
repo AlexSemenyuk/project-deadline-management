@@ -16,7 +16,6 @@ import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Optional;
 
 @Component
@@ -35,17 +34,16 @@ public class InitDatabase implements CommandLineRunner {
     private final TaskTypeRepository taskTypeRepository;
     private final EquipmentRepository equipmentRepository;
     private final ProjectRepository projectRepository;
-    private final ProjectListRepository projectListRepository;
     private final TechnologyAssemblyRepository technologyAssemblyRepository;
     private final TechnologyPartRepository technologyPartRepository;
     private final TaskService taskService;
-    private final ProductionPlanRepository productionPlanRepository;
     private final ProductionPlanService productionPlanService;
     private final ContractTypeRepository contractTypeRepository;
     private final ContractRepository contractRepository;
     private final UserRoleRepository userRoleRepository;
     private final UserDetailsManager userDetailsManager;
     private final PasswordEncoder encoder;
+    private final TaskRepository taskRepository;
 
     @Transactional
     @Override
@@ -183,13 +181,12 @@ public class InitDatabase implements CommandLineRunner {
         userDetailsManager.createUser(userProduction);
 
 
-
         // 14. Создание Project
         // Project 1001
         addProject(new ProjectCommand(
                 1001, null, 1,
                 LocalDateTime.parse("2023-06-05T00:00"), LocalDateTime.parse("2023-07-07T00:00"),
-                1,1,1,4));
+                1, 1, 1, 4));
         // DesignTerm
         addDesignTerm(1, 5);
 
@@ -255,14 +252,14 @@ public class InitDatabase implements CommandLineRunner {
 
 
         productionPlanService.formProductionPlans(taskService.formTasks(1));
-        changeProjectCondition(1,4);
-        changeTaskCondition(1);
+        changeProjectCondition(1, 4);
+        changeTaskCondition(1, 6);
 
 
         // Project 1002
         addProject(new ProjectCommand(
                 1002, null, 2,
-                LocalDateTime.parse("2023-07-25T00:00"), LocalDateTime.parse("2023-09-25T00:00"),
+                LocalDateTime.parse("2023-08-20T00:00"), LocalDateTime.parse("2023-10-15T00:00"),
                 1, 1, 1, 1));
         // DesignTerm
         addDesignTerm(2, 7);
@@ -286,34 +283,30 @@ public class InitDatabase implements CommandLineRunner {
 
         addContract(2, new ContractCommand(                                   // Contracts material
                 "№10000-6", "Закупівля металу",
-                LocalDateTime.parse("2023-08-04T00:00"),
-                LocalDateTime.parse("2023-08-14T00:00"),
+                LocalDateTime.parse("2023-08-30T00:00"),
+                LocalDateTime.parse("2023-09-10T00:00"),
                 1));
         addContract(2, new ContractCommand(
                 "№10000-7", "Закупівля металу",
-                LocalDateTime.parse("2023-08-05T00:00"),
-                LocalDateTime.parse("2023-08-11T00:00"),
-                1));
-        addContract(2, new ContractCommand(
-                "№10000-8", "Закупівля металу",
-                LocalDateTime.parse("2023-08-09T00:00"),
-                LocalDateTime.parse("2023-08-15T00:00"),
+                LocalDateTime.parse("2023-08-29T00:00"),
+                LocalDateTime.parse("2023-09-08T00:00"),
                 1));
 
+
         addContract(2, new ContractCommand(                                   // Contracts component
-                "№10000-9", "Закупівля комплектуючих виробів",
-                LocalDateTime.parse("2023-08-10T00:00"),
-                LocalDateTime.parse("2023-08-27T00:00"),
+                "№10000-8", "Закупівля комплектуючих виробів",
+                LocalDateTime.parse("2023-08-30T00:00"),
+                LocalDateTime.parse("2023-10-02T00:00"),
                 2));
         addContract(2, new ContractCommand(
-                "№10000-10", "Закупівля комплектуючих виробів",
-                LocalDateTime.parse("2023-08-09T00:00"),
-                LocalDateTime.parse("2023-09-05T00:00"),
+                "№10000-9", "Закупівля комплектуючих виробів",
+                LocalDateTime.parse("2023-08-29T00:00"),
+                LocalDateTime.parse("2023-10-03T00:00"),
                 2));
 //
         productionPlanService.formProductionPlans(taskService.formTasks(2));
-
-
+        changeProjectCondition(2, 3);
+        changeTaskCondition(2, 2);
 
 
         // Project 1002
@@ -386,17 +379,13 @@ public class InitDatabase implements CommandLineRunner {
 //        productionPlanService.formProductionPlans(taskService.formTasks(4));
 
 
-
-
     }
-
-
 
 
     private void addEquipment(EquipmentCommand command) {
         Optional<Division> optionalDivision = divisionRepository.findById(command.divisionId());
         Optional<EquipmentType> optionalEquipmentType = equipmentTypeRepository.findById(command.equipmentTypeId());
-        if (optionalDivision.isPresent() && optionalEquipmentType.isPresent()){
+        if (optionalDivision.isPresent() && optionalEquipmentType.isPresent()) {
             Equipment equipment = Equipment.fromCommand(command);
 
             Division division = optionalDivision.get();
@@ -481,7 +470,7 @@ public class InitDatabase implements CommandLineRunner {
     private void addPartListToProject(Integer projectId, PartListCommand command) {
         Optional<Project> optionalProject = projectRepository.findById(projectId);
         Optional<Part> optionalPart = partRepository.findById(command.partId());
-        if (optionalProject.isPresent() && optionalPart.isPresent()){
+        if (optionalProject.isPresent() && optionalPart.isPresent()) {
             ProjectList projectList = optionalProject.get().getProjectList();
             Part part = optionalPart.get();
 
@@ -501,29 +490,29 @@ public class InitDatabase implements CommandLineRunner {
     }
 
     private void createTechnologyAssembly(TechnologyAssemblyCommand command) {
-            Optional<Assembly> optionalAssembly = assemblyRepository.findById(command.assemblyId());
-            Optional<Equipment> optionalEquipment = equipmentRepository.findById(command.equipmentId());
-            if (optionalAssembly.isPresent() && optionalEquipment.isPresent()) {
-                Assembly assembly = optionalAssembly.get();
-                Equipment equipment = optionalEquipment.get();
-                TechnologyAssembly technologyAssembly = TechnologyAssembly.fromCommand(command);
-                technologyAssembly.setAssembly(assembly);
-                technologyAssembly.setEquipment(equipment);
-                technologyAssemblyRepository.save(technologyAssembly);
-            }
+        Optional<Assembly> optionalAssembly = assemblyRepository.findById(command.assemblyId());
+        Optional<Equipment> optionalEquipment = equipmentRepository.findById(command.equipmentId());
+        if (optionalAssembly.isPresent() && optionalEquipment.isPresent()) {
+            Assembly assembly = optionalAssembly.get();
+            Equipment equipment = optionalEquipment.get();
+            TechnologyAssembly technologyAssembly = TechnologyAssembly.fromCommand(command);
+            technologyAssembly.setAssembly(assembly);
+            technologyAssembly.setEquipment(equipment);
+            technologyAssemblyRepository.save(technologyAssembly);
+        }
     }
 
     private void createTechnologyPart(TechnologyPartCommand command) {
-            Optional<Part> optionalPart = partRepository.findById(command.partId());
-            Optional<Equipment> optionalEquipment = equipmentRepository.findById(command.equipmentId());
-            if (optionalPart.isPresent() && optionalEquipment.isPresent()) {
-                Part part = optionalPart.get();
-                Equipment equipment = optionalEquipment.get();
-                TechnologyPart technologyPart = TechnologyPart.fromCommand(command);
-                technologyPart.setPart(part);
-                technologyPart.setEquipment(equipment);
-                technologyPartRepository.save(technologyPart);
-            }
+        Optional<Part> optionalPart = partRepository.findById(command.partId());
+        Optional<Equipment> optionalEquipment = equipmentRepository.findById(command.equipmentId());
+        if (optionalPart.isPresent() && optionalEquipment.isPresent()) {
+            Part part = optionalPart.get();
+            Equipment equipment = optionalEquipment.get();
+            TechnologyPart technologyPart = TechnologyPart.fromCommand(command);
+            technologyPart.setPart(part);
+            technologyPart.setEquipment(equipment);
+            technologyPartRepository.save(technologyPart);
+        }
     }
 
     private void addTechnologyTerm(int projectId, int technologyTerm) {
@@ -553,7 +542,7 @@ public class InitDatabase implements CommandLineRunner {
         Optional<Project> optionalProject = projectRepository.findById(projectId);
         Optional<ProjectCondition> optionalProjectCondition = projectConditionRepository.findById(projectConditionId);
 
-        if (optionalProject.isPresent() && optionalProjectCondition.isPresent()){
+        if (optionalProject.isPresent() && optionalProjectCondition.isPresent()) {
             Project project = optionalProject.get();
             ProjectCondition projectCondition = optionalProjectCondition.get();
             project.setProjectCondition(projectCondition);
@@ -561,20 +550,21 @@ public class InitDatabase implements CommandLineRunner {
         }
 
     }
-    private void changeTaskCondition(int projectId) {
-        Optional<Project> optionalProject = projectRepository.findById(projectId);
-        Optional<TaskCondition> optionalTaskCondition = taskConditionRepository.findById(6);
 
-        if (optionalProject.isPresent() && optionalTaskCondition.isPresent()){
+    private void changeTaskCondition(int projectId, int taskConditionId) {
+        Optional<Project> optionalProject = projectRepository.findById(projectId);
+        Optional<TaskCondition> optionalTaskCondition = taskConditionRepository.findById(taskConditionId);
+
+        if (optionalProject.isPresent() && optionalTaskCondition.isPresent()) {
             Project project = optionalProject.get();
             TaskCondition taskCondition = optionalTaskCondition.get();
-            if (project.getProjectCondition().getName().equals("Archive")){
-                if (!project.getTasks().isEmpty()){
-                    for (Task task: project.getTasks()){
-                        task.setTaskCondition(taskCondition);
-                    }
+            if (!project.getTasks().isEmpty()) {
+                for (Task task : project.getTasks()) {
+                    task.setTaskCondition(taskCondition);
+//                        taskRepository.save(task);
                 }
             }
+            projectRepository.save(project);
         }
 
     }

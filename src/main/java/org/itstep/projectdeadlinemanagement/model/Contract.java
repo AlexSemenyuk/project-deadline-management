@@ -4,11 +4,9 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.itstep.projectdeadlinemanagement.command.ContractCommand;
-import org.itstep.projectdeadlinemanagement.command.DivisionCommand;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+
 @Data
 @Entity
 @Table(name = "contracts")
@@ -36,9 +34,6 @@ public class Contract {
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Project project;
 
-
-//    @OneToMany(mappedBy = "division")
-//    private List<Equipment> equipments = new ArrayList<>();
 
     public Contract(String number, String name, LocalDateTime start, LocalDateTime deadline) {
         this.number = number;

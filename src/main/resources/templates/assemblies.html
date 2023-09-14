@@ -140,10 +140,11 @@
                         <label class="form-label d-block me-1" >
                             <input class="form-control bg-white border-3 rounded-0" type="number" name="number" placeholder="Номер вузла (унікальний)" required>
                         </label>
-                        <label class="form-label d-block me-1" >
-                            Name (unique) <input class="form-control bg-white border-3 rounded-0" type="text" name="name"  placeholder="Назва вузла" required>
-                        </label>
                         <br/>
+                        <label class="form-label d-block me-1" >
+                            <input class="form-control bg-white border-3 rounded-0" type="text" name="name"  placeholder="Назва вузла" required>
+                        </label>
+
                         <br/>
                         <input th:name="${_csrf.parameterName}" type="hidden" th:value="${_csrf.token}">
                         <input class="btn btn-primary border-3 rounded-0 w-100 text-center" type="submit"  value="Створити">

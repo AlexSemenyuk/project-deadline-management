@@ -31,9 +31,7 @@ public class ProjectContractController {
     @GetMapping("/{id}")
     public String findAll(@PathVariable Integer id, Model model) {
         Optional<Project> optionalProject = projectRepository.findById(id);
-        optionalProject.ifPresent(project -> {
-            model.addAttribute("projectContract", project);
-        });
+        optionalProject.ifPresent(project -> model.addAttribute("projectContract", project));
         List<ContractType> contractTypes = contractTypeRepository.findAll();
         model.addAttribute("contractTypes", contractTypes);
         return "project_contracts";

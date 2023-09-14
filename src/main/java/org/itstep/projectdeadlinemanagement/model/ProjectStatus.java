@@ -5,7 +5,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.itstep.projectdeadlinemanagement.command.ProjectConditionCommand;
 import org.itstep.projectdeadlinemanagement.command.ProjectStatusCommand;
 
 import java.util.ArrayList;

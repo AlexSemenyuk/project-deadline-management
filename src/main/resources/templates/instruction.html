@@ -364,9 +364,9 @@
 <script>
     // Функция для прокрутки к якорю с учетом смещения
     function scrollToAnchor(anchorId, offset) {
-        var element = document.getElementById(anchorId);
+        let element = document.getElementById(anchorId);
         if (element) {
-            var offsetPosition = element.offsetTop - offset;
+            let offsetPosition = element.offsetTop - offset;
             window.scrollTo({
                 top: offsetPosition,
                 behavior: "smooth"

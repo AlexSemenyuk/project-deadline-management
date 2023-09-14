@@ -2,7 +2,6 @@ package org.itstep.projectdeadlinemanagement.api.service;
 
 import lombok.RequiredArgsConstructor;
 import org.itstep.projectdeadlinemanagement.api.data.AssemblyChart;
-import org.itstep.projectdeadlinemanagement.api.data.PartChart;
 import org.itstep.projectdeadlinemanagement.api.data.TermHours;
 import org.itstep.projectdeadlinemanagement.model.Project;
 import org.itstep.projectdeadlinemanagement.model.Task;

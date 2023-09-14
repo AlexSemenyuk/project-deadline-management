@@ -3,8 +3,6 @@ package org.itstep.projectdeadlinemanagement.controller;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.itstep.projectdeadlinemanagement.command.ChartDaysCommand;
-import org.itstep.projectdeadlinemanagement.command.ChartMonthCommand;
 import org.itstep.projectdeadlinemanagement.command.ChartYearCommand;
 import org.itstep.projectdeadlinemanagement.command.ProductionPlanTermCommand;
 import org.itstep.projectdeadlinemanagement.model.ProductionPlan;

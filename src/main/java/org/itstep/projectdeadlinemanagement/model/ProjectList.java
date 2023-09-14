@@ -2,8 +2,7 @@ package org.itstep.projectdeadlinemanagement.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.itstep.projectdeadlinemanagement.command.ProjectListCommand;
+
 
 import java.util.ArrayList;
 import java.util.List;

@@ -2,8 +2,6 @@ package org.itstep.projectdeadlinemanagement.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.itstep.projectdeadlinemanagement.command.TechnologyAssemblyCommand;
-import org.itstep.projectdeadlinemanagement.command.TechnologyPartCommand;
 import org.itstep.projectdeadlinemanagement.model.*;
 import org.itstep.projectdeadlinemanagement.repository.*;
 import org.itstep.projectdeadlinemanagement.service.ProductionPlanService;
@@ -12,7 +10,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,9 +27,7 @@ public class TechnologyTermController {
     @GetMapping("/{id}")
     public String term(@PathVariable Integer id, Model model) {
         Optional<Project> optionalProject = projectRepository.findById(id);
-        optionalProject.ifPresent(project -> {
-            model.addAttribute("techProject", project);
-        });
+        optionalProject.ifPresent(project -> model.addAttribute("techProject", project));
         return "technology_terms";
     }
 

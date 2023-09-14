@@ -29,9 +29,7 @@ public class DesignTermController {
     @GetMapping("/{id}")
     public String findAll(@PathVariable Integer id, Model model) {
         Optional<Project> optionalProject = projectRepository.findById(id);
-        optionalProject.ifPresent(project -> {
-            model.addAttribute("designProject", project);
-        });
+        optionalProject.ifPresent(project -> model.addAttribute("designProject", project) );
         return "design_terms";
     }
 
